@@ -7,10 +7,9 @@ import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.auth.TokenService;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthInfoResponse;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthLoginParams;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class OAuthLoginService {
         Long memberId = findOrCreateMember(oAuthInfoResponse);
         return tokenService.generate(memberId.toString());
     }
+
 
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
         return memberRepository.findByEmail(oAuthInfoResponse.getEmail())
@@ -40,4 +40,5 @@ public class OAuthLoginService {
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build()).getId();
     }
+
 }
