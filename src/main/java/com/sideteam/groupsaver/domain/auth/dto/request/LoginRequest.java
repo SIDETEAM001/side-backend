@@ -1,15 +1,19 @@
 package com.sideteam.groupsaver.domain.auth.dto.request;
 
+import com.sideteam.groupsaver.global.auth.AuthConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record LoginRequest(
-        @NotBlank
+        @NotBlank(message = "입력한 이메일 주소는 공백이 아니어야 합니다")
         @Email(message = "입력한 이메일 주소에 @ 기호와 도메인 명이 필요합니다")
         String email,
-        @NotBlank
-        @Size(min = 8, max = 16, message = "비밀번호의 길이는 8 ~ 16자입니다")
+
+        @NotBlank(message = "입력한 비밀번호는 공백이 아니어야 합니다")
+        @Size(min = 6, max = 64, message = "비밀번호의 길이는 6 ~ 64자 입니다")
         String password
+
 ) {
 }

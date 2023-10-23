@@ -14,12 +14,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @EnableMethodSecurity
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,9 +51,9 @@ class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations().toString()).permitAll()
-                        .requestMatchers(publicEndpoints).permitAll()
-                        .requestMatchers(HttpMethod.GET, publicReadOnlyPublicEndpoints).permitAll()
+                        .requestMatchers(getPublicStaticPath()).permitAll()
+                        .requestMatchers(convertToAntPathMatcher(publicEndpoints)).permitAll()
+                        .requestMatchers(convertToAntPathMatcher(publicReadOnlyPublicEndpoints, HttpMethod.GET)).permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -75,6 +77,23 @@ class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+
+    private AntPathRequestMatcher getPublicStaticPath() {
+        return new AntPathRequestMatcher(PathRequest.toStaticResources().atCommonLocations().toString());
+    }
+
+    private AntPathRequestMatcher[] convertToAntPathMatcher(String[] paths) {
+        return Stream.of(paths)
+                .map(AntPathRequestMatcher::antMatcher)
+                .toArray(AntPathRequestMatcher[]::new);
+    }
+
+    private AntPathRequestMatcher[] convertToAntPathMatcher(String[] paths, HttpMethod httpMethod) {
+        return Stream.of(paths)
+                .map(path -> new AntPathRequestMatcher(path, httpMethod.name()))
+                .toArray(AntPathRequestMatcher[]::new);
     }
 
 }

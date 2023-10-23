@@ -35,6 +35,7 @@ public class AuthSignupService {
                 .nickname(signupRequest.nickname())
                 .roles(roles)
                 .password(encodePassword(signupRequest))
+                .phoneNumber(signupRequest.phoneNumber())
                 .build();
         memberRepository.save(member);
 
@@ -45,11 +46,11 @@ public class AuthSignupService {
 
 
     private void checkDuplication(final SignupRequest signupRequest) {
-        final boolean isDuplicated = memberRepository.existsByEmailOrNickname(signupRequest.email(), signupRequest.nickname());
+        final boolean isDuplicated = memberRepository.existsByEmail(signupRequest.email());
 
         if (isDuplicated) {
-            log.error("이메일이나 닉네임이 중복입니다. Email: {}, Nickname: {}", signupRequest.email(), signupRequest.nickname());
-            // TODO 중복 예외 발생시키기
+            log.error("중복되는 이메일: {}", signupRequest.email());
+//            throw new
         }
     }
 

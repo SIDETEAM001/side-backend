@@ -29,19 +29,19 @@ public class RefreshTokenService {
     /**
      * 리프래시 토큰을 새로 발행
      *
-     * @param id - 리프래시 토큰 구분 대상
+     * @param memberId - 리프래시 토큰 구분 대상
      * @return - 리프래시 토큰
      */
-    public String issueRefreshToken(final long id) {
+    public String issueRefreshToken(final String memberId) {
         final RefreshToken refreshToken = RefreshToken.builder()
                 .token(makeRefreshToken())
-                .memberId(id)
+                .memberId(memberId)
                 .timeToLive(getExpiryTime())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
 
-        log.info("리프래시 토큰 신규 발급. Member ID: {}", id);
+        log.info("리프래시 토큰 신규 발급. Member: {}", memberId);
         return refreshToken.getToken();
     }
 
@@ -60,23 +60,19 @@ public class RefreshTokenService {
     /**
      * 로그아웃하고 기존의 refresh 토큰은 폐기함(재사용 불가)
      *
-     * @param currentMemberId   - 현재 인증된 멤버 ID
-     * @param savedRefreshToken - 기존의 저장된 토큰
+     * @param refreshToken - 삭제할 refresh 토큰
      */
-    public void logout(final long currentMemberId, final String savedRefreshToken) {
-
-        final RefreshToken refreshToken = findOrThrow(savedRefreshToken);
-        final long expectedMemberId = refreshToken.getMemberId();
-
-        if (expectedMemberId != currentMemberId) {
-            final String errorMessage = String.format("비정상적인 로그아웃 시도! 현재 멤버 ID: %s, But tried ID: %s", currentMemberId, expectedMemberId);
-            log.warn(errorMessage);
-            throw new AuthErrorException(AuthErrorCode.MISMATCHED_REFRESH_TOKEN, errorMessage);
-        }
-
+    public void deleteToken(final RefreshToken refreshToken) {
+        final String logoutId = refreshToken.getMemberId();
         refreshTokenRepository.delete(refreshToken);
-        log.info("로그아웃: ID: {}", currentMemberId);
+        log.info("로그아웃: ID: {}", logoutId);
     }
+
+    public RefreshToken findOrThrow(final String refreshToken) {
+        return refreshTokenRepository.findById(refreshToken)
+                .orElseThrow(() -> new AuthErrorException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND, "인증 정보를 찾을 수 없습니다"));
+    }
+
 
     private String makeRefreshToken() {
         return UUID.randomUUID().toString();
@@ -86,9 +82,5 @@ public class RefreshTokenService {
         return refreshTokenExpiration.toSeconds();
     }
 
-    private RefreshToken findOrThrow(final String refreshToken) {
-        return refreshTokenRepository.findById(refreshToken)
-                .orElseThrow(() -> new AuthErrorException(AuthErrorCode.REFRESH_TOKEN_NOT_FOUND, "인증 정보를 찾을 수 없습니다"));
-    }
 
 }

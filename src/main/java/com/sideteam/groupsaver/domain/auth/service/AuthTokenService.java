@@ -8,7 +8,6 @@ import com.sideteam.groupsaver.global.auth.jwt.JwtTokenProvider;
 import com.sideteam.groupsaver.global.auth.refresh_token.RefreshToken;
 import com.sideteam.groupsaver.global.auth.refresh_token.RefreshTokenService;
 import com.sideteam.groupsaver.global.auth.userdetails.CustomUserDetails;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,11 +31,17 @@ public class AuthTokenService {
     private final MemberRepository memberRepository;
 
 
+    /**
+     * 로그인 요청이 오면 이메일과 비밀번호로 확인 후, 인증에 성공한 경우 토큰 DTO를 반환하는 함수
+     *
+     * @param loginRequest - 로그인 처리를 위한 정보
+     * @return - 토큰 DTO
+     */
     public TokenDto login(final LoginRequest loginRequest) {
 
         final CustomUserDetails userDetails = setAuthentication(loginRequest);
 
-        final long memberId = userDetails.getId();
+        final String memberId = userDetails.getId().toString();
 
         final String accessToken = jwtTokenProvider.issueJwtToken(memberId);
         final String refreshToken = refreshTokenService.issueRefreshToken(memberId);
@@ -50,13 +55,13 @@ public class AuthTokenService {
      * 기존의 유효한 Refresh 토큰으로 새로운 Access 토큰과 Refresh 토큰을 발급하는 함수
      *
      * @param requestRefreshToken - 토큰 재발급 정보
-     * @return - 재발급된 토클들 반환
+     * @return - 재발급된 토큰들 반환
      */
     public TokenDto refreshTokens(final String requestRefreshToken) {
         // Refresh 토큰 재발급
         final RefreshToken refreshToken = refreshTokenService.refresh(requestRefreshToken);
 
-        final long memberId = refreshToken.getMemberId();
+        final String memberId = refreshToken.getMemberId();
 
         // Access Token 재발급
         final String newAccessToken = jwtTokenProvider.issueJwtToken(memberId);

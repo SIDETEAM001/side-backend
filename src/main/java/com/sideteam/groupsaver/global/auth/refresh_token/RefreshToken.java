@@ -12,13 +12,13 @@ public class RefreshToken {
     @Id
     private String token;
 
-    private final long memberId;
+    private final String memberId;
 
     @TimeToLive
     private long timeToLive;
 
     @Builder
-    protected RefreshToken(String token, long memberId, long timeToLive) {
+    protected RefreshToken(String token, String memberId, long timeToLive) {
         this.token = token;
         this.memberId = memberId;
         this.timeToLive = timeToLive;
