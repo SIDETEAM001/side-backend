@@ -1,9 +1,9 @@
 package com.sideteam.groupsaver.domain.auth.service;
 
 import com.sideteam.groupsaver.domain.auth.dto.response.TokenDto;
+import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
-import com.sideteam.groupsaver.domain.member.domain.OAuthMember;
-import com.sideteam.groupsaver.domain.member.repository.OAuthMemberRepository;
+import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthInfoResponse;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthLoginParams;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class OAuthLoginService {
-    private final OAuthMemberRepository oAuthMemberRepository;
+    private final MemberRepository memberRepository;
     private final AuthTokenService authTokenService;
     private final RequestOAuthInfoService requestOAuthInfoService;
 
@@ -25,16 +25,17 @@ public class OAuthLoginService {
     }
 
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-        return oAuthMemberRepository.findByEmail(oAuthInfoResponse.getEmail())
-                .map(OAuthMember::getId)
+        return memberRepository.findByEmail(oAuthInfoResponse.getEmail())
+                .map(Member::getId)
                 .orElseGet(() -> newMember(oAuthInfoResponse));
     }
 
     private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
-
-        return oAuthMemberRepository.save(OAuthMember.builder()
+        final var roles = Set.of(MemberRole.USER);
+        return memberRepository.save(Member.builder()
                 .email(oAuthInfoResponse.getEmail())
                 .nickname(oAuthInfoResponse.getNickname())
+                .roles(roles)
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build()).getId();
     }

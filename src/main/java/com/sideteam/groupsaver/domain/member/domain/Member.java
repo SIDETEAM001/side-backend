@@ -18,7 +18,7 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    // nullalbe을 해제해도 되는지?
     private String password;
 
     @Column(nullable = false)
@@ -26,6 +26,10 @@ public class Member extends BaseTimeEntity {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private OAuthProvider oAuthProvider;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
@@ -35,10 +39,11 @@ public class Member extends BaseTimeEntity {
     private Set<MemberRole> roles = new HashSet<>();
 
     @Builder
-    protected Member(String password, String nickname, String email, Set<MemberRole> roles) {
+    protected Member(String password, String nickname, String email, OAuthProvider oAuthProvider,Set<MemberRole> roles) {
         this.password = password;
         this.email = email;
         this.nickname = nickname;
+        this.oAuthProvider = oAuthProvider;
         this.roles = roles;
     }
 
