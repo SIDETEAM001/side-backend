@@ -24,9 +24,12 @@ public class RefreshToken {
         this.timeToLive = timeToLive;
     }
 
-    public void refresh(String newToken, long newTimeToLive) {
-        this.token = newToken;
-        this.timeToLive = newTimeToLive;
+    public static RefreshToken of(final RefreshToken refreshToken, final String newToken, long newTtl) {
+        return RefreshToken.builder()
+                .token(newToken)
+                .memberId(refreshToken.memberId)
+                .timeToLive(newTtl)
+                .build();
     }
 
 }

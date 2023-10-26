@@ -2,9 +2,12 @@ package com.sideteam.groupsaver.global.config.security;
 
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import com.sideteam.groupsaver.global.auth.entrypoint.AuthEntryPointJwt;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
-
 @EnableMethodSecurity
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Configuration
@@ -31,7 +30,6 @@ class SecurityConfig {
     private final AuthEntryPointJwt unauthorizedHandler;
 
     private final SecurityAdapterConfig securityAdapterConfig;
-
 
     private static final String[] publicEndpoints = {
             // API
@@ -52,8 +50,8 @@ class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(getPublicStaticPath()).permitAll()
-                        .requestMatchers(convertToAntPathMatcher(publicEndpoints)).permitAll()
-                        .requestMatchers(convertToAntPathMatcher(publicReadOnlyPublicEndpoints, HttpMethod.GET)).permitAll()
+                        .requestMatchers(getPublicEndpoints()).permitAll()
+                        .requestMatchers(getReadOnlyPublicEndpoints()).permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -84,15 +82,15 @@ class SecurityConfig {
         return new AntPathRequestMatcher(PathRequest.toStaticResources().atCommonLocations().toString());
     }
 
-    private AntPathRequestMatcher[] convertToAntPathMatcher(String[] paths) {
-        return Stream.of(paths)
+    private AntPathRequestMatcher[] getPublicEndpoints() {
+        return Stream.of(publicEndpoints)
                 .map(AntPathRequestMatcher::antMatcher)
                 .toArray(AntPathRequestMatcher[]::new);
     }
 
-    private AntPathRequestMatcher[] convertToAntPathMatcher(String[] paths, HttpMethod httpMethod) {
-        return Stream.of(paths)
-                .map(path -> new AntPathRequestMatcher(path, httpMethod.name()))
+    private AntPathRequestMatcher[] getReadOnlyPublicEndpoints() {
+        return Stream.of(SecurityConfig.publicReadOnlyPublicEndpoints)
+                .map(path -> new AntPathRequestMatcher(path, HttpMethod.GET.name()))
                 .toArray(AntPathRequestMatcher[]::new);
     }
 

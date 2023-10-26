@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 public record SignupRequest(
 
         @NotBlank(message = "전화번호는 공백이 아니어야 합니다")
+        @Pattern(message = "전화번호는 숫자만 허용되며, '-'을 포함한 형식입니다", regexp = AuthConstants.phoneNumberRegexp)
         String phoneNumber,
 
         @NotBlank(message = "닉네임은 공백이 아니어야 합니다")
@@ -21,7 +22,7 @@ public record SignupRequest(
 
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다")
         @Pattern(message = "비밀번호는 숫자, 영어, 특수문자를 포함해야 합니다", regexp = AuthConstants.passwordRegexp)
-        @Size(min = 6, max = 64, message = "비밀번호의 길이는 6 ~ 64자 입니다")
+        @Size(min = 6, message = "비밀번호의 길이는 최소 6자 입니다")
         String password
 
 ) {

@@ -1,14 +1,23 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -18,7 +27,7 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    // nullalbe을 해제해도 되는지?
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -30,6 +39,10 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private OAuthProvider oAuthProvider;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "member_roles",
@@ -38,11 +51,13 @@ public class Member extends BaseTimeEntity {
     private Set<MemberRole> roles = new HashSet<>();
 
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, Set<MemberRole> roles) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider,
+                     Set<MemberRole> roles) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.nickname = nickname;
+        this.oAuthProvider = oAuthProvider;
         this.roles = roles;
     }
 

@@ -12,7 +12,7 @@ public record LoginRequest(
         String email,
 
         @NotBlank(message = "입력한 비밀번호는 공백이 아니어야 합니다")
-        @Size(min = 6, max = 64, message = "비밀번호의 길이는 6 ~ 64자 입니다")
+        @Size(min = 6, message = "비밀번호의 길이는 최소 6자 입니다")
         String password
 
 ) {

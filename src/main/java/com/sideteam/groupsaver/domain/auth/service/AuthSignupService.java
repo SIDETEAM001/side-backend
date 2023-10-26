@@ -4,6 +4,7 @@ import com.sideteam.groupsaver.domain.auth.dto.request.SignupRequest;
 import com.sideteam.groupsaver.domain.auth.dto.response.SignupResult;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
+import com.sideteam.groupsaver.domain.member.domain.OAuthProvider;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class AuthSignupService {
                 .email(signupRequest.email())
                 .nickname(signupRequest.nickname())
                 .roles(roles)
+                .oAuthProvider(OAuthProvider.STANDARD)
                 .password(encodePassword(signupRequest))
                 .phoneNumber(signupRequest.phoneNumber())
                 .build();

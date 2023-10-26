@@ -25,3 +25,11 @@ app:
       expiration: ${JWT_EXPIRATION_ACCESS}
     refresh:
       expiration: ${JWT_EXPIRATION_REFRESH}
+
+oauth:
+  kakao:
+    client-id: ${KAKAO_REST_API_KEY}
+    url:
+     auth: https://kauth.kakao.com
+     api: https://kapi.kakao.com
+

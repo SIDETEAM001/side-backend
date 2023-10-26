@@ -52,9 +52,15 @@ public class RefreshTokenService {
      * @return - 새로운 리프래시 토큰
      */
     public RefreshToken refresh(final String requestRefreshToken) {
-        final RefreshToken refreshToken = findOrThrow(requestRefreshToken);
-        refreshToken.refresh(makeRefreshToken(), getExpiryTime());
-        return refreshToken;
+        final RefreshToken oldRefreshToken = findOrThrow(requestRefreshToken);
+
+        final RefreshToken newRefreshToken = RefreshToken.of(
+                oldRefreshToken,
+                makeRefreshToken(),
+                getExpiryTime());
+
+        deleteToken(oldRefreshToken);
+        return refreshTokenRepository.save(newRefreshToken);
     }
 
     /**
