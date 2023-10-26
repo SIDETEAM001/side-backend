@@ -4,20 +4,22 @@ import com.sideteam.groupsaver.global.auth.AuthConstants;
 import com.sideteam.groupsaver.global.auth.entrypoint.AuthEntryPointJwt;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,11 +32,10 @@ class SecurityConfig {
 
     private final SecurityAdapterConfig securityAdapterConfig;
 
-
-    private static final String[] publicEndpoints = {
+    private static final AntPathRequestMatcher[] publicEndpoints = {
             // API
-            "/api/v1/auth/**",
-            "/api/v1/test/**",
+            new AntPathRequestMatcher("/api/v1/auth/**"),
+            new AntPathRequestMatcher("/api/v1/test/**"),
     };
 
     private static final String[] publicReadOnlyPublicEndpoints = {
@@ -49,9 +50,9 @@ class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations().toString()).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher(PathRequest.toStaticResources().atCommonLocations().toString())).permitAll()
                         .requestMatchers(publicEndpoints).permitAll()
-                        .requestMatchers(HttpMethod.GET, publicReadOnlyPublicEndpoints).permitAll()
+//                        .requestMatchers(HttpMethod.GET, publicReadOnlyPublicEndpoints).permitAll()
                         .anyRequest().authenticated()
                 )
 
