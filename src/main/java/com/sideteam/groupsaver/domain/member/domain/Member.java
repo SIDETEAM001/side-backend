@@ -1,23 +1,14 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -50,9 +41,7 @@ public class Member extends BaseTimeEntity {
     )
     private Set<MemberRole> roles = new HashSet<>();
 
-    @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider,
-                     Set<MemberRole> roles) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
