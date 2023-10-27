@@ -2,7 +2,6 @@ package com.sideteam.groupsaver.global.config.security;
 
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import com.sideteam.groupsaver.global.auth.entrypoint.AuthEntryPointJwt;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

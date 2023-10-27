@@ -6,7 +6,6 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.domain.OAuthProvider;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
