@@ -41,6 +41,7 @@ public class Member extends BaseTimeEntity {
     )
     private Set<MemberRole> roles = new HashSet<>();
 
+    @Builder
     protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles) {
         this.password = password;
         this.phoneNumber = phoneNumber;

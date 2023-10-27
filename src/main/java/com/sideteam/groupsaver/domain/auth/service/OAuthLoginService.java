@@ -4,6 +4,7 @@ import com.sideteam.groupsaver.domain.auth.dto.response.TokenDto;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
+import com.sideteam.groupsaver.global.auth.TokenService;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthInfoResponse;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthLoginParams;
 import lombok.RequiredArgsConstructor;

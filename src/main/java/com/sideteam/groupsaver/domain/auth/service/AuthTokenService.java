@@ -43,15 +43,6 @@ public class AuthTokenService {
         return tokenService.generate(memberId);
     }
 
-    public TokenDto generate(Long memberId) {
-
-        final String accessToken = jwtTokenProvider.issueJwtToken(memberId);
-        final String refreshToken = refreshTokenService.issueRefreshToken(memberId);
-
-        log.info("로그인, 토큰 신규 발급. Member ID: {}", memberId);
-
-        return new TokenDto(accessToken, refreshToken);
-    }
 
     /**
      * 기존의 유효한 Refresh 토큰으로 새로운 Access 토큰과 Refresh 토큰을 발급하는 함수

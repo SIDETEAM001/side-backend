@@ -9,19 +9,15 @@ import com.sideteam.groupsaver.domain.auth.service.OAuthLoginService;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import com.sideteam.groupsaver.global.auth.oauth.kakao.KakaoLoginParams;
 import com.sideteam.groupsaver.global.util.CookieUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.time.Duration;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @RestController
@@ -57,6 +53,7 @@ public class AuthController {
                 .build();
     }
 
+
     @PostMapping("/kakao")
     public ResponseEntity<TokenDto> loginKakao(@RequestBody KakaoLoginParams params) {
         return ResponseEntity.ok(oAuthLoginService.login(params));
@@ -84,8 +81,4 @@ public class AuthController {
         ).toString();
     }
 
-    @PostMapping("/kakao")
-    public ResponseEntity<TokenDto> loginKakao(@RequestBody KakaoLoginParams params) {
-        return ResponseEntity.ok(oAuthLoginService.login(params));
-    }
 }
