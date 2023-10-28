@@ -12,21 +12,24 @@ public class RefreshToken {
     @Id
     private String token;
 
-    private final long memberId;
+    private final String memberId;
 
     @TimeToLive
     private long timeToLive;
 
     @Builder
-    protected RefreshToken(String token, long memberId, long timeToLive) {
+    protected RefreshToken(String token, String memberId, long timeToLive) {
         this.token = token;
         this.memberId = memberId;
         this.timeToLive = timeToLive;
     }
 
-    public void refresh(String newToken, long newTimeToLive) {
-        this.token = newToken;
-        this.timeToLive = newTimeToLive;
+    public static RefreshToken of(final RefreshToken refreshToken, final String newToken, long newTtl) {
+        return RefreshToken.builder()
+                .token(newToken)
+                .memberId(refreshToken.memberId)
+                .timeToLive(newTtl)
+                .build();
     }
 
 }

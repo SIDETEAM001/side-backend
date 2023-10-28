@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
@@ -63,15 +64,15 @@ public final class JwtTokenProvider {
      * @param memberId - JWT 토큰 구분 대상
      * @return - 새로 발급한 JWT 토큰
      */
-    public String issueJwtToken(final long memberId) {
+    public String issueJwtToken(final String memberId) {
 
-        final Date now = new Date();
-        final Date expiryDate = createExpiryDate(now);
+        final Instant now = Instant.now();
+        final Instant expiryDate = createExpiryDate(now);
 
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expiryDate))
                 .setClaims(createClaims(memberId, expiryDate))
                 .signWith(tokenSecretKey, signatureAlgorithm)
                 .compact();
@@ -87,11 +88,11 @@ public final class JwtTokenProvider {
         return verifyAndGetClaims(accessToken).getSubject();
     }
 
-    public Date getExpiryDate(final String accessToken) {
-        return verifyAndGetClaims(accessToken).getExpiration();
+    public Instant getExpiryDate(final String accessToken) {
+        return verifyAndGetClaims(accessToken).getExpiration().toInstant();
     }
 
-    public Claims verifyAndGetClaims(final String accessToken) {
+    public Claims verifyAndGetClaims(final String accessToken) throws AuthErrorException {
         try {
             return getClaimsFormToken(accessToken, tokenSecretKey);
         } catch (JwtException jwtException) {
@@ -108,15 +109,15 @@ public final class JwtTokenProvider {
         );
     }
 
-    private static Map<String, Object> createClaims(final long id, final Date expiryDate) {
+    private static Map<String, Object> createClaims(final String subject, final Instant expiryDate) {
         return Map.of(
-                Claims.SUBJECT, id,
-                Claims.EXPIRATION, expiryDate
+                Claims.SUBJECT, subject,
+                Claims.EXPIRATION, Date.from(expiryDate)
         );
     }
 
-    private Date createExpiryDate(final Date now) {
-        return new Date(now.getTime() + tokenExpiration.toMillis());
+    private Instant createExpiryDate(final Instant since) {
+        return since.plus(tokenExpiration);
     }
 
     private static Claims getClaimsFormToken(final String token, final Key secretKey) {

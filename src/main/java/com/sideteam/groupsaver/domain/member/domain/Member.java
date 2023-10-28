@@ -21,6 +21,9 @@ public class Member extends BaseTimeEntity {
     // nullalbe을 해제해도 되는지?
     private String password;
 
+    @Column(unique = true, nullable = false)
+    private String phoneNumber;
+
     @Column(nullable = false)
     private String nickname;
 
@@ -39,8 +42,9 @@ public class Member extends BaseTimeEntity {
     private Set<MemberRole> roles = new HashSet<>();
 
     @Builder
-    protected Member(String password, String nickname, String email, OAuthProvider oAuthProvider,Set<MemberRole> roles) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles) {
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;

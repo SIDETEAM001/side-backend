@@ -8,9 +8,7 @@ import com.sideteam.groupsaver.domain.auth.service.AuthTokenService;
 import com.sideteam.groupsaver.domain.auth.service.OAuthLoginService;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import com.sideteam.groupsaver.global.auth.oauth.kakao.KakaoLoginParams;
-import com.sideteam.groupsaver.global.auth.oauth.kakao.KakaoTokens;
 import com.sideteam.groupsaver.global.util.CookieUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +54,12 @@ public class AuthController {
     }
 
 
+    @PostMapping("/kakao")
+    public ResponseEntity<TokenDto> loginKakao(@RequestBody KakaoLoginParams params) {
+        return ResponseEntity.ok(oAuthLoginService.login(params));
+    }
+
+
     private HttpHeaders createLoginTokenHeaders(final TokenDto tokenDto) {
 
         final HttpHeaders headers = new HttpHeaders();
@@ -77,8 +81,4 @@ public class AuthController {
         ).toString();
     }
 
-    @PostMapping("/kakao")
-    public ResponseEntity<TokenDto> loginKakao(@RequestBody KakaoLoginParams params) {
-        return ResponseEntity.ok(oAuthLoginService.login(params));
-    }
 }
