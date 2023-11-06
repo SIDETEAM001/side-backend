@@ -10,7 +10,7 @@ public interface FileService {
     /**
      * <p>
      * 저장할 경로와 파일을 바탕으로 파일들을 업로드<br>
-     * 파일 키 리스트 반환
+     * 파일 URL 리스트 반환
      * </p>
      *
      * @param prefix        저장할 경로
@@ -23,7 +23,7 @@ public interface FileService {
     /**
      * <p>
      * 저장할 경로와 파일을 바탕으로 파일들을 업로드<br>
-     * 파일 키 리스트 반환
+     * 파일 URL 리스트 반환
      * </p>
      *
      * @param prefix         저장할 경로
@@ -32,5 +32,12 @@ public interface FileService {
      */
     FileUrlDto upload(String prefix, List<MultipartFile> multipartFiles);
 
+    /**
+     * <p>
+     * 업로드한 파일을 삭제
+     * </p>
+     *
+     * @param fileKey - 파일 고유 키
+     */
     void deleteFile(String fileKey);
 }
