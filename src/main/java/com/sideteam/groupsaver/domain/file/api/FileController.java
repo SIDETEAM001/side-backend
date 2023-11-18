@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.file.api;
 
+import com.sideteam.groupsaver.domain.file.dto.FileUrlDto;
 import com.sideteam.groupsaver.infra.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class FileController {
 
 
     @PostMapping
-    public ResponseEntity<?> uploadFiles(@RequestParam(name = "files") List<MultipartFile> files) {
-        final var data = fileService.upload("upload/", files);
-        return ResponseEntity.ok(data);
+    public ResponseEntity<FileUrlDto> uploadFiles(@RequestParam(name = "files") List<MultipartFile> files) {
+        final FileUrlDto fileUrlDto = fileService.upload("upload/", files);
+        return ResponseEntity.ok(fileUrlDto);
     }
 
 }
