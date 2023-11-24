@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum FileErrorCode implements ErrorCode {
 
     INVALID_EXTENSION(BAD_REQUEST, "허용된 확장자가 아닌 파일입니다, 허용된 확장자만 가능합니다"),
+    FILE_ID_NOT_FOUND(NOT_FOUND, "찾을 수 없는 파일입니다"),
 
     FAILED_S3_UPLOAD(UNPROCESSABLE_ENTITY, "업로드에 실패한 이미지입니다"),
 

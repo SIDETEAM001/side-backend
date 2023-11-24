@@ -11,8 +11,10 @@ import com.sideteam.groupsaver.domain.file.repository.ResourceFileRepository;
 import com.sideteam.groupsaver.global.exception.file.FileErrorCode;
 import com.sideteam.groupsaver.global.exception.file.FileException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,11 +29,6 @@ public class FileServiceS3Impl implements FileService {
     private final AmazonS3 amazonS3;
     private final String bucketName;
     private final ResourceFileRepository resourceFileRepository;
-
-    private static final Set<String> ALLOWED_EXTENSIONS = new HashSet<>(Arrays.asList(
-            "png", "jpeg", "jpg"
-    ));
-
 
     public FileServiceS3Impl(
             AmazonS3 amazonS3,
@@ -66,9 +63,12 @@ public class FileServiceS3Impl implements FileService {
 
 
     @Override
-    public void deleteFile(String fileKey) {
+    public void deleteFile(long fileId) {
+        String fileKey = resourceFileRepository.findById(fileId)
+                        .orElseThrow(()-> new FileException(FileErrorCode.FILE_ID_NOT_FOUND, String.valueOf(fileId)))
+                .getFileKey();
         amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileKey));
-        resourceFileRepository.deleteByFileKey(fileKey);
+        resourceFileRepository.deleteById(fileId);
         log.info("파일 '{}' 삭제 완료", fileKey);
     }
 
@@ -118,9 +118,7 @@ public class FileServiceS3Impl implements FileService {
     }
 
     private boolean isValidExtension(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        String extension = StringUtils.getFilenameExtension(fileName);
-        return ALLOWED_EXTENSIONS.contains(extension);
+        return Objects.requireNonNull(file.getContentType()).startsWith("image/");
     }
 
 

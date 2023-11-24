@@ -34,10 +34,10 @@ public interface FileService {
 
     /**
      * <p>
-     * 업로드한 파일을 삭제
+     * 기존에 저장된 파일을 삭제
      * </p>
      *
-     * @param fileKey - 파일 고유 키
+     * @param fileId - DB의 id
      */
-    void deleteFile(String fileKey);
+    void deleteFile(long fileId);
 }
