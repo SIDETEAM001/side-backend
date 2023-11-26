@@ -1,7 +1,7 @@
 package com.sideteam.groupsaver.domain.club_schedule.domain;
 
+import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
-import com.sideteam.groupsaver.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SQLDelete(sql = "UPDATE ClubSchedule SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
@@ -26,14 +24,35 @@ public class ClubSchedule extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    // TODO Club 테이블과 연결
-//    @JoinColumn(nullable = false)
-//    private Club club;
+    @JoinColumn(nullable = false)
+    private Club club;
 
     @Column(nullable = false)
     private LocalDateTime meetAt;
 
     @Column(nullable = false)
     private String title;
+
+    // TODO 모임 일정 참석 최대 인원수?
+
+    public static ClubSchedule of(Club club, ClubScheduleRequestDto clubScheduleRequestDto) {
+        return new ClubSchedule(club, clubScheduleRequestDto.meetAt(), clubScheduleRequestDto.title());
+    }
+
+    public void update(LocalDateTime meetAt, String title) {
+        if (meetAt != null) {
+            this.meetAt = meetAt;
+        }
+        if (title != null) {
+            this.title = title;
+        }
+    }
+
+
+    private ClubSchedule(Club club, LocalDateTime meetAt, String title) {
+        this.club = club;
+        this.meetAt = meetAt;
+        this.title = title;
+    }
 
 }

@@ -30,4 +30,15 @@ public class ClubScheduleMember extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+
+    public static ClubScheduleMember of(ClubSchedule clubSchedule, Member member) {
+        return new ClubScheduleMember(clubSchedule, member);
+    }
+
+
+    private ClubScheduleMember(ClubSchedule clubSchedule, Member member) {
+        this.clubSchedule = clubSchedule;
+        this.member = member;
+    }
+
 }
