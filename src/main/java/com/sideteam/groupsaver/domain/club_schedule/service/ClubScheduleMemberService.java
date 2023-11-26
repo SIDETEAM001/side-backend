@@ -2,6 +2,7 @@ package com.sideteam.groupsaver.domain.club_schedule.service;
 
 import com.sideteam.groupsaver.domain.club_schedule.domain.ClubSchedule;
 import com.sideteam.groupsaver.domain.club_schedule.domain.ClubScheduleMember;
+import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleMemberDto;
 import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleMemberRepository;
 import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleRepository;
 import com.sideteam.groupsaver.domain.member.domain.Member;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.awt.print.Pageable;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -21,6 +25,12 @@ public class ClubScheduleMemberService {
     private final ClubScheduleMemberRepository clubScheduleMemberRepository;
 
     private final MemberRepository memberRepository;
+
+    public List<ClubScheduleMemberDto> getClubScheduleMembers(Long clubScheduleId, Pageable pageable) {
+        return clubScheduleMemberRepository.findAll(clubScheduleId, pageable).stream()
+                .map(ClubScheduleMemberDto::from)
+                .toList();
+    }
 
     public void joinSchedule(Long clubScheduleId, Long memberId) {
         ClubSchedule clubSchedule = findClubScheduleOrThrow(clubScheduleId);
