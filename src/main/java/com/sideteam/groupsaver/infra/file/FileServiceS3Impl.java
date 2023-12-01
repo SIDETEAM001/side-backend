@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Slf4j
+@Transactional
 @Service
 public class FileServiceS3Impl implements FileService {
     private final AmazonS3 amazonS3;
