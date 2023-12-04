@@ -6,7 +6,6 @@ import lombok.Getter;
 public enum ClubActivityType {
     ONLINE("온라인"),
     OFFLINE("오프라인"),
-    ONANDOFF("온/오프라인")
     ;
 
     private final String activityType;

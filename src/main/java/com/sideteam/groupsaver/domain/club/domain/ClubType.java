@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ClubType {
-    SHOT("단기"),
+    SHORT("단기"),
     LONG("장기"),
     ONE("원데이")
     ;
