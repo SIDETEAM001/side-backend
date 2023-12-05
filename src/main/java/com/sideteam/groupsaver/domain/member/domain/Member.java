@@ -1,17 +1,20 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
+import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
+import com.sideteam.groupsaver.domain.join.domain.WantHobby;
+import com.sideteam.groupsaver.domain.join.enums.JobCategory;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Entity
 public class Member extends BaseTimeEntity {
     @Id
@@ -41,14 +44,28 @@ public class Member extends BaseTimeEntity {
     )
     private Set<MemberRole> roles = new HashSet<>();
 
+    // 직무 & 자기계발 & 취미생활 데이터 받기
+    @Column
+    private JobCategory jobCategory;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<WantDevelop> wantDevelopList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<WantHobby> wantHobbyList = new ArrayList<>();
+
+
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobCategory jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;
         this.roles = roles;
+        this.jobCategory = jobCategory;
+        this.wantDevelopList = wantDevelopList;
+        this.wantHobbyList = wantHobbyList;
     }
 
 }

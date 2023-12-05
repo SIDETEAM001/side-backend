@@ -6,6 +6,11 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.auth.TokenService;
 import com.sideteam.groupsaver.global.auth.userdetails.CustomUserDetails;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorCode;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,4 +79,14 @@ public class AuthTokenService {
     }
 
 
+    public void deleteMember(HttpServletRequest request, Cookie cookie) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new AuthErrorException(AuthErrorCode.FAILED_AUTHENTICATION, "현재 로그인하지 않은 상태입니다.");
+        }
+        Member member = (Member) session.getAttribute("loginMember");
+        session.invalidate();
+        cookie.setMaxAge(0);
+        memberRepository.delete(member);
+    }
 }
