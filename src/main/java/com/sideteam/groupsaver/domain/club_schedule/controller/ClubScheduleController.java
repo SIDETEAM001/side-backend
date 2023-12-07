@@ -4,10 +4,11 @@ import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
 import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleResponseDto;
 import com.sideteam.groupsaver.domain.club_schedule.service.ClubScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class ClubScheduleController {
     }
 
     @GetMapping("/club/{clubId}")
-    public ResponseEntity<List<ClubScheduleResponseDto>> getSchedules(
+    public ResponseEntity<Page<ClubScheduleResponseDto>> getSchedules(
             @PathVariable Long clubId,
             Pageable pageable) {
         return ResponseEntity.ok(clubScheduleService.getScheduleByClubId(clubId, pageable));
@@ -44,7 +45,7 @@ public class ClubScheduleController {
     }
 
     @DeleteMapping("/{clubScheduleId}")
-    public ResponseEntity<Void> getSchedules(@PathVariable Long clubScheduleId) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long clubScheduleId) {
         clubScheduleService.deleteSchedule(clubScheduleId);
         return ResponseEntity.noContent().build();
     }

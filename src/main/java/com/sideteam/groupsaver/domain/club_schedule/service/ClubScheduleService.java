@@ -7,10 +7,12 @@ import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleRepos
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubScheduleErrorCode.CLUB_SCHEDULE_NOT_FOUND;
@@ -31,11 +33,13 @@ public class ClubScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClubScheduleResponseDto> getScheduleByClubId(Long clubId, Pageable pageable) {
-        return clubScheduleRepository.findAllByClubId(clubId, pageable)
-                .stream()
+    public Page<ClubScheduleResponseDto> getScheduleByClubId(Long clubId, Pageable pageable) {
+        Page<ClubSchedule> clubSchedulePage = clubScheduleRepository.findAllByClubId(clubId, pageable);
+
+        List<ClubScheduleResponseDto> clubScheduleResponses = clubSchedulePage.getContent().stream()
                 .map(ClubScheduleResponseDto::from)
                 .toList();
+        return new PageImpl<>(clubScheduleResponses, clubSchedulePage.getPageable(), clubSchedulePage.getTotalElements());
     }
 
     public ClubScheduleResponseDto createSchedule(Long clubId, ClubScheduleRequestDto clubScheduleRequestDto) {
