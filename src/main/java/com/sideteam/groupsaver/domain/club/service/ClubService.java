@@ -80,7 +80,7 @@ public class ClubService {
 
     public void deleteClub(long clubId) {
         checkTheReader(clubId);
-        repository.deleteById(clubId);
+        repository.updateIsStatusByClubId(clubId);
     }
 
     public void checkTheReader(long clubId) {
