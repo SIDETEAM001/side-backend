@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ClubMemberStatus {
     ACTIVITY("활동중"),
-    WITHDRAWAL("탈퇴"),
-    STANDBY("신청대기");
+    WITHDRAWAL("탈퇴")
+    ;
 
     private final String ClubMemberStatus;
 
