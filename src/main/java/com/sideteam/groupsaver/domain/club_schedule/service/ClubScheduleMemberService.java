@@ -9,10 +9,13 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,22 +29,25 @@ public class ClubScheduleMemberService {
 
     private final MemberRepository memberRepository;
 
-    public List<ClubScheduleMemberDto> getClubScheduleMembers(Long clubScheduleId, Pageable pageable) {
-        return clubScheduleMemberRepository.findAll(clubScheduleId, pageable).stream()
+    public Page<ClubScheduleMemberDto> getClubScheduleMembers(Long clubScheduleId, Pageable pageable) {
+        Page<ClubScheduleMember> clubScheduleMembers = clubScheduleMemberRepository.findAllByClubScheduleId(clubScheduleId, pageable);
+
+        List<ClubScheduleMemberDto> clubScheduleResponses = clubScheduleMembers.getContent().stream()
                 .map(ClubScheduleMemberDto::from)
                 .toList();
+        return new PageImpl<>(clubScheduleResponses, clubScheduleMembers.getPageable(), clubScheduleMembers.getTotalElements());
     }
 
+    @PreAuthorize("isAuthenticated() and (( #memberId.toString() == principal.username ) or hasRole('ROLE_ADMIN'))")
     public void joinSchedule(Long clubScheduleId, Long memberId) {
         ClubSchedule clubSchedule = findClubScheduleOrThrow(clubScheduleId);
         Member member = findMemberOrThrow(memberId);
-        // TODO 해당 모임 일정 참석하기 권환 유무 확인
         // TODO 모임 일정 참석 최대 인원수 제한이 필요하다면 로직 추가
         clubScheduleMemberRepository.save(ClubScheduleMember.of(clubSchedule, member));
     }
 
+    @PreAuthorize("isAuthenticated() and (( #memberId.toString() == principal.username ) or hasRole('ROLE_ADMIN'))")
     public void leaveSchedule(Long clubScheduleId, Long memberId) {
-        // TODO 해당 모임 일정 나가기 권환 유무 확인
         clubScheduleMemberRepository.deleteByClubScheduleIdAndMemberId(clubScheduleId, memberId);
     }
 
