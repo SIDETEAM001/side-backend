@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 
 public record ClubScheduleRequestDto(
         String title,
-        LocalDateTime meetAt
+        String description,
+        long maxParticipation,
+        String location,
+        LocalDateTime meetAt,
+        long participationFee
 ) {
 }

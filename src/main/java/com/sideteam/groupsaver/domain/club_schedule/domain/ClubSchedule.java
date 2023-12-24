@@ -34,10 +34,29 @@ public class ClubSchedule extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    // TODO 모임 일정 참석 최대 인원수?
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private Long maxParticipation;
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
+    private Long participationFee;
+
 
     public static ClubSchedule of(Club club, ClubScheduleRequestDto clubScheduleRequestDto) {
-        return new ClubSchedule(club, clubScheduleRequestDto.meetAt(), clubScheduleRequestDto.title());
+        return new ClubSchedule(
+                club,
+                clubScheduleRequestDto.meetAt(),
+                clubScheduleRequestDto.title(),
+                clubScheduleRequestDto.description(),
+                clubScheduleRequestDto.maxParticipation(),
+                clubScheduleRequestDto.location(),
+                clubScheduleRequestDto.participationFee()
+        );
     }
 
     public void update(LocalDateTime meetAt, String title) {
@@ -45,11 +64,16 @@ public class ClubSchedule extends BaseTimeEntity {
         this.title = Objects.requireNonNullElse(title, this.title);
     }
 
-
-    private ClubSchedule(Club club, LocalDateTime meetAt, String title) {
+    private ClubSchedule(Club club, LocalDateTime meetAt, String title, String description,
+                         Long maxParticipation, String location, Long participationFee) {
         this.club = club;
         this.meetAt = meetAt;
         this.title = title;
+        this.description = description;
+        this.maxParticipation = maxParticipation;
+        this.location = location;
+        this.participationFee = participationFee;
+        this.isDeleted = false;
     }
 
 }
