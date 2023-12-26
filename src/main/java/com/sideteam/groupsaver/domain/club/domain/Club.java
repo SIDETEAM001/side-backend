@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 //@SQLDelete(sql = "UPDATE club SET isStatus = false WHERE id = ?")
 //@Where(clause = "isStatus = true")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Club extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,8 +62,6 @@ public class Club extends BaseTimeEntity {
         this.startClub = startClub;
         this.activityType = activityType;
     }
-
-
 
     public static Club of(String name, int memberNumMax, ClubType type, String description, ClubMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
         return new Club(name, memberNumMax, type, description, category, mainImage, startClub, activityType);

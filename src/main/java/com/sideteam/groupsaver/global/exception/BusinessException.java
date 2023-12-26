@@ -16,4 +16,5 @@ public class BusinessException extends RuntimeException {
     public String toString() {
         return "AUTH 에러 코드: " + errorCode + ", 사유: " + causedBy;
     }
+
 }

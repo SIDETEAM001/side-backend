@@ -50,7 +50,7 @@ public class ClubService {
     private void createClubMember(long clubId, ClubMemberRole role) {
         long memberId = Long.parseLong(GetAuthUserUtils.getAuthUserId());
         if (clubMemberRepository.existsByMemberId(memberId)) {
-            throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "멤버 아이디 : " + String.valueOf(memberId));
+            throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "멤버 아이디 : " + memberId);
         }
         ClubMember entity = ClubMember.of(clubId, memberId, role);
         clubMemberRepository.save(entity);
