@@ -5,25 +5,28 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
-@RequiredArgsConstructor
 @Slf4j
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
+    private final HandlerExceptionResolver resolver;
+
+    public AuthEntryPointJwt(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+        this.resolver = resolver;
+    }
+
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException {
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        // TODO 에러 값 생성 후 반환
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
+        resolver.resolveException(request, response, null, authException);
     }
 
 }
