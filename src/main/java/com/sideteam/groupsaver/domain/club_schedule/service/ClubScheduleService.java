@@ -1,5 +1,7 @@
 package com.sideteam.groupsaver.domain.club_schedule.service;
 
+import com.sideteam.groupsaver.domain.club.domain.Club;
+import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.club_schedule.domain.ClubSchedule;
 import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
 import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleResponseDto;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubScheduleErrorCode.CLUB_SCHEDULE_NOT_FOUND;
@@ -25,6 +29,8 @@ public class ClubScheduleService {
 
     private final ClubRepository clubRepository;
     private final ClubScheduleRepository clubScheduleRepository;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Transactional(readOnly = true)
     public ClubScheduleResponseDto getSchedule(Long clubScheduleId) {
@@ -54,7 +60,9 @@ public class ClubScheduleService {
             ClubScheduleRequestDto clubScheduleRequestDto) {
 
         ClubSchedule clubSchedule = findClubScheduleOrThrow(clubScheduleId);
-        clubSchedule.update(clubScheduleRequestDto.meetAt(), clubScheduleRequestDto.title());
+
+        clubSchedule.update(LocalDateTime.parse(clubScheduleRequestDto.meetAt(), formatter),
+                clubScheduleRequestDto.title());
 
         return ClubScheduleResponseDto.from(clubSchedule);
     }
@@ -72,6 +80,5 @@ public class ClubScheduleService {
         return clubScheduleRepository.findById(clubScheduleId)
                 .orElseThrow(() -> new BusinessException(CLUB_SCHEDULE_NOT_FOUND, clubScheduleId.toString()));
     }
-
 
 }

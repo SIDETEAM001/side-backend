@@ -1,13 +1,15 @@
 package com.sideteam.groupsaver.domain.club_schedule.dto;
 
-import java.time.LocalDateTime;
-
 public record ClubScheduleRequestDto(
         String title,
         String description,
         long maxParticipation,
         String location,
-        LocalDateTime meetAt,
+        String meetAt,
+//        @JsonFormat(shape = JsonFormat.Shape.STRING,
+//                pattern = "yyyy-MM-dd HH:mm:ss",
+//                timezone = "Asia/Seoul")
+//        LocalDateTime meetAt,
         long participationFee
 ) {
 }

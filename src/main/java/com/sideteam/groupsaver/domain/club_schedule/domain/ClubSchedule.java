@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.club_schedule.domain;
 
+import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @SQLDelete(sql = "UPDATE ClubSchedule SET is_deleted = true WHERE id = ?")
@@ -26,6 +28,7 @@ public class ClubSchedule extends BaseTimeEntity {
     private boolean isDeleted;
 
     @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
     @Column(nullable = false)
@@ -48,9 +51,11 @@ public class ClubSchedule extends BaseTimeEntity {
 
 
     public static ClubSchedule of(Club club, ClubScheduleRequestDto clubScheduleRequestDto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         return new ClubSchedule(
                 club,
-                clubScheduleRequestDto.meetAt(),
+                LocalDateTime.parse(clubScheduleRequestDto.meetAt(), formatter),
                 clubScheduleRequestDto.title(),
                 clubScheduleRequestDto.description(),
                 clubScheduleRequestDto.maxParticipation(),
