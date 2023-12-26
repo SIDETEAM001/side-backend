@@ -1,11 +1,15 @@
 package com.sideteam.groupsaver.domain.auth.dto.request;
 
+import com.sideteam.groupsaver.domain.join.enums.DevelopCategory;
+import com.sideteam.groupsaver.domain.join.enums.HobbyCategory;
+import com.sideteam.groupsaver.domain.join.enums.JobCategory;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
 
 public record SignupRequest(
 
@@ -23,7 +27,13 @@ public record SignupRequest(
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다")
         @Pattern(message = "비밀번호는 숫자, 영어, 특수문자를 포함해야 합니다", regexp = AuthConstants.passwordRegexp)
         @Size(min = 6, message = "비밀번호의 길이는 최소 6자 입니다")
-        String password
+        String password,
+
+        JobCategory jobCategory,
+
+        List<DevelopCategory> wantDevelopCategory,
+
+        List<HobbyCategory> wantHobbyCategory
 
 ) {
 }
