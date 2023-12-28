@@ -1,19 +1,11 @@
 package com.sideteam.groupsaver.domain.club.controller;
 
-import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
-import com.sideteam.groupsaver.domain.club.domain.ClubMajor;
-import com.sideteam.groupsaver.domain.club.domain.ClubMemberRole;
-import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.club.dto.ClubCreateDto;
 import com.sideteam.groupsaver.domain.club.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/club")

@@ -1,15 +1,13 @@
 package com.sideteam.groupsaver.domain.club.dto;
 
 import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
-import com.sideteam.groupsaver.domain.club.domain.ClubMajor;
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class ClubCreateDto {
-    private ClubMajor categoryType;
+    private DevelopMajor categoryType;
     private ClubType type;
     private String name;
     private ClubActivityType activityType;
