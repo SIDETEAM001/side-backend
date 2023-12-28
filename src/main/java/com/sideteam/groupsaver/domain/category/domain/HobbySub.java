@@ -38,9 +38,9 @@ public enum HobbySub {
     DANCE_ETC(HobbyMajor.DANCE, "기타"),
 
     DRAWING(HobbyMajor.CRAFT, "드로잉"),
-    WOOD(HobbyMajor.CRAFT, "드로잉"),
-    CALLIGRAPHY(HobbyMajor.CRAFT, "드로잉"),
-    FLOWER(HobbyMajor.CRAFT, "드로잉"),
+    WOOD(HobbyMajor.CRAFT, "목공"),
+    CALLIGRAPHY(HobbyMajor.CRAFT, "캘리그라피"),
+    FLOWER(HobbyMajor.CRAFT, "꽃꽂이"),
     CRAFT_ETC(HobbyMajor.CRAFT, "기타"),
 
     FRIEND(HobbyMajor.FRIEND, "사교"),
@@ -48,7 +48,7 @@ public enum HobbySub {
     GAME(HobbyMajor.FRIEND, "게임"),
     FRIEND_ETC(HobbyMajor.FRIEND, "기타"),
 
-    RESTARUNT(HobbyMajor.HOT, "맛집"),
+    RESTAURANT(HobbyMajor.HOT, "맛집"),
     CAFE(HobbyMajor.HOT, "카페"),
     WINE(HobbyMajor.HOT, "와인 / 칵테일"),
     HOT_ETC(HobbyMajor.HOT, "기타"),
