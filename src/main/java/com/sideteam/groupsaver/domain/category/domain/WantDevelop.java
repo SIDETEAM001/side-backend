@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "want_develop")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WantDevelop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

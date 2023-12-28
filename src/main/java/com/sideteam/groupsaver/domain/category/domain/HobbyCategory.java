@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "hobby_category")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HobbyCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
