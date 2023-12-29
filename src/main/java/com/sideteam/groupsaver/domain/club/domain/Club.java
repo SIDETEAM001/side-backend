@@ -1,12 +1,10 @@
 package com.sideteam.groupsaver.domain.club.domain;
 
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 
 import java.time.LocalDateTime;
@@ -29,7 +27,7 @@ public class Club extends BaseTimeEntity {
     private ClubType type;
     private String description;
     @Enumerated(value = EnumType.STRING)
-    private ClubMajor category;
+    private DevelopMajor category;
     @Column(name = "main_image")
     private String mainImage;
     @Column(name = "is_status")
@@ -42,7 +40,7 @@ public class Club extends BaseTimeEntity {
     @Column(name = "activity_type")
     private ClubActivityType activityType;
 
-    private Club(String name, int memberNumMax, ClubType type, String description, ClubMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
+    private Club(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
         this.name = name;
         this.memberNumMax = memberNumMax;
         this.type = type;
@@ -53,7 +51,7 @@ public class Club extends BaseTimeEntity {
         this.activityType = activityType;
     }
 
-    private Club(String name, int memberNumMax, ClubType type, String description, ClubMajor category, LocalDateTime startClub, ClubActivityType activityType) {
+    private Club(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, LocalDateTime startClub, ClubActivityType activityType) {
         this.name = name;
         this.memberNumMax = memberNumMax;
         this.type = type;
@@ -63,7 +61,7 @@ public class Club extends BaseTimeEntity {
         this.activityType = activityType;
     }
 
-    public static Club of(String name, int memberNumMax, ClubType type, String description, ClubMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
+    public static Club of(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
         return new Club(name, memberNumMax, type, description, category, mainImage, startClub, activityType);
     }
 

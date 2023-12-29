@@ -1,9 +1,9 @@
-package com.sideteam.groupsaver.domain.club.domain;
+package com.sideteam.groupsaver.domain.category.domain;
 
 import lombok.Getter;
 
 @Getter
-public enum ClubMajor {
+public enum DevelopMajor {
     PROJECT("사이드프로젝트"),
     CHANGE("이직준비"),
     STUDY("스터디/자격증"),
@@ -14,7 +14,7 @@ public enum ClubMajor {
 
     private final String categoryType;
 
-    ClubMajor(String categoryType) {
+    DevelopMajor(String categoryType) {
         this.categoryType = categoryType;
     }
 }
