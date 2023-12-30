@@ -22,12 +22,13 @@ public class LocationSplitter implements ArgumentConverter {
     private List<LocationResponse> splitAndConvert(String input) {
         String[] parts = input.split(",");
 
-        final int batchSize = 3;
+        final int batchSize = 6;
         return IntStream.range(0, parts.length / batchSize)
                 .mapToObj(i -> LocationResponse.of(
-                        parts[i * batchSize], parts[i * batchSize + 1], parts[i * batchSize + 2]))
+                        parts[i * batchSize],
+                        parts[i * batchSize + 1], parts[i * batchSize + 2], parts[i * batchSize + 3],
+                        parts[i * batchSize + 4], parts[i * batchSize + 5]))
                 .toList();
-
     }
 
 

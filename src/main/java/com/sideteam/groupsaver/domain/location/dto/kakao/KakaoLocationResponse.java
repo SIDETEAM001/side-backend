@@ -3,8 +3,13 @@ package com.sideteam.groupsaver.domain.location.dto.kakao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
 
 import java.util.List;
+import java.util.Objects;
+
+import static io.micrometer.common.util.StringUtils.isBlank;
+import static io.micrometer.common.util.StringUtils.isNotBlank;
 
 public record KakaoLocationResponse(
         List<Document> documents,
@@ -18,6 +23,16 @@ public record KakaoLocationResponse(
             Double y,
             String addressName,
             RoadAddress roadAddress) {
+        public LocationResponse toLocationResponse() {
+            return LocationResponse.of(
+                    addressName,
+                    address.region1depthName, address.region2depthName, address.getRegion3(),
+                    x, y);
+        }
+
+        public boolean hasRegion3Value() {
+            return !(isBlank(address.region3depthHName()) && isBlank(address.region3depthName()));
+        }
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -33,13 +48,19 @@ public record KakaoLocationResponse(
             String region1depthName,
             @JsonProperty("region_2depth_name")
             String region2depthName,
-            @JsonProperty("region_3depth_h_name")
-            String region3depthHName,
             @JsonProperty("region_3depth_name")
             String region3depthName,
+            @JsonProperty("region_3depth_h_name")
+            String region3depthHName,
             String bCode,
             RoadAddress roadAddress
     ) {
+        public String getRegion3() {
+            if (isNotBlank(region3depthName)) {
+                return region3depthName;
+            }
+            return region3depthHName;
+        }
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,9 +74,11 @@ public record KakaoLocationResponse(
             Double x,
             Double y,
             String addressName,
-            String region2depthName,
             String zoneNo,
-            String region1depthName
+            @JsonProperty("region_1depth_name")
+            String region1depthName,
+            @JsonProperty("region_2depth_name")
+            String region2depthName
     ) {
     }
 

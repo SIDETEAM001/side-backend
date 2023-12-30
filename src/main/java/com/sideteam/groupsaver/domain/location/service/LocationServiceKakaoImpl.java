@@ -22,7 +22,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
-import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -93,7 +92,7 @@ public class LocationServiceKakaoImpl implements LocationService {
 
         return response.documents().stream()
                 .filter(Objects::nonNull)
-                .map(document -> LocationResponse.of(document.addressName(), document.x(), document.y()))
+                .map(KakaoCoordinate2RegionResponse.Document::toLocationResponse)
                 .toList();
     }
 
@@ -112,10 +111,10 @@ public class LocationServiceKakaoImpl implements LocationService {
             return emptyList();
         }
 
-        if (hasDongAddress(response.documents().get(0).address())) {
+        if (response.documents().get(0).hasRegion3Value()) {
             return response.documents().stream()
                     .filter(Objects::nonNull)
-                    .map(document -> LocationResponse.of(document.addressName(), document.x(), document.y()))
+                    .map(KakaoLocationResponse.Document::toLocationResponse)
                     .toList();
         }
 
@@ -126,10 +125,9 @@ public class LocationServiceKakaoImpl implements LocationService {
 
     private void saveAllLocations(List<LocationResponse> locationResponses) {
         locationRepository.saveAll(locationResponses.stream()
-                .map(location -> Location.of(location.longitude(), location.latitude(), location.addressName()))
+                .map(Location::of)
                 .toList());
     }
-
 
     private <T> T doKakaoGetRequest(URI uri, ParameterizedTypeReference<T> reference) {
         return webClient.get()
@@ -159,10 +157,6 @@ public class LocationServiceKakaoImpl implements LocationService {
                 .queryParam("y", latitude)
                 .build()
                 .toUri();
-    }
-
-    private boolean hasDongAddress(KakaoLocationResponse.Address address) {
-        return !(isBlank(address.region3depthHName()) && isBlank(address.region3depthName()));
     }
 
 }
