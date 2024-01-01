@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 // @SQLDelete를 사용하면 컬럼을 인식못하는 오류가 발생함
@@ -39,6 +41,8 @@ public class Club extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "activity_type")
     private ClubActivityType activityType;
+    @OneToMany(mappedBy = "club")
+    List<ClubMember> clubMemberList = new ArrayList<>();
 
     private Club(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType) {
         this.name = name;

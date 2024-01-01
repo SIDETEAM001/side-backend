@@ -33,6 +33,9 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private String birth;
+    private String profileUrl;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OAuthProvider oAuthProvider;
