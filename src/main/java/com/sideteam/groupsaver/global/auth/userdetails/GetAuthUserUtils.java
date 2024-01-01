@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class GetAuthUserUtils {
     private final MemberRepository repository;
 
-    public static String getAuthUserId() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public static Long getAuthUserId() {
+        return Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

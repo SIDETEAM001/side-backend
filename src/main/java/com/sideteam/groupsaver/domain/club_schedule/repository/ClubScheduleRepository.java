@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 
 public interface ClubScheduleRepository extends JpaRepository<ClubSchedule, Long> {
-
     @Query("SELECT cs FROM ClubSchedule cs WHERE cs.club.id=:clubId")
     Page<ClubSchedule> findAllByClubId(Long clubId, Pageable pageable);
-
 }

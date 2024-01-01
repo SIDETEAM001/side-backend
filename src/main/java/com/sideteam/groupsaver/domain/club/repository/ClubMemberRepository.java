@@ -10,4 +10,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
     @Query("SELECT c.role FROM ClubMember c WHERE c.memberId = :memberId AND c.clubId = :clubId")
     ClubMemberRole findRoleByMemberIdAndClubId(long memberId, long clubId);
+
+    ClubMember findByMemberIdAndClubId(Long memberId, ClubMemberRepository clubMemberRepository);
 }
