@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
+import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.location.Region1TypeAttributeConverter;
 import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
 import jakarta.persistence.*;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Location {
+public class Location extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +26,12 @@ public class Location {
     private String region2; // 구군
     private String region3; // 동읍리
 
+
     public static Location of(LocationResponse locationResponse) {
         return Location.of(
                 locationResponse.longitude(), locationResponse.latitude(),
                 locationResponse.addressName(),
-                Region1Type.of(locationResponse.region1()), locationResponse.region2(), locationResponse.region3()
+                locationResponse.region1(), locationResponse.region2(), locationResponse.region3()
         );
     }
 
@@ -37,12 +39,13 @@ public class Location {
     public static Location of(
             Double longitude, Double latitude,
             String locationName,
-            Region1Type region1, String region2, String region3) {
+            String region1, String region2, String region3) {
         return new Location(
                 LocationCoordinate.of(longitude, latitude),
                 locationName,
-                region1, region2, region3);
+                Region1Type.of(region1), region2, region3);
     }
+
 
     private Location(
             LocationCoordinate locationCoordinate,

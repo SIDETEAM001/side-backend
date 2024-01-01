@@ -60,7 +60,6 @@ public class LocationServiceKakaoImpl implements LocationService {
     public List<LocationResponse> searchByName(String address) {
 
         List<Location> locations = locationRepository.findAllByNameContains(address);
-
         if (!locations.isEmpty()) {
             return locations.stream()
                     .map(LocationResponse::of)
@@ -82,6 +81,45 @@ public class LocationServiceKakaoImpl implements LocationService {
                     .toList();
         }
 
+        List<LocationResponse> locationResponses = fetchByCoordinate(longitude, latitude);
+        saveAllLocations(locationResponses);
+        return locationResponses;
+    }
+
+    @Override
+    public List<LocationResponse> searchByCoordinate(CoordinateRequest coordinateRequest) {
+        return searchByCoordinate(coordinateRequest.longitude(), coordinateRequest.latitude());
+    }
+
+
+    private void saveAllLocations(List<LocationResponse> locationResponses) {
+        locationRepository.saveAll(locationResponses.stream()
+                .map(Location::of)
+                .toList());
+    }
+
+    private List<LocationResponse> fetchByAddressName(String address) {
+        KakaoLocationResponse response = doKakaoGetRequest(
+                getSearchApiUrl(address), new ParameterizedTypeReference<>() {}
+        );
+
+        if (response == null || response.documents() == null || response.documents().isEmpty()) {
+            return emptyList();
+        }
+
+        KakaoLocationResponse.Document firstAddress = response.documents().get(0);
+
+        if (firstAddress.hasRegion3Value()) {
+            return response.documents().stream()
+                    .filter(Objects::nonNull)
+                    .map(KakaoLocationResponse.Document::toLocationResponse)
+                    .toList();
+        }
+
+        return searchByCoordinate(firstAddress.x(), firstAddress.y());
+    }
+
+    private List<LocationResponse> fetchByCoordinate(Double longitude, Double latitude) {
         KakaoCoordinate2RegionResponse response = doKakaoGetRequest(
                 getCoordinateApiUrl(longitude, latitude), new ParameterizedTypeReference<>() {}
         );
@@ -94,39 +132,6 @@ public class LocationServiceKakaoImpl implements LocationService {
                 .filter(Objects::nonNull)
                 .map(KakaoCoordinate2RegionResponse.Document::toLocationResponse)
                 .toList();
-    }
-
-    @Override
-    public List<LocationResponse> searchByCoordinate(CoordinateRequest coordinateRequest) {
-        return searchByCoordinate(coordinateRequest.longitude(), coordinateRequest.latitude());
-    }
-
-
-    private List<LocationResponse> fetchByAddressName(String address) {
-        KakaoLocationResponse response = doKakaoGetRequest(
-                getSearchApiUrl(address), new ParameterizedTypeReference<>() {}
-        );
-
-        if (response == null || response.documents() == null || response.documents().isEmpty()) {
-            return emptyList();
-        }
-
-        if (response.documents().get(0).hasRegion3Value()) {
-            return response.documents().stream()
-                    .filter(Objects::nonNull)
-                    .map(KakaoLocationResponse.Document::toLocationResponse)
-                    .toList();
-        }
-
-        return searchByCoordinate(
-                response.documents().get(0).x(),
-                response.documents().get(0).y());
-    }
-
-    private void saveAllLocations(List<LocationResponse> locationResponses) {
-        locationRepository.saveAll(locationResponses.stream()
-                .map(Location::of)
-                .toList());
     }
 
     private <T> T doKakaoGetRequest(URI uri, ParameterizedTypeReference<T> reference) {
