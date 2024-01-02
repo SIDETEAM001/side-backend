@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.club.domain;
 
-import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,11 +10,11 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+// club 컬럼중 category 삭제
 @Entity
-// @SQLDelete를 사용하면 컬럼을 인식못하는 오류가 발생함
-//@SQLDelete(sql = "UPDATE club SET isStatus = false WHERE id = ?")
-//@Where(clause = "isStatus = true")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,8 +28,6 @@ public class Club extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private ClubType type;
     private String description;
-    @Enumerated(value = EnumType.STRING)
-    private DevelopMajor category;
     @Column(name = "main_image")
     private String mainImage;
     @Column(name = "is_status")
@@ -42,21 +40,24 @@ public class Club extends BaseTimeEntity {
     @Column(name = "activity_type")
     private ClubActivityType activityType;
     private String location;
+    @OneToMany(mappedBy = "club")
+    private List<ClubCategory> clubCategoryList = new ArrayList<>();
+    @OneToMany(mappedBy = "club")
+    private List<ClubMember> clubMemberList = new ArrayList<>();
 
-    private Club(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType, String location) {
+    private Club(String name, int memberNumMax, ClubType type, String description, String mainImage, LocalDateTime startClub, ClubActivityType activityType, String location) {
         this.name = name;
         this.memberNumMax = memberNumMax;
         this.type = type;
         this.description = description;
-        this.category = category;
         this.mainImage = mainImage;
         this.startClub = startClub;
         this.activityType = activityType;
         this.location = location;
     }
 
-    public static Club of(String name, int memberNumMax, ClubType type, String description, DevelopMajor category, String mainImage, LocalDateTime startClub, ClubActivityType activityType, String location) {
-        return new Club(name, memberNumMax, type, description, category, mainImage, startClub, activityType, location);
+    public static Club of(String name, int memberNumMax, ClubType type, String description, String mainImage, LocalDateTime startClub, ClubActivityType activityType, String location) {
+        return new Club(name, memberNumMax, type, description, mainImage, startClub, activityType, location);
     }
 
     public void updateImage(String mainImage) {

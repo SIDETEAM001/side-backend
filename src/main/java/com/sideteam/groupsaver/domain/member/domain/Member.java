@@ -1,6 +1,8 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
+import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
+import com.sideteam.groupsaver.domain.hobby.domain.HobbyMember;
 import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
 import com.sideteam.groupsaver.domain.join.domain.WantHobby;
 import com.sideteam.groupsaver.domain.join.enums.JobCategory;
@@ -53,6 +55,12 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WantHobby> wantHobbyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<ClubMember> clubMemberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<HobbyMember> hobbyMemberList = new ArrayList<>();
 
 
     @Builder

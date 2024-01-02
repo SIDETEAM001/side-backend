@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/v1/club")
 @RequiredArgsConstructor
 public class ClubController {
-    private final ClubService service;
     private final ClubGateway gateway;
 
     @PostMapping("/create")

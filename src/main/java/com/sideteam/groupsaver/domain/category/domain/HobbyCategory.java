@@ -2,6 +2,7 @@ package com.sideteam.groupsaver.domain.category.domain;
 
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
+import com.sideteam.groupsaver.domain.hobby.domain.Hobby;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class HobbyCategory extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private HobbySub sub;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLUB_ID")
-    private Club club;
+    @JoinColumn(name = "HOBBY_ID")
+    private Hobby hobby;
 }

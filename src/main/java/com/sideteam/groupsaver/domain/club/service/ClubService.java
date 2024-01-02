@@ -32,7 +32,7 @@ public class ClubService {
     private final DefaultMainImageRepository defaultMainImageRepository;
 
     public Club createClub(ClubCreateDto dto) {
-        Club entity = Club.of(dto.getName(), dto.getMemberNumMax(), dto.getType(), dto.getDescription(),dto.getCategoryType(),dto.getMainImage(), toLocalDateTime(dto.getStartClub()), dto.getActivityType(), dto.getLocation());
+        Club entity = Club.of(dto.getName(), dto.getMemberNumMax(), dto.getType(), dto.getDescription(), dto.getMainImage(), toLocalDateTime(dto.getStartClub()), dto.getActivityType(), dto.getLocation());
         if (entity.getMainImage() == null) {
             entity.updateImage(randomDefaultMainImage());
         }
