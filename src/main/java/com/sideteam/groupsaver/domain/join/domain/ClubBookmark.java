@@ -1,7 +1,7 @@
 package com.sideteam.groupsaver.domain.join.domain;
 
+import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.member.domain.Member;
-import com.sideteam.groupsaver.domain.mypage.domain.Club;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

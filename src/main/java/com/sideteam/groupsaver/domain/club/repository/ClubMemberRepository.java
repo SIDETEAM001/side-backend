@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
+    Page<ClubMember> findByMemberAndStatus(Member member, ClubMemberStatus status, Pageable pageable);
     boolean existsByMemberId(long memberId);
 
     @Query("SELECT c.role FROM ClubMember c WHERE c.memberId = :memberId AND c.clubId = :clubId")

@@ -1,11 +1,11 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
+import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.hobby.domain.HobbyMember;
 import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
 import com.sideteam.groupsaver.domain.join.domain.WantHobby;
-import com.sideteam.groupsaver.domain.join.enums.JobCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +35,9 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private String birth;
+    private String profileUrl;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OAuthProvider oAuthProvider;
@@ -48,7 +51,7 @@ public class Member extends BaseTimeEntity {
 
     // 직무 & 자기계발 & 취미생활 데이터 받기
     @Column
-    private JobCategory jobCategory;
+    private JobMajor jobCategory;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WantDevelop> wantDevelopList = new ArrayList<>();
@@ -64,7 +67,7 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobCategory jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
