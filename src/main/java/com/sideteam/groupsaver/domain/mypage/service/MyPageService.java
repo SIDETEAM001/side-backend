@@ -1,5 +1,8 @@
 package com.sideteam.groupsaver.domain.mypage.service;
 
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbyMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbySub;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.club.domain.ClubMemberStatus;
@@ -8,8 +11,6 @@ import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.join.domain.ClubBookmark;
 import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
 import com.sideteam.groupsaver.domain.join.domain.WantHobby;
-import com.sideteam.groupsaver.domain.join.enums.DevelopCategory;
-import com.sideteam.groupsaver.domain.join.enums.HobbyCategory;
 import com.sideteam.groupsaver.domain.join.repository.ClubBookmarkRepository;
 import com.sideteam.groupsaver.domain.join.repository.WantDevelopRepository;
 import com.sideteam.groupsaver.domain.join.repository.WantHobbyRepository;
@@ -52,11 +53,11 @@ public class MyPageService {
         List<WantDevelop> wantDevelopList = member.getWantDevelopList();
         List<WantHobby> wantHobbyList = member.getWantHobbyList();
 
-        List<DevelopCategory> developCategoryList = wantDevelopList.stream()
+        List<DevelopMajor> developCategoryList = wantDevelopList.stream()
                 .map(WantDevelop::getDevelopCategory)
                 .collect(Collectors.toList());
 
-        List<HobbyCategory> hobbyCategoryList = wantHobbyList.stream()
+        List<HobbyMajor> hobbyCategoryList = wantHobbyList.stream()
                 .map(WantHobby::getHobbyCategory)
                 .collect(Collectors.toList());
 
@@ -85,7 +86,7 @@ public class MyPageService {
         if(dto.getJobCategory() != null)
             member.setJobCategory(dto.getJobCategory());
 
-        for(HobbyCategory hobbyCategory : dto.getHobbyCategory()){
+        for(HobbyMajor hobbyCategory : dto.getHobbyCategory()){
             WantHobby wantHobby = WantHobby.builder()
                     .hobbyCategory(hobbyCategory)
                     .member(member)
@@ -93,7 +94,7 @@ public class MyPageService {
             wantHobbyRepository.save(wantHobby);
         }
 
-        for(DevelopCategory developCategory : dto.getDevelopCategory()){
+        for(DevelopMajor developCategory : dto.getDevelopCategory()){
             WantDevelop wantDevelop = WantDevelop.builder()
                     .developCategory(developCategory)
                     .member(member)

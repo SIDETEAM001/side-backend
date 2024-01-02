@@ -1,7 +1,7 @@
 package com.sideteam.groupsaver.domain.mypage.dto.response;
 
-import com.sideteam.groupsaver.domain.join.enums.DevelopCategory;
-import com.sideteam.groupsaver.domain.join.enums.HobbyCategory;
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbyMajor;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +21,8 @@ public class MyInfoFindResponse {
     private String phoneNumber;
     private String nickname;
     private String email;
-    private List<DevelopCategory> developCategoryList;
-    private List<HobbyCategory> hobbyCategoryList;
+    private List<DevelopMajor> developCategoryList;
+    private List<HobbyMajor> hobbyCategoryList;
 
     @Builder
     public static MyInfoFindResponse toDto(Member member) {

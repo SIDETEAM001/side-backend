@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.join.domain;
 
-import com.sideteam.groupsaver.domain.join.enums.HobbyCategory;
+import com.sideteam.groupsaver.domain.category.domain.HobbyMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbySub;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +17,7 @@ public class WantHobby {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private HobbyCategory hobbyCategory;
+    private HobbyMajor hobbyCategory;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
