@@ -1,6 +1,9 @@
 package com.sideteam.groupsaver.domain.mypage.dto.response;
 
-import com.sideteam.groupsaver.domain.mypage.domain.Club;
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.club.domain.Club;
+import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
+import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,29 +18,28 @@ import java.time.LocalDateTime;
 public class ClubFindResponse {
     private Long id;
     private String name;
-    private String location;
-    private Long memberNumMax;
-    private String type;
+    private Integer memberCurrentNum;
+    private Integer memberNumMax;
+    private ClubType type;
     private String description;
-    private Long category;
+    private DevelopMajor category;
     private String mainImage;
-    private Boolean status;
-    private String period;
+    private Boolean isStatus;
     private LocalDateTime startClub;
-    private String activityType;
+    private ClubActivityType activityType;
 
     @Builder
     public static ClubFindResponse toDto(Club club) {
         return ClubFindResponse.builder()
                 .id(club.getId())
                 .name(club.getName())
-                .location(club.getLocation())
+                .memberCurrentNum(club.getMemberCurrentNum())
                 .memberNumMax(club.getMemberNumMax())
                 .type(club.getType())
+                .description(club.getDescription())
                 .category(club.getCategory())
                 .mainImage(club.getMainImage())
-                .status(club.getStatus())
-                .period(club.getPeriod())
+                .isStatus(club.isStatus())
                 .startClub(club.getStartClub())
                 .activityType(club.getActivityType())
                 .build();

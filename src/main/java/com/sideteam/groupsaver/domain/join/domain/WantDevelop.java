@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.join.domain;
 
-import com.sideteam.groupsaver.domain.join.enums.DevelopCategory;
+
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ public class WantDevelop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private DevelopCategory developCategory;
+    private DevelopMajor developCategory;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

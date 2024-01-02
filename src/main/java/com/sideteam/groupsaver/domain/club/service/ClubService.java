@@ -49,11 +49,11 @@ public class ClubService {
 
     private void createClubMember(long clubId, ClubMemberRole role) {
         long memberId = Long.parseLong(GetAuthUserUtils.getAuthUserId());
-        if (clubMemberRepository.existsByMemberId(memberId)) {
-            throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "멤버 아이디 : " + memberId);
-        }
-        ClubMember entity = ClubMember.of(clubId, memberId, role);
-        clubMemberRepository.save(entity);
+//        if (clubMemberRepository.existsByMemberId(memberId)) {
+//            throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "멤버 아이디 : " + memberId);
+//        }
+//        ClubMember entity = ClubMember.of(clubId, memberId, role);
+//        clubMemberRepository.save(entity);
     }
 
     public void joinTheClub(long clubId) {
@@ -85,8 +85,8 @@ public class ClubService {
 
     public void checkTheReader(long clubId) {
         long memberId = Long.parseLong(GetAuthUserUtils.getAuthUserId());
-        if (clubMemberRepository.findRoleByMemberIdAndClubId(memberId, clubId) == ClubMemberRole.MEMBER) {
-            throw new BusinessException(MEMBER_DO_NOT_HAVE_PERMISSION, "멤버 아이디 : " + memberId);
-        }
+//        if (clubMemberRepository.findRoleByMemberIdAndClubId(memberId, clubId) == ClubMemberRole.MEMBER) {
+//            throw new BusinessException(MEMBER_DO_NOT_HAVE_PERMISSION, "멤버 아이디 : " + memberId);
+//        }
     }
 }
