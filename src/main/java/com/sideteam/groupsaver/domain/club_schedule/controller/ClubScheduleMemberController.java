@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.club_schedule.controller;
 
-import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleMemberDto;
+import com.sideteam.groupsaver.domain.club_schedule.dto.response.ClubScheduleMemberResponse;
 import com.sideteam.groupsaver.domain.club_schedule.service.ClubScheduleMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ public class ClubScheduleMemberController {
     private final ClubScheduleMemberService clubScheduleMemberService;
 
     @GetMapping
-    public ResponseEntity<Page<ClubScheduleMemberDto>> getClubScheduleMembers(
+    public ResponseEntity<Page<ClubScheduleMemberResponse>> getClubScheduleMembers(
             @RequestParam("clubScheduleId") Long clubScheduleId,
             Pageable pageable) {
         return ResponseEntity.ok(clubScheduleMemberService.getClubScheduleMembers(clubScheduleId, pageable));
