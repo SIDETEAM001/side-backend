@@ -40,8 +40,9 @@ public class Club extends BaseTimeEntity {
     @Column(name = "activity_type")
     private ClubActivityType activityType;
     private String location;
-    @OneToMany(mappedBy = "club")
-    private List<ClubCategory> clubCategoryList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "club_category_id")
+    private ClubCategory clubCategory;
     @OneToMany(mappedBy = "club")
     private List<ClubMember> clubMemberList = new ArrayList<>();
 
@@ -70,5 +71,9 @@ public class Club extends BaseTimeEntity {
 
     public void updateMemberCurrent() {
         this.setMemberCurrentNum(this.getMemberCurrentNum() + 1);
+    }
+
+    public void updateCategory(ClubCategory category) {
+        this.setClubCategory(category);
     }
 }

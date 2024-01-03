@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "club_category")
 @Getter
@@ -16,16 +20,20 @@ public class ClubCategory extends BaseTimeEntity {
     private long id;
     @Enumerated(value = EnumType.STRING)
     private DevelopMajor major;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLUB_ID")
-    private Club club;
+    @OneToMany(mappedBy = "clubCategory")
+    private List<Club> clubList = new ArrayList<>();
 
-    private ClubCategory(Club club, DevelopMajor major) {
-        this.club = club;
+    public ClubCategory(DevelopMajor major) {
         this.major = major;
     }
 
     public static ClubCategory of(Club club, DevelopMajor categoryType) {
-        return new ClubCategory(club, categoryType);
+        ClubCategory category = new ClubCategory(categoryType);
+        category.getClubList().add(club);
+        return category;
+    }
+
+    public void addAClub(Club club) {
+        this.getClubList().add(club);
     }
 }

@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.club.gateway;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.category.service.CategoryService;
 import com.sideteam.groupsaver.domain.club.controller.ClubController;
@@ -13,23 +14,26 @@ import com.sideteam.groupsaver.domain.club.service.ClubService;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.service.MemberService;
 import com.sideteam.groupsaver.global.auth.userdetails.GetAuthUserUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class ClubGateway {
+public class DevelopGateway {
     private final ClubService clubService;
     private final CategoryService categoryService;
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
 
-    public long createClubGateway(ClubCreateDto dto) {
+    public long createClub(ClubCreateDto dto) {
         Member member = findMember();
         Club club = clubService.createClub(dto);
-        categoryService.createClubCategory(dto.getCategoryType(), club);
+        ClubCategory category = categoryService.checkACategory(dto.getCategoryType(), club);
+        club.updateCategory(category);
         clubMemberService.createClubMember(club, member, ClubMemberRole.LEADER);
         return club.getId();
     }
@@ -57,5 +61,4 @@ public class ClubGateway {
     public Member findMember() {
         return memberService.findMember();
     }
-
 }

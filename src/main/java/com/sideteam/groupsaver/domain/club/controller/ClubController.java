@@ -4,8 +4,7 @@ import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.club.dto.ClubCreateDto;
 import com.sideteam.groupsaver.domain.club.dto.ClubResponseDto;
-import com.sideteam.groupsaver.domain.club.gateway.ClubGateway;
-import com.sideteam.groupsaver.domain.club.service.ClubService;
+import com.sideteam.groupsaver.domain.club.gateway.DevelopGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +16,11 @@ import java.util.List;
 @RequestMapping("/api/v1/club")
 @RequiredArgsConstructor
 public class ClubController {
-    private final ClubGateway gateway;
+    private final DevelopGateway gateway;
 
     @PostMapping("/create")
     public ResponseEntity<Long> createClub(@RequestBody ClubCreateDto dto) {
-        return ResponseEntity.ok(gateway.createClubGateway(dto));
+        return ResponseEntity.ok(gateway.createClub(dto));
     }
 
     @PostMapping("/join/{clubId}")

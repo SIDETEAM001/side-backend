@@ -40,7 +40,6 @@ public class ClubService {
         return entity;
     }
 
-
     public void updateDescription(long clubId, String description) {
         Club club = findTheClub(clubId);
         club.updateDescription(description);

@@ -1,7 +1,7 @@
 package com.sideteam.groupsaver.domain.club.dto;
 
-import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.club.domain.Club;
+import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import lombok.*;
 
 import java.util.List;
@@ -20,12 +20,13 @@ public class ClubResponseDto {
     private String category;
 
     public static ClubResponseDto of(Club club) {
-        return new ClubResponseDto(club.getMainImage(), club.getType().getClubType(), club.getName(), club.getLocation(), club.getMemberCurrentNum(), club.getMemberNumMax(), club.getCategory().getCategoryType());
+        return new ClubResponseDto(club.getMainImage(), club.getType().getClubType(), club.getName(), club.getLocation(), club.getMemberCurrentNum(), club.getMemberNumMax(),
+                club.getClubCategory().getMajor().getCategoryType());
     }
-    public static List<ClubResponseDto> listOf(List<ClubCategory> clubList) {
+    public static List<ClubResponseDto> listOf(List<Club> clubList, ClubType type) {
         return clubList.stream()
-                .filter(clubCategory -> clubCategory.getClub().isStatus())
-                .map(clubCategory -> ClubResponseDto.of(clubCategory.getClub()))
+                .filter(club -> club.isStatus() && club.getType() == type)
+                .map(ClubResponseDto::of)
                 .collect(Collectors.toList());
     }
 }
