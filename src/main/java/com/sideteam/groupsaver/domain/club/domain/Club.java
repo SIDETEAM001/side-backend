@@ -76,4 +76,8 @@ public class Club extends BaseTimeEntity {
     public void updateCategory(ClubCategory category) {
         this.setClubCategory(category);
     }
+
+    public void addAClubMember(ClubMember clubMember) {
+        this.getClubMemberList().add(clubMember);
+    }
 }

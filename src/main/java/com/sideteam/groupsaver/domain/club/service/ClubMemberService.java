@@ -20,7 +20,7 @@ import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.*;
 public class ClubMemberService {
     private final ClubMemberRepository clubMemberRepository;
 
-    public void createClubMember(Club club, Member member, ClubMemberRole role) {
+    public ClubMember createClubMember(Club club, Member member, ClubMemberRole role) {
         boolean check = club.getClubMemberList().stream()
                 .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), member.getId()));
         if (check) {
@@ -28,7 +28,7 @@ public class ClubMemberService {
         }
         ClubMember entity = ClubMember.of(club, member, role);
         club.updateMemberCurrent();
-        clubMemberRepository.save(entity);
+        return clubMemberRepository.save(entity);
     }
 
     public void checkAReaders(Long memberId, Long clubId) {

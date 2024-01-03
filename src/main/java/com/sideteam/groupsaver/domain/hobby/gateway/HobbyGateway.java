@@ -7,6 +7,7 @@ import com.sideteam.groupsaver.domain.club.domain.ClubMemberRole;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.hobby.controller.HobbyController;
 import com.sideteam.groupsaver.domain.hobby.domain.Hobby;
+import com.sideteam.groupsaver.domain.hobby.domain.HobbyMember;
 import com.sideteam.groupsaver.domain.hobby.dto.HobbyCreateDto;
 import com.sideteam.groupsaver.domain.hobby.dto.HobbyResponseDto;
 import com.sideteam.groupsaver.domain.hobby.service.HobbyMemberService;
@@ -33,14 +34,21 @@ public class HobbyGateway {
         Hobby hobby = hobbyService.createHobby(dto);
         HobbyCategory category = categoryService.checkACategory(dto.getCategoryType(), hobby);
         hobby.updateCategory(category);
-        hobbyMemberService.createHobbyMember(hobby, member, ClubMemberRole.LEADER);
+        HobbyMember hobbyMember = hobbyMemberService.createHobbyMember(hobby, member, ClubMemberRole.LEADER);
+        addAHobbyMember(hobbyMember, hobby, member);
         return hobby.getId();
+    }
+
+    private void addAHobbyMember(HobbyMember hobbyMember, Hobby hobby, Member member) {
+        hobby.addAHobbyMember(hobbyMember);
+        member.addAHobbyMember(hobbyMember);
     }
 
     public void joinTheHobby(Long hobbyId) {
         Hobby hobby = hobbyService.checkHobby(hobbyId);
         Member member = findMember();
-        hobbyMemberService.createHobbyMember(hobby, member, ClubMemberRole.MEMBER);
+        HobbyMember hobbyMember = hobbyMemberService.createHobbyMember(hobby, member, ClubMemberRole.MEMBER);
+        addAHobbyMember(hobbyMember, hobby, member);
     }
 
     public List<HobbyResponseDto> findHobbyList(HobbySub category, ClubType type) {

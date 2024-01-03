@@ -22,7 +22,7 @@ import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.MEMBE
 public class HobbyMemberService {
     private final HobbyMemberRepository hobbyMemberRepository;
 
-    public void createHobbyMember(Hobby hobby, Member member, ClubMemberRole role) {
+    public HobbyMember createHobbyMember(Hobby hobby, Member member, ClubMemberRole role) {
         boolean check = hobby.getHobbyMemberList().stream()
                 .anyMatch(hobbyMember -> Objects.equals(hobbyMember.getMember().getId(), member.getId()));
         if (check) {
@@ -30,7 +30,7 @@ public class HobbyMemberService {
         }
         HobbyMember entity = HobbyMember.of(hobby, member, role);
         hobby.updateMemberCurrent();
-        hobbyMemberRepository.save(entity);
+        return hobbyMemberRepository.save(entity);
     }
 
     public void checkAReaders(Member member, Long hobbyId) {

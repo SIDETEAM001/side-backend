@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
@@ -79,4 +80,11 @@ public class Member extends BaseTimeEntity {
         this.wantHobbyList = wantHobbyList;
     }
 
+    public void addAClubMember(ClubMember clubMember) {
+        this.getClubMemberList().add(clubMember);
+    }
+
+    public void addAHobbyMember(HobbyMember hobbyMember) {
+        this.getHobbyMemberList().add(hobbyMember);
+    }
 }

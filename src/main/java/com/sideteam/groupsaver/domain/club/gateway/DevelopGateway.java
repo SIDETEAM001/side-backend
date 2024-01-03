@@ -5,6 +5,7 @@ import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.category.service.CategoryService;
 import com.sideteam.groupsaver.domain.club.controller.ClubController;
 import com.sideteam.groupsaver.domain.club.domain.Club;
+import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.club.domain.ClubMemberRole;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.club.dto.ClubCreateDto;
@@ -34,14 +35,21 @@ public class DevelopGateway {
         Club club = clubService.createClub(dto);
         ClubCategory category = categoryService.checkACategory(dto.getCategoryType(), club);
         club.updateCategory(category);
-        clubMemberService.createClubMember(club, member, ClubMemberRole.LEADER);
+        ClubMember clubMember = clubMemberService.createClubMember(club, member, ClubMemberRole.LEADER);
+        addAClubMember(clubMember, club, member);
         return club.getId();
+    }
+
+    private void addAClubMember(ClubMember clubMember, Club club, Member member) {
+        club.addAClubMember(clubMember);
+        member.addAClubMember(clubMember);
     }
 
     public void joinTheClub(Long clubId) {
         Club club = clubService.checkClub(clubId);
         Member member = findMember();
-        clubMemberService.createClubMember(club, member, ClubMemberRole.MEMBER);
+        ClubMember clubMember = clubMemberService.createClubMember(club, member, ClubMemberRole.MEMBER);
+        addAClubMember(clubMember, club, member);
     }
 
     public List<ClubResponseDto> findDevelopClubList(DevelopMajor category, ClubType type) {

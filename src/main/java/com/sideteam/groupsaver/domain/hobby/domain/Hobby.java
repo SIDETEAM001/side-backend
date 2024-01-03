@@ -76,4 +76,8 @@ public class Hobby extends BaseTimeEntity {
     public void updateCategory(HobbyCategory category) {
         this.setHobbyCategory(category);
     }
+
+    public void addAHobbyMember(HobbyMember hobbyMember) {
+        this.getHobbyMemberList().add(hobbyMember);
+    }
 }
