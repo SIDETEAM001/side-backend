@@ -23,9 +23,7 @@ public class HobbyMemberService {
     private final HobbyMemberRepository hobbyMemberRepository;
 
     public HobbyMember createHobbyMember(Hobby hobby, Member member, ClubMemberRole role) {
-        boolean check = hobby.getHobbyMemberList().stream()
-                .anyMatch(hobbyMember -> Objects.equals(hobbyMember.getMember().getId(), member.getId()));
-        if (check) {
+        if (hobbyMemberRepository.existsByMemberIdAndHobbyId(member.getId(), hobby.getId())) {
             throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "이미 존재하는 인원 : " + member.getId());
         }
         HobbyMember entity = HobbyMember.of(hobby, member, role);

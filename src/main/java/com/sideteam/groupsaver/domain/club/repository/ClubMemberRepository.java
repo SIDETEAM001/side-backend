@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
-    boolean existsByMemberId(long memberId);
-
     ClubMember findByMemberIdAndClubId(Long memberId, Long clubId);
 
     Page<ClubMember> findByMemberAndStatus(Member member, ClubMemberStatus status, Pageable pageable);
+
+    boolean existsByMemberIdAndClubId(Long memberId, long clubId);
 }

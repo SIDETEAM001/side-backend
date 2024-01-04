@@ -41,7 +41,7 @@ public class HobbyController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("/getClubList/{category}/{type}")
+    @GetMapping("/getHobbyList/{category}/{type}")
     public ResponseEntity<List<HobbyResponseDto>> findHobbyList(
             @PathVariable("category") HobbySub category,
             @PathVariable("type") ClubType type) {

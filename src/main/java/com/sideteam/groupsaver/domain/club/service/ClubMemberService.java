@@ -21,9 +21,7 @@ public class ClubMemberService {
     private final ClubMemberRepository clubMemberRepository;
 
     public ClubMember createClubMember(Club club, Member member, ClubMemberRole role) {
-        boolean check = club.getClubMemberList().stream()
-                .anyMatch(clubMember -> Objects.equals(clubMember.getMember().getId(), member.getId()));
-        if (check) {
+        if (clubMemberRepository.existsByMemberIdAndClubId(member.getId(),club.getId())) {
             throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "이미 존재하는 인원 : " + member.getId());
         }
         ClubMember entity = ClubMember.of(club, member, role);
