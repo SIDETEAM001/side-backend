@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,22 +43,28 @@ public class ClubScheduleService {
         return new PageImpl<>(clubScheduleResponses, clubSchedulePage.getPageable(), clubSchedulePage.getTotalElements());
     }
 
-    public ClubScheduleResponse createSchedule(Long clubId, ClubScheduleRequest clubScheduleRequest) {
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
+            " AND @clubMemberRepository.existsByMemberIdAndClubId(#memberId, #clubId) " +
+            " OR hasRole('ROLE_ADMIN'))")
+    public ClubScheduleResponse createSchedule(Long clubId, ClubScheduleRequest clubScheduleRequest, Long memberId) {
         Club club = clubRepository.getReferenceById(clubId);
-        // TODO 해당 모임에 일정을 추가하는 권한 있는지 확인 로직 추가 필요
         ClubSchedule clubSchedule = clubScheduleRepository.save(ClubSchedule.of(club, clubScheduleRequest));
         return ClubScheduleResponse.from(clubSchedule);
     }
 
-    public ClubScheduleResponse updateSchedule(Long clubScheduleId, ClubScheduleRequest clubScheduleRequest) {
-
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
+            " AND @clubScheduleRepository.isCreatorOrLeader(#memberId, #clubScheduleId) " +
+            " OR hasRole('ROLE_ADMIN'))")
+    public ClubScheduleResponse updateSchedule(Long clubScheduleId, ClubScheduleRequest clubScheduleRequest, Long memberId) {
         ClubSchedule clubSchedule = clubScheduleRepository.getReferenceById(clubScheduleId);
         clubSchedule.update(clubScheduleRequest);
         return ClubScheduleResponse.from(clubSchedule);
     }
 
-    public void deleteSchedule(Long clubScheduleId) {
-        // TODO 삭제 권한 체크
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
+            " AND @clubScheduleRepository.isCreatorOrLeader(#memberId, #clubScheduleId) " +
+            " OR hasRole('ROLE_ADMIN'))")
+    public void deleteSchedule(Long clubScheduleId, Long memberId) {
         clubScheduleRepository.deleteById(clubScheduleId);
     }
 

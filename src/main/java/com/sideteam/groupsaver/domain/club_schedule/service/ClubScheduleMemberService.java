@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
 import static com.sideteam.groupsaver.global.exception.club.ClubScheduleErrorCode.CLUB_SCHEDULE_IS_FULL;
 
 @RequiredArgsConstructor
@@ -47,11 +46,11 @@ public class ClubScheduleMemberService {
         return new PageImpl<>(clubScheduleResponses, clubScheduleMembers.getPageable(), clubScheduleMembers.getTotalElements());
     }
 
-    @PreAuthorize("isAuthenticated() and (( #memberId.toString() == principal.username ) or hasRole('ROLE_ADMIN'))")
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ROLE_ADMIN'))")
     public void joinSchedule(Long clubScheduleId, Long memberId) {
         ClubSchedule clubSchedule = clubScheduleRepository.findOrThrowWithReadLock(clubScheduleId);
 
-        checkIfMemberNotInClub(memberId, clubSchedule.getClub().getId());
+        clubMemberRepository.throwIfMemberNotInClub(memberId, clubSchedule.getClub().getId());
         checkIfParticipationExceed(clubSchedule);
 
         Member member = memberRepository.getReferenceById(memberId);
@@ -59,22 +58,15 @@ public class ClubScheduleMemberService {
         clubScheduleMemberRepository.save(ClubScheduleMember.of(clubSchedule, member));
     }
 
-    @PreAuthorize("isAuthenticated() and (( #memberId.toString() == principal.username ) or hasRole('ROLE_ADMIN'))")
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ROLE_ADMIN'))")
     public void leaveSchedule(Long clubScheduleId, Long memberId) {
         clubScheduleMemberRepository.deleteByClubScheduleIdAndMemberId(clubScheduleId, memberId);
     }
 
 
-    private void checkIfMemberNotInClub(Long memberId, Long clubId) {
-        if (!clubMemberRepository.existsByMemberIdAndClubId(memberId, clubId)) {
-            log.warn("가입되어 있지 않은 모임의 일정에 가입 시도! Member id: {}, Club id: {}", memberId, clubId);
-            throw new BusinessException(CLUB_MEMBER_DO_NOT_HAVE_PERMISSION, memberId + ", club id: " + clubId);
-        }
-    }
-
     private void checkIfParticipationExceed(ClubSchedule clubSchedule) {
         if (clubSchedule.isReachMaximumParticipation()) {
-            log.warn("이미 가득찬 모임 일정! 모임일정 id: {}", clubSchedule.getId());
+            log.warn("이미 가득찬 모임 일정! 모임일정 ID: {}", clubSchedule.getId());
             throw new BusinessException(CLUB_SCHEDULE_IS_FULL, clubSchedule.getId().toString());
         }
     }

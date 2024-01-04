@@ -3,6 +3,7 @@ package com.sideteam.groupsaver.domain.club_schedule.controller;
 import com.sideteam.groupsaver.domain.club_schedule.dto.request.ClubScheduleRequest;
 import com.sideteam.groupsaver.domain.club_schedule.dto.response.ClubScheduleResponse;
 import com.sideteam.groupsaver.domain.club_schedule.service.ClubScheduleService;
+import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,20 +33,25 @@ public class ClubScheduleController {
     @PostMapping("/club/{clubId}")
     public ResponseEntity<ClubScheduleResponse> createSchedule(
             @PathVariable Long clubId,
-            @Valid @RequestBody ClubScheduleRequest clubScheduleRequestDto) {
-        return ResponseEntity.ok(clubScheduleService.createSchedule(clubId, clubScheduleRequestDto));
+            @Valid @RequestBody ClubScheduleRequest clubScheduleRequest,
+            @MemberIdParam Long memberId) {
+        return ResponseEntity.ok(clubScheduleService.createSchedule(clubId, clubScheduleRequest, memberId));
     }
 
     @PatchMapping("/{clubScheduleId}")
     public ResponseEntity<ClubScheduleResponse> updateSchedule(
             @PathVariable Long clubScheduleId,
-            @Valid @RequestBody ClubScheduleRequest clubScheduleRequestDto) {
-        return ResponseEntity.ok(clubScheduleService.updateSchedule(clubScheduleId, clubScheduleRequestDto));
+            @Valid @RequestBody ClubScheduleRequest clubScheduleRequest,
+            @MemberIdParam Long memberId) {
+        return ResponseEntity.ok(clubScheduleService.updateSchedule(
+                clubScheduleId, clubScheduleRequest, memberId));
     }
 
     @DeleteMapping("/{clubScheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long clubScheduleId) {
-        clubScheduleService.deleteSchedule(clubScheduleId);
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable Long clubScheduleId,
+            @MemberIdParam Long memberId) {
+        clubScheduleService.deleteSchedule(clubScheduleId, memberId);
         return ResponseEntity.noContent().build();
     }
 

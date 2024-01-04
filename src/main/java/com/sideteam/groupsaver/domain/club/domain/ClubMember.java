@@ -22,6 +22,7 @@ public class ClubMember extends BaseTimeEntity {
     private Member member;
     @Enumerated(value = EnumType.STRING)
     private ClubMemberStatus status = ClubMemberStatus.ACTIVITY;
+    @Enumerated(value = EnumType.STRING)
     private ClubMemberRole role;
 
     public ClubMember(Club club, Member member, ClubMemberRole role) {

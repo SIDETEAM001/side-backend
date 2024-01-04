@@ -30,7 +30,7 @@ public class ClubScheduleMember extends BaseTimeEntity {
     private ClubSchedule clubSchedule;
 
     @JoinColumn(nullable = false, name = "member_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
 
