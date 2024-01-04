@@ -1,8 +1,8 @@
 package com.sideteam.groupsaver.domain.auth.dto.request;
 
-import com.sideteam.groupsaver.domain.join.enums.DevelopCategory;
-import com.sideteam.groupsaver.domain.join.enums.HobbyCategory;
-import com.sideteam.groupsaver.domain.join.enums.JobCategory;
+import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbyMajor;
+import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,11 +29,11 @@ public record SignupRequest(
         @Size(min = 6, message = "비밀번호의 길이는 최소 6자 입니다")
         String password,
 
-        JobCategory jobCategory,
+        JobMajor jobCategory,
 
-        List<DevelopCategory> wantDevelopCategory,
+        List<DevelopMajor> wantDevelopCategory,
 
-        List<HobbyCategory> wantHobbyCategory
+        List<HobbyMajor> wantHobbyCategory
 
 ) {
 }
