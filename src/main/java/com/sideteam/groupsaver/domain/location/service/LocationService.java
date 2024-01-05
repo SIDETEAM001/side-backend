@@ -1,7 +1,6 @@
 package com.sideteam.groupsaver.domain.location.service;
 
-import com.sideteam.groupsaver.domain.location.dto.CoordinateRequest;
-import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 
 import java.util.List;
 
@@ -24,11 +23,4 @@ public interface LocationService {
      */
     List<LocationResponse> searchByCoordinate(Double longitude, Double latitude);
 
-    /**
-     * 좌표로 현재 주변 위치 주소를 반환
-     *
-     * @param coordinateRequest - 좌표 정보 DTO
-     * @return - 주변 위치 주소 이름, 좌표 리스트
-     */
-    List<LocationResponse> searchByCoordinate(CoordinateRequest coordinateRequest);
 }

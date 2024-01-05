@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.location;
 
-import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.ArgumentConverter;

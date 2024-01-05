@@ -1,10 +1,10 @@
 package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.domain.Location;
-import com.sideteam.groupsaver.domain.location.dto.CoordinateRequest;
-import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
+import com.sideteam.groupsaver.domain.location.domain.LocationCoordinate;
 import com.sideteam.groupsaver.domain.location.dto.kakao.KakaoCoordinate2RegionResponse;
 import com.sideteam.groupsaver.domain.location.dto.kakao.KakaoLocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,7 +74,8 @@ public class LocationServiceKakaoImpl implements LocationService {
     @Override
     public List<LocationResponse> searchByCoordinate(Double longitude, Double latitude) {
 
-        List<Location> locations = locationRepository.findByLongitudeAndLatitude(longitude, latitude);
+        List<Location> locations = locationRepository.findByLocationCoordinate(
+                LocationCoordinate.of(longitude, latitude));
         if (!locations.isEmpty()) {
             return locations.stream()
                     .map(LocationResponse::of)
@@ -84,11 +85,6 @@ public class LocationServiceKakaoImpl implements LocationService {
         List<LocationResponse> locationResponses = fetchByCoordinate(longitude, latitude);
         saveAllLocations(locationResponses);
         return locationResponses;
-    }
-
-    @Override
-    public List<LocationResponse> searchByCoordinate(CoordinateRequest coordinateRequest) {
-        return searchByCoordinate(coordinateRequest.longitude(), coordinateRequest.latitude());
     }
 
 

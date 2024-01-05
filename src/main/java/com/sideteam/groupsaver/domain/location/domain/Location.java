@@ -2,7 +2,7 @@ package com.sideteam.groupsaver.domain.location.domain;
 
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.location.Region1TypeAttributeConverter;
-import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

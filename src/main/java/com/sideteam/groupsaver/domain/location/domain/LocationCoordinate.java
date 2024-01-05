@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
+import com.sideteam.groupsaver.domain.location.service.LocationUtils;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class LocationCoordinate {
 
 
     private LocationCoordinate(Double longitude, Double latitude) {
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.longitude = LocationUtils.roundCoordinate(longitude);
+        this.latitude = LocationUtils.roundCoordinate(latitude);
     }
 
 }

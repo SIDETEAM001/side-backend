@@ -1,7 +1,6 @@
 package com.sideteam.groupsaver.domain.location;
 
-import com.sideteam.groupsaver.domain.location.dto.CoordinateRequest;
-import com.sideteam.groupsaver.domain.location.dto.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
 import com.sideteam.groupsaver.domain.location.service.LocationService;
 import com.sideteam.groupsaver.domain.location.service.LocationServiceKakaoImpl;
@@ -78,10 +77,8 @@ class LocationKakaoServiceTest {
     void searchByCoordinate(Double longitude, Double latitude,
                             @ConvertWith(LocationSplitter.class) List<LocationResponse> expected) {
 
-        CoordinateRequest coordinateRequest = new CoordinateRequest(longitude, latitude);
-        List<LocationResponse> locations = locationService.searchByCoordinate(coordinateRequest);
+        List<LocationResponse> locations = locationService.searchByCoordinate(longitude, latitude);
 
-        log.debug("{}: {}", coordinateRequest, locations);
         assertThat(locations).isEqualTo(expected);
     }
 
