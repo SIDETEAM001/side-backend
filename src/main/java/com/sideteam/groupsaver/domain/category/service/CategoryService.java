@@ -33,12 +33,11 @@ public class CategoryService {
     }
 
     public ClubCategory checkACategory(DevelopMajor major, Club club) {
-        try {
-            ClubCategory category = categoryRepository.findByMajor(major);
-            category.addAClub(club);
-            return category;
-        } catch (NullPointerException e1) {
+        if (!categoryRepository.existsByMajor(major)) {
             return createClubCategory(major, club);
         }
+        ClubCategory category = categoryRepository.findByMajor(major);
+        category.addAClub(club);
+        return category;
     }
 }

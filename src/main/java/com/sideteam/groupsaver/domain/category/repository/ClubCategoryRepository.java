@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface ClubCategoryRepository extends JpaRepository<ClubCategory, Long> {
     ClubCategory findByMajor(DevelopMajor major);
+
+    boolean existsByMajor(DevelopMajor major);
 }
