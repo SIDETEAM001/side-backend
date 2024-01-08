@@ -12,7 +12,12 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 public enum ClubScheduleErrorCode implements ErrorCode {
 
+    MEMBER_DO_NOT_HAVE_PERMISSION(UNAUTHORIZED, "회원에게 권한이 없습니다."),
+
     CLUB_SCHEDULE_NOT_FOUND(NOT_FOUND, "찾을 수 없는 모임 일정입니다"),
+
+    CLUB_SCHEDULE_IS_FULL(UNPROCESSABLE_ENTITY, "모임의 정원이 다 찼습니다."),
+    CLUB_SCHEDULE_MEMBER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "이미 가입되어 있습니다."),
 
     ;
 
