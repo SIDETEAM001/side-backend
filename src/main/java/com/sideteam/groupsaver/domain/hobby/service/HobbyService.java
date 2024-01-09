@@ -5,16 +5,13 @@ import com.sideteam.groupsaver.domain.hobby.domain.Hobby;
 import com.sideteam.groupsaver.domain.hobby.dto.HobbyCreateDto;
 import com.sideteam.groupsaver.domain.hobby.repository.HobbyRepository;
 import com.sideteam.groupsaver.global.exception.BusinessException;
+import com.sideteam.groupsaver.global.exception.club.ClubErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
-
-import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.CLUB_MEMBER_IS_FULL;
-import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.CLUB_NOT_FOUND;
 
 @Service
 @Transactional
@@ -42,13 +39,13 @@ public class HobbyService {
     }
 
     public Hobby findTheHobby(long hobbyId) {
-        return repository.findById(hobbyId).orElseThrow(() -> new BusinessException(CLUB_NOT_FOUND, "잘못된 모임 아이디 : " + hobbyId));
+        return repository.findById(hobbyId).orElseThrow(() -> new BusinessException(ClubErrorCode.CLUB_NOT_FOUND, "잘못된 모임 아이디 : " + hobbyId));
     }
 
     public Hobby checkHobby(long hobbyId) {
         Hobby hobby = findTheHobby(hobbyId);
         if (hobby.getMemberCurrentNum() == hobby.getMemberNumMax()) {
-            throw new BusinessException(CLUB_MEMBER_IS_FULL, "클럼 정원이 마감되었습니다.");
+            throw new BusinessException(ClubErrorCode.CLUB_MEMBER_IS_FULL, "클럼 정원이 마감되었습니다.");
         }
         return hobby;
     }

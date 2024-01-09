@@ -10,9 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
-import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.*;
+import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_ALREADY_EXIST;
+import static com.sideteam.groupsaver.global.exception.club.ClubScheduleErrorCode.MEMBER_DO_NOT_HAVE_PERMISSION;
 
 @Service
 @RequiredArgsConstructor
