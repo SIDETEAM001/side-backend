@@ -5,7 +5,6 @@ import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.category.repository.ClubCategoryRepository;
 import com.sideteam.groupsaver.domain.club.controller.ClubController;
 import com.sideteam.groupsaver.domain.club.domain.Club;
-import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.club.domain.ClubMemberRole;
 import com.sideteam.groupsaver.domain.club.dto.ClubCreateDto;
 import com.sideteam.groupsaver.domain.club.repository.ClubMemberRepository;
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-import static com.sideteam.groupsaver.global.exception.clubA.ClubErrorCode.*;
+import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
