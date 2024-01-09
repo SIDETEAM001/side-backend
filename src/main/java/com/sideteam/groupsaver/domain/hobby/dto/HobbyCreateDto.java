@@ -1,13 +1,14 @@
-package com.sideteam.groupsaver.domain.club.dto;
+package com.sideteam.groupsaver.domain.hobby.dto;
 
-import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.HobbySub;
+import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import lombok.Getter;
 
 @Getter
-public class ClubCreateDto {
-    private DevelopMajor categoryType;
+public class HobbyCreateDto {
+    private HobbySub categoryType;
     private ClubType type;
     private String name;
     private ClubActivityType activityType;
