@@ -32,6 +32,8 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    implementation 'org.hibernate:hibernate-spatial:6.4.1.Final' // DB Point 좌표계
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

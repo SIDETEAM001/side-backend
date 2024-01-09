@@ -1,9 +1,6 @@
-package com.sideteam.groupsaver.domain.location;
+package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
-import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
-import com.sideteam.groupsaver.domain.location.service.LocationService;
-import com.sideteam.groupsaver.domain.location.service.LocationServiceKakaoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
@@ -24,20 +19,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.BDDMockito.given;
 
 @Slf4j
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @ActiveProfiles(profiles = "test")
 @ContextConfiguration(
         initializers = {ConfigDataApplicationContextInitializer.class},
-        classes = {LocationKakaoServiceTest.class})
-class LocationKakaoServiceTest {
+        classes = {LocationKakaoClientTest.class})
+class LocationKakaoClientTest {
 
-    private LocationService locationService;
+    private LocationClient locationClient;
 
-    @Mock
-    private LocationRepository locationRepository;
 
     @Value("${location.kakao.api-key}")
     private String kakaoApiKey;
@@ -48,8 +40,7 @@ class LocationKakaoServiceTest {
 
     @BeforeEach
     void setup() {
-        locationService = new LocationServiceKakaoImpl(
-                locationRepository,
+        locationClient = new LocationKakaoClient(
                 WebClient.builder().build(),
                 kakaoApiKey,
                 searchApiUrl,
@@ -61,11 +52,9 @@ class LocationKakaoServiceTest {
     @DisplayName("주소로 검색 테스트")
     @CsvFileSource(files = "src/test/resources/location/search-by-address-response.csv", numLinesToSkip = 1)
     @ParameterizedTest
-    void searchByName(String searchAddress,
+    void fetchByAddressName(String searchAddress,
                       @ConvertWith(LocationSplitter.class) List<LocationResponse> expected) {
-        given(locationRepository.saveAll(ArgumentMatchers.any())).willReturn(List.of());
-
-        List<LocationResponse> locations = locationService.searchByName(searchAddress);
+        List<LocationResponse> locations = locationClient.fetchByAddressName(searchAddress);
 
         log.debug("{}: {}", searchAddress, locations);
         assertThat(locations).isEqualTo(expected);
@@ -74,10 +63,10 @@ class LocationKakaoServiceTest {
     @DisplayName("좌표로 검색 테스트")
     @CsvFileSource(files = "src/test/resources/location/search-by-coordinate-response.csv", numLinesToSkip = 1)
     @ParameterizedTest
-    void searchByCoordinate(Double longitude, Double latitude,
+    void fetchByCoordinate(Double longitude, Double latitude,
                             @ConvertWith(LocationSplitter.class) List<LocationResponse> expected) {
 
-        List<LocationResponse> locations = locationService.searchByCoordinate(longitude, latitude);
+        List<LocationResponse> locations = locationClient.fetchByCoordinate(longitude, latitude);
 
         assertThat(locations).isEqualTo(expected);
     }

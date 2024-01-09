@@ -1,24 +1,39 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
 import com.sideteam.groupsaver.domain.location.service.LocationUtils;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 
-@Embeddable
+import static com.sideteam.groupsaver.domain.location.service.LocationUtils.SRID;
+
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class LocationCoordinate {
 
-    private Double longitude; // 경도
-    private Double latitude; // 위도
+    @Column(nullable = false, columnDefinition = "POINT SRID " + SRID)
+    private Point coord; // 경도, 위도 (longitude, latitude) 정보
 
 
-    public static LocationCoordinate of(String x, String y) {
-        return new LocationCoordinate(Double.parseDouble(x), Double.parseDouble(y));
+    public Double getLongitude() {
+        return coord.getCoordinate().x;
+    }
+
+    public Double getLatitude() {
+        return coord.getCoordinate().y;
+    }
+
+    public static LocationCoordinate of(String longitude, String latitude) {
+        return new LocationCoordinate(Double.parseDouble(longitude), Double.parseDouble(latitude));
     }
 
     public static LocationCoordinate of(Double longitude, Double latitude) {
@@ -27,8 +42,10 @@ public class LocationCoordinate {
 
 
     private LocationCoordinate(Double longitude, Double latitude) {
-        this.longitude = LocationUtils.roundCoordinate(longitude);
-        this.latitude = LocationUtils.roundCoordinate(latitude);
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
+        this.coord = geometryFactory.createPoint(new Coordinate(
+                LocationUtils.roundCoordinate(longitude),
+                LocationUtils.roundCoordinate(latitude)));
     }
 
 }

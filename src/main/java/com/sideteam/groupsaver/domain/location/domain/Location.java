@@ -3,13 +3,25 @@ package com.sideteam.groupsaver.domain.location.domain;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.location.Region1TypeAttributeConverter;
 import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.service.LocationUtils;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.SQLInsert;
 
 @Getter
+@ToString
+@SQLInsert(sql =
+        "REPLACE `location` (create_at,coord,name,region1,region2,region3,update_at) " +
+        "VALUES (?,?,?,?,?,?,?)")
 @Entity
+@Table(name = "location",
+        indexes = {
+                @Index(name = "idx_point", columnList = "coord")
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location extends BaseTimeEntity {
     @Id
@@ -19,6 +31,7 @@ public class Location extends BaseTimeEntity {
     @Embedded
     private LocationCoordinate locationCoordinate;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Convert(converter = Region1TypeAttributeConverter.class)

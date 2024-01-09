@@ -1,4 +1,4 @@
-package com.sideteam.groupsaver.domain.location;
+package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import org.junit.jupiter.api.extension.ParameterContext;
