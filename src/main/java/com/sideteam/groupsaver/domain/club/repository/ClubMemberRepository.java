@@ -12,7 +12,7 @@ import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_M
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
     Page<ClubMember> findByMemberAndStatus(Member member, ClubMemberStatus status, Pageable pageable);
-
+    ClubMember findByMemberIdAndClubId(Long memberId, Long clubId);
     boolean existsByMemberIdAndClubId(Long memberId, Long clubId);
 
     default void throwIfMemberNotInClub(Long memberId, Long clubId) {
