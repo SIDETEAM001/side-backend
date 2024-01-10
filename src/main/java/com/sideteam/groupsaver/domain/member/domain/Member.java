@@ -1,7 +1,9 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
+import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
+import com.sideteam.groupsaver.domain.hobby.domain.HobbyMember;
 import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
 import com.sideteam.groupsaver.domain.join.domain.WantHobby;
 import jakarta.persistence.*;
@@ -57,6 +59,12 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WantHobby> wantHobbyList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<ClubMember> clubMemberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<HobbyMember> hobbyMemberList = new ArrayList<>();
+
 
     @Builder
     protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
@@ -71,4 +79,11 @@ public class Member extends BaseTimeEntity {
         this.wantHobbyList = wantHobbyList;
     }
 
+    public void addAClubMember(ClubMember clubMember) {
+        this.getClubMemberList().add(clubMember);
+    }
+
+    public void addAHobbyMember(HobbyMember hobbyMember) {
+        this.getHobbyMemberList().add(hobbyMember);
+    }
 }

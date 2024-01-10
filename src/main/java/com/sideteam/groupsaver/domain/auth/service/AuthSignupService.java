@@ -6,6 +6,9 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.domain.OAuthProvider;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
+import com.sideteam.groupsaver.global.exception.BusinessException;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorCode;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+
+import static com.sideteam.groupsaver.global.exception.member.MemberErrorCode.DUPLICATED_EMAIL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -51,7 +56,7 @@ public class AuthSignupService {
 
         if (isDuplicated) {
             log.error("중복되는 이메일: {}", signupRequest.email());
-//            throw new
+            throw new BusinessException(DUPLICATED_EMAIL, signupRequest.email());
         }
     }
 

@@ -1,25 +1,25 @@
 package com.sideteam.groupsaver.domain.club_schedule.domain;
 
 import com.sideteam.groupsaver.domain.club.domain.Club;
-import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
-import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
+import com.sideteam.groupsaver.domain.club_schedule.dto.request.ClubScheduleRequest;
+import com.sideteam.groupsaver.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-@SQLDelete(sql = "UPDATE ClubSchedule SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE club_schedule SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class ClubSchedule extends BaseTimeEntity {
+public class ClubSchedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +27,7 @@ public class ClubSchedule extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "club_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
@@ -50,24 +50,36 @@ public class ClubSchedule extends BaseTimeEntity {
     private Long participationFee;
 
 
-    public static ClubSchedule of(Club club, ClubScheduleRequestDto clubScheduleRequestDto) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    @Formula("(SELECT COUNT(csm.id) from club_schedule_member csm WHERE csm.club_schedule_id = id)")
+    private Integer clubScheduleMemberCount;
+
+
+    public static ClubSchedule of(Club club, ClubScheduleRequest clubScheduleRequest) {
 
         return new ClubSchedule(
                 club,
-                LocalDateTime.parse(clubScheduleRequestDto.meetAt(), formatter),
-                clubScheduleRequestDto.title(),
-                clubScheduleRequestDto.description(),
-                clubScheduleRequestDto.maxParticipation(),
-                clubScheduleRequestDto.location(),
-                clubScheduleRequestDto.participationFee()
+                clubScheduleRequest.meetAt(),
+                clubScheduleRequest.title(),
+                clubScheduleRequest.description(),
+                clubScheduleRequest.maxParticipation(),
+                clubScheduleRequest.location(),
+                clubScheduleRequest.participationFee()
         );
     }
 
-    public void update(LocalDateTime meetAt, String title) {
-        this.meetAt = Objects.requireNonNullElse(meetAt, this.meetAt);
-        this.title = Objects.requireNonNullElse(title, this.title);
+    public void update(ClubScheduleRequest clubScheduleRequest) {
+        this.meetAt = Objects.requireNonNullElse(clubScheduleRequest.meetAt(), meetAt);
+        this.title = Objects.requireNonNullElse(clubScheduleRequest.title(), title);
+        this.description = Objects.requireNonNullElse(clubScheduleRequest.description(), description);
+        this.maxParticipation = Objects.requireNonNullElse(clubScheduleRequest.maxParticipation(), maxParticipation);
+        this.location = Objects.requireNonNullElse(clubScheduleRequest.location(), location);
+        this.participationFee = Objects.requireNonNullElse(clubScheduleRequest.participationFee(), participationFee);
     }
+
+    public boolean isReachMaximumParticipation() {
+        return maxParticipation <= clubScheduleMemberCount;
+    }
+
 
     private ClubSchedule(Club club, LocalDateTime meetAt, String title, String description,
                          Long maxParticipation, String location, Long participationFee) {

@@ -37,7 +37,7 @@ public class ClubFindResponse {
                 .memberNumMax(club.getMemberNumMax())
                 .type(club.getType())
                 .description(club.getDescription())
-                .category(club.getCategory())
+                .category(club.getClubCategory().getMajor())
                 .mainImage(club.getMainImage())
                 .isStatus(club.isStatus())
                 .startClub(club.getStartClub())
