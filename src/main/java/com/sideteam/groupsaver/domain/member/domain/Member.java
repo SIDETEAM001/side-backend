@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
+import com.sideteam.groupsaver.domain.chat.domain.ChatMember;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
@@ -65,6 +66,9 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<HobbyMember> hobbyMemberList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<ChatMember> chatMemberList = new ArrayList<>();
+
 
     @Builder
     protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
@@ -85,5 +89,9 @@ public class Member extends BaseTimeEntity {
 
     public void addAHobbyMember(HobbyMember hobbyMember) {
         this.getHobbyMemberList().add(hobbyMember);
+    }
+
+    public void addChatMember(ChatMember chatMember) {
+        this.getChatMemberList().add(chatMember);
     }
 }

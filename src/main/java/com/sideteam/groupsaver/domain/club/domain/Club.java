@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.club.domain;
 
 import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
+import com.sideteam.groupsaver.domain.chat.domain.ClubChatRoom;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -45,6 +46,8 @@ public class Club extends BaseTimeEntity {
     private ClubCategory clubCategory;
     @OneToMany(mappedBy = "club")
     private List<ClubMember> clubMemberList = new ArrayList<>();
+    @OneToOne (mappedBy = "club")
+    private ClubChatRoom clubChatRoom;
 
     private Club(String name, int memberNumMax, ClubType type, String description, String mainImage, LocalDateTime startClub, ClubActivityType activityType, String location) {
         this.name = name;
@@ -79,5 +82,9 @@ public class Club extends BaseTimeEntity {
 
     public void addAClubMember(ClubMember clubMember) {
         this.getClubMemberList().add(clubMember);
+    }
+
+    public void addClubChatRoom(ClubChatRoom clubChatRoom) {
+        this.setClubChatRoom(clubChatRoom);
     }
 }

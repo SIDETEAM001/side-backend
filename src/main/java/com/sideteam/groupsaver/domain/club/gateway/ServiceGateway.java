@@ -3,6 +3,9 @@ package com.sideteam.groupsaver.domain.club.gateway;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
 import com.sideteam.groupsaver.domain.category.service.CategoryService;
+import com.sideteam.groupsaver.domain.chat.domain.ChatMember;
+import com.sideteam.groupsaver.domain.chat.domain.ClubChatRoom;
+import com.sideteam.groupsaver.domain.chat.service.ChatService;
 import com.sideteam.groupsaver.domain.club.controller.ClubController;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
@@ -24,11 +27,12 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DevelopGateway {
+public class ServiceGateway {
     private final ClubService clubService;
     private final CategoryService categoryService;
     private final ClubMemberService clubMemberService;
     private final MemberService memberService;
+    private final ChatService chatService;
 
     public long createClub(ClubCreateDto dto) {
         Member member = findMember();
@@ -37,6 +41,10 @@ public class DevelopGateway {
         club.updateCategory(category);
         ClubMember clubMember = clubMemberService.createClubMember(club, member, ClubMemberRole.LEADER);
         addAClubMember(clubMember, club, member);
+        ClubChatRoom clubChatRoom = chatService.createClubChatRoom(club);
+        club.addClubChatRoom(clubChatRoom);
+        ChatMember chatMember = ChatMember.of(member, clubChatRoom, ClubMemberRole.LEADER);
+        member.addChatMember(chatMember);
         return club.getId();
     }
 

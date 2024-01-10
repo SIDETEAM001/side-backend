@@ -9,9 +9,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
     private final ClubChatSocketHandler clubChatSocketHandler;
+    private final ClubChatMainHandler clubChatMainHandler;
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(clubChatSocketHandler, "/ws/club/chat")
+                .addHandler(clubChatSocketHandler, "/ws/club/chat_main")
                 .setAllowedOriginPatterns("*");
 
     }
