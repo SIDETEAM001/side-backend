@@ -13,9 +13,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:mysql://localhost:3306/mysql
+    username: root
+    password:
 
   data:
     redis:
@@ -27,15 +27,15 @@ spring:
 app:
   token:
     access:
-      secret-key: ${JWT_SECRET_KEY_ACCESS}
-      expiration: ${JWT_EXPIRATION_ACCESS}
+      secret-key: L4xO5TLWQzVLDdXb5cyOzDPostvp1YOa
+      expiration: 99999999
     refresh:
-      expiration: ${JWT_EXPIRATION_REFRESH}
+      expiration: 99999999
 
 
 oauth:
   kakao:
-    client-id: ${KAKAO_REST_API_KEY}
+    client-id: 490d4b77ebf8180c237157b47e6185b1
     url:
      auth: https://kauth.kakao.com
      api: https://kapi.kakao.com
