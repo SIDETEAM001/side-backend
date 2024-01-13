@@ -1,7 +1,6 @@
 package com.sideteam.groupsaver.domain.auth.dto.request;
 
-import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
-import com.sideteam.groupsaver.domain.category.domain.HobbyMajor;
+import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import jakarta.validation.constraints.Email;
@@ -31,9 +30,6 @@ public record SignupRequest(
 
         JobMajor jobCategory,
 
-        List<DevelopMajor> wantDevelopCategory,
-
-        List<HobbyMajor> wantHobbyCategory
-
+        List<ClubCategoryMajor> categories
 ) {
 }

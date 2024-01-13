@@ -33,15 +33,14 @@ public class AuthSignupService {
 
         checkDuplication(signupRequest);
 
-        final var roles = Set.of(MemberRole.USER);
-
-        final var member = Member.builder()
+        final Member member = Member.builder()
                 .email(signupRequest.email())
                 .nickname(signupRequest.nickname())
-                .roles(roles)
+                .roles(Set.of(MemberRole.USER))
                 .oAuthProvider(OAuthProvider.STANDARD)
                 .password(encodePassword(signupRequest))
                 .phoneNumber(signupRequest.phoneNumber())
+                .jobCategory(signupRequest.jobCategory())
                 .build();
         memberRepository.save(member);
 
@@ -52,10 +51,8 @@ public class AuthSignupService {
 
 
     private void checkDuplication(final SignupRequest signupRequest) {
-        final boolean isDuplicated = memberRepository.existsByEmail(signupRequest.email());
-
-        if (isDuplicated) {
-            log.error("중복되는 이메일: {}", signupRequest.email());
+        if (memberRepository.existsByEmail(signupRequest.email())) {
+            log.warn("중복되는 이메일: {}", signupRequest.email());
             throw new BusinessException(DUPLICATED_EMAIL, signupRequest.email());
         }
     }

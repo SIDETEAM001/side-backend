@@ -2,7 +2,8 @@ package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.location.domain.LocationCoordinate;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationInfoResponse;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,19 +28,17 @@ public class LocationService {
      * @param address - 주소 문자열
      * @return - 주소 이름, 주소 좌표 리스트
      */
-    public List<LocationResponse> searchByName(String address) {
+    public List<LocationInfoResponse> searchByName(String address) {
 
         List<Location> locations = locationRepository.findAllByNameContains(address);
         if (!locations.isEmpty()) {
             return locations.stream()
-                    .map(LocationResponse::of)
+                    .map(LocationInfoResponse::of)
                     .distinct()
                     .toList();
         }
 
-        List<LocationResponse> locationResponses = locationClient.fetchByAddressName(address);
-        saveAllLocations(locationResponses);
-        return locationResponses;
+        return saveAllLocations(locationClient.fetchByAddressName(address));
     }
 
     /**
@@ -49,26 +48,28 @@ public class LocationService {
      * @param latitude  - 위도
      * @return - 주변 위치 주소 이름, 좌표 리스트
      */
-    public List<LocationResponse> searchByCoordinate(Double longitude, Double latitude) {
+    public List<LocationInfoResponse> searchByCoordinate(Double longitude, Double latitude) {
 
         List<Location> locations =
                 locationRepository.findAllWithInCircleArea(LocationCoordinate.of(longitude, latitude));
         if (!locations.isEmpty()) {
             return locations.stream()
-                    .map(LocationResponse::of)
+                    .map(LocationInfoResponse::of)
                     .toList();
         }
 
-        List<LocationResponse> locationResponses = locationClient.fetchByCoordinate(longitude, latitude);
-        saveAllLocations(locationResponses);
-        return locationResponses;
+        return saveAllLocations(locationClient.fetchByCoordinate(longitude, latitude));
     }
 
 
-    private void saveAllLocations(List<LocationResponse> locationResponses) {
-        locationRepository.saveAll(locationResponses.stream()
+    private List<LocationInfoResponse> saveAllLocations(List<LocationData> locationResponse) {
+        List<Location> savedLocations = locationRepository.saveAll(locationResponse.stream()
                 .map(Location::of)
                 .toList());
+
+        return savedLocations.stream()
+                .map(LocationInfoResponse::of)
+                .toList();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.mypage.dto.response;
 
-import com.sideteam.groupsaver.domain.category.domain.DevelopMajor;
+import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
@@ -22,25 +22,24 @@ public class ClubFindResponse {
     private Integer memberNumMax;
     private ClubType type;
     private String description;
-    private DevelopMajor category;
+    private ClubCategoryMajor category;
     private String mainImage;
     private Boolean isStatus;
     private LocalDateTime startClub;
     private ClubActivityType activityType;
 
-    @Builder
     public static ClubFindResponse toDto(Club club) {
         return ClubFindResponse.builder()
                 .id(club.getId())
                 .name(club.getName())
-                .memberCurrentNum(club.getMemberCurrentNum())
-                .memberNumMax(club.getMemberNumMax())
+                .memberCurrentNum(club.getMemberCurrentNumber())
+                .memberNumMax(club.getMemberMaxNumber())
                 .type(club.getType())
                 .description(club.getDescription())
-                .category(club.getClubCategory().getMajor())
+                .category(club.getCategoryMajor())
                 .mainImage(club.getMainImage())
-                .isStatus(club.isStatus())
-                .startClub(club.getStartClub())
+                .isStatus(club.isActive())
+                .startClub(club.getStartAt())
                 .activityType(club.getActivityType())
                 .build();
     }

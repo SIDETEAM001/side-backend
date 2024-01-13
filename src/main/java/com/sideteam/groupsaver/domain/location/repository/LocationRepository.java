@@ -2,10 +2,8 @@ package com.sideteam.groupsaver.domain.location.repository;
 
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.location.domain.LocationCoordinate;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
 import com.sideteam.groupsaver.domain.location.service.LocationUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

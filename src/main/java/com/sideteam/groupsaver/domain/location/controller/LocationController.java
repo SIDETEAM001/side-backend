@@ -1,7 +1,8 @@
 package com.sideteam.groupsaver.domain.location.controller;
 
 import com.sideteam.groupsaver.domain.location.dto.response.CoordinateDistanceResponse;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
+import com.sideteam.groupsaver.domain.location.dto.response.LocationInfoResponse;
 import com.sideteam.groupsaver.domain.location.service.LocationService;
 import com.sideteam.groupsaver.domain.location.service.LocationUtils;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,12 @@ public class LocationController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<List<LocationResponse>> searchByName(@RequestParam("address") String address) {
+    public ResponseEntity<List<LocationInfoResponse>> searchByName(@RequestParam("address") String address) {
         return ResponseEntity.ok(locationService.searchByName(address));
     }
 
     @GetMapping("/coordinate")
-    public ResponseEntity<List<LocationResponse>> getLocationByCoordinate(
+    public ResponseEntity<List<LocationInfoResponse>> getLocationByCoordinate(
             @RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude) {
         return ResponseEntity.ok(locationService.searchByCoordinate(longitude, latitude));
     }
