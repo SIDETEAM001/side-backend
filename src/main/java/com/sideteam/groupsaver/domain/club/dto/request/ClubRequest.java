@@ -1,10 +1,12 @@
 package com.sideteam.groupsaver.domain.club.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.location.dto.request.LocationInfoRequest;
+import com.sideteam.groupsaver.global.util.ProjectTimeFormat;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +19,7 @@ public record ClubRequest(
         String description,
         @Min(value = 1, message = "최소 모임 인원수는 1명 이상이어야 합니다")
         Integer memberMaxNumber,
+        @JsonFormat(pattern = ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN)
         LocalDateTime startAt,
         String mainImage,
         ClubCategoryMajor categoryMajor,

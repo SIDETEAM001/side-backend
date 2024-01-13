@@ -19,10 +19,8 @@ public class ClubController {
     private final ClubFacade clubFacade;
 
     @PostMapping
-    public ResponseEntity<ClubInfoResponse> createClub(
-            @Valid @RequestBody ClubRequest clubRequest,
-            @MemberIdParam Long memberId) {
-        return ResponseEntity.ok(clubFacade.createClubAndJoin(clubRequest, memberId));
+    public ResponseEntity<ClubInfoResponse> createClub(@Valid @RequestBody ClubRequest clubRequest) {
+        return ResponseEntity.ok(clubFacade.createClubAndJoin(clubRequest));
     }
 
     @PatchMapping("/{clubId}")

@@ -1,6 +1,8 @@
 package com.sideteam.groupsaver.domain.club.dto.response;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
+import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
@@ -18,7 +20,9 @@ public record ClubInfoResponse(
         ClubType clubType,
         String mainImage,
         Long creatorId,
-        ClubCategoryMajor category,
+        ClubCategory category,
+        ClubCategoryMajor categoryMajor,
+        ClubCategorySub categorySub,
         Boolean isActive,
         LocalDateTime startAt,
         ClubActivityType activityType
@@ -31,11 +35,14 @@ public record ClubInfoResponse(
                 .memberMaxNumber(club.getMemberMaxNumber())
                 .clubType(club.getType())
                 .description(club.getDescription())
-                .category(club.getCategoryMajor())
+                .category(club.getCategory())
+                .categoryMajor(club.getCategoryMajor())
+                .categorySub(club.getCategorySub())
                 .mainImage(club.getMainImage())
                 .isActive(club.isActive())
                 .startAt(club.getStartAt())
                 .activityType(club.getActivityType())
+                .creatorId(club.getCreator().getId())
                 .build();
     }
 
