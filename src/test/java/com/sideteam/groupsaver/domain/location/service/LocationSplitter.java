@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.location.service;
 
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.ArgumentConverter;
@@ -19,12 +19,12 @@ public class LocationSplitter implements ArgumentConverter {
         return splitAndConvert(input);
     }
 
-    private List<LocationResponse> splitAndConvert(String input) {
+    private List<LocationData> splitAndConvert(String input) {
         String[] parts = input.split(",");
 
         final int batchSize = 6;
         return IntStream.range(0, parts.length / batchSize)
-                .mapToObj(i -> LocationResponse.of(
+                .mapToObj(i -> LocationData.of(
                         parts[i * batchSize],
                         parts[i * batchSize + 1], parts[i * batchSize + 2], parts[i * batchSize + 3],
                         parts[i * batchSize + 4], parts[i * batchSize + 5]))
