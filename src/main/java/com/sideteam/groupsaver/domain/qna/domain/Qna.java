@@ -5,10 +5,7 @@ import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.qna.dto.request.QnaRequestDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +25,14 @@ public class Qna extends BaseTimeEntity {
     private long id;
 
     /* 질문 제목 */
+    @Column(nullable = false)
     private String title;
 
     /* 질문 내용 */
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
     /* 생성자 */
-
     private Qna(String title, String body) {
         this.title = title;
         this.body = body;

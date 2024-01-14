@@ -1,7 +1,6 @@
 package com.sideteam.groupsaver.domain.qna.dto.request;
 
 import com.sideteam.groupsaver.domain.qna.domain.Qna;
-import com.sideteam.groupsaver.domain.qna.dto.response.QnaResponseDto;
 import lombok.*;
 
 import java.time.Instant;

@@ -22,13 +22,14 @@ public class QnaService {
     private final QnaRepository qnaRepository;
 
     /* 전체 조회 */
-    @Transactional
-    public List<Qna> getAllQna() {
-        return qnaRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<QnaResponseDto> getAllQna() {
+        List<Qna> qna = qnaRepository.findAll();
+        return QnaResponseDto.listOf(qna);
     }
 
     /* 단건 조회 */
-    @Transactional
+    @Transactional(readOnly = true)
     public QnaResponseDto getQnaById(Long id) {
         //id에 맞는 정보를 가져온다, 없으면 예외 발생
         Qna qna = qnaRepository.findById(id)
@@ -45,20 +46,12 @@ public class QnaService {
 
     /* 질문 수정 */
     public QnaResponseDto updateQna(Long id, QnaRequestDto qnaRequestDto) {
-        /*
-            findById = Entity 반환
-            existByid = 존재 여부 Boolean 반환
-        */
-        // id가 존재한다면
-        if(qnaRepository.existsById(id)) {
-            Qna qna = qnaRepository.findById(id).orElseThrow();
-            qna.qnaUpdate(qnaRequestDto);
+        Qna qna = qnaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID가 없습니다 ! : " + id));
+        qna.qnaUpdate(qnaRequestDto);
 
-            // 저장 및 DTO로 변환 후 반환
-            return QnaResponseDto.toDto(qnaRepository.save(qna));
-        } else {
-            throw new IllegalArgumentException("ID가 없습니다 ! : " + id);
-        }
+        // 저장 및 DTO로 변환 후 반환
+        return QnaResponseDto.toDto(qnaRepository.save(qna));
     }
 
     /* 질문 삭제 */
