@@ -6,6 +6,9 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.domain.OAuthProvider;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
+import com.sideteam.groupsaver.global.exception.BusinessException;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorCode;
+import com.sideteam.groupsaver.global.exception.auth.AuthErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+
+import static com.sideteam.groupsaver.global.exception.member.MemberErrorCode.DUPLICATED_EMAIL;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,15 +33,14 @@ public class AuthSignupService {
 
         checkDuplication(signupRequest);
 
-        final var roles = Set.of(MemberRole.USER);
-
-        final var member = Member.builder()
+        final Member member = Member.builder()
                 .email(signupRequest.email())
                 .nickname(signupRequest.nickname())
-                .roles(roles)
+                .roles(Set.of(MemberRole.USER))
                 .oAuthProvider(OAuthProvider.STANDARD)
                 .password(encodePassword(signupRequest))
                 .phoneNumber(signupRequest.phoneNumber())
+                .jobCategory(signupRequest.jobCategory())
                 .build();
         memberRepository.save(member);
 
@@ -47,11 +51,9 @@ public class AuthSignupService {
 
 
     private void checkDuplication(final SignupRequest signupRequest) {
-        final boolean isDuplicated = memberRepository.existsByEmail(signupRequest.email());
-
-        if (isDuplicated) {
-            log.error("중복되는 이메일: {}", signupRequest.email());
-//            throw new
+        if (memberRepository.existsByEmail(signupRequest.email())) {
+            log.warn("중복되는 이메일: {}", signupRequest.email());
+            throw new BusinessException(DUPLICATED_EMAIL, signupRequest.email());
         }
     }
 
