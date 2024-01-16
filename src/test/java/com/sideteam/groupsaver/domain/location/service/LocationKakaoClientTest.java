@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.location.service;
 
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,8 +53,8 @@ class LocationKakaoClientTest {
     @CsvFileSource(files = "src/test/resources/location/search-by-address-response.csv", numLinesToSkip = 1)
     @ParameterizedTest
     void fetchByAddressName(String searchAddress,
-                      @ConvertWith(LocationSplitter.class) List<LocationResponse> expected) {
-        List<LocationResponse> locations = locationClient.fetchByAddressName(searchAddress);
+                      @ConvertWith(LocationSplitter.class) List<LocationData> expected) {
+        List<LocationData> locations = locationClient.fetchByAddressName(searchAddress);
 
         log.debug("{}: {}", searchAddress, locations);
         assertThat(locations).isEqualTo(expected);
@@ -64,9 +64,9 @@ class LocationKakaoClientTest {
     @CsvFileSource(files = "src/test/resources/location/search-by-coordinate-response.csv", numLinesToSkip = 1)
     @ParameterizedTest
     void fetchByCoordinate(Double longitude, Double latitude,
-                            @ConvertWith(LocationSplitter.class) List<LocationResponse> expected) {
+                            @ConvertWith(LocationSplitter.class) List<LocationData> expected) {
 
-        List<LocationResponse> locations = locationClient.fetchByCoordinate(longitude, latitude);
+        List<LocationData> locations = locationClient.fetchByCoordinate(longitude, latitude);
 
         assertThat(locations).isEqualTo(expected);
     }

@@ -1,4 +1,4 @@
-package com.sideteam.groupsaver.domain.location;
+package com.sideteam.groupsaver.domain.location.converter;
 
 import com.sideteam.groupsaver.domain.location.domain.Region1Type;
 import com.sideteam.groupsaver.global.util.converter.AbstractEnumAttributeConverter;

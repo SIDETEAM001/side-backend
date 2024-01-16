@@ -2,7 +2,7 @@ package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.dto.kakao.KakaoCoordinate2RegionResponse;
 import com.sideteam.groupsaver.domain.location.dto.kakao.KakaoLocationResponse;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +45,7 @@ public class LocationKakaoClient implements LocationClient {
     }
 
     @Override
-    public List<LocationResponse> fetchByAddressName(String address) {
+    public List<LocationData> fetchByAddressName(String address) {
         KakaoLocationResponse response = doKakaoGetRequest(
                 getSearchApiUrl(address), new ParameterizedTypeReference<>() {}
         );
@@ -68,7 +68,7 @@ public class LocationKakaoClient implements LocationClient {
     }
 
     @Override
-    public List<LocationResponse> fetchByCoordinate(Double longitude, Double latitude) {
+    public List<LocationData> fetchByCoordinate(Double longitude, Double latitude) {
         KakaoCoordinate2RegionResponse response = doKakaoGetRequest(
                 getCoordinateApiUrl(longitude, latitude), new ParameterizedTypeReference<>() {}
         );

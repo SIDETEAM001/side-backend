@@ -3,7 +3,7 @@ package com.sideteam.groupsaver.domain.location.dto.kakao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
 
 import java.util.List;
 
@@ -22,8 +22,8 @@ public record KakaoLocationResponse(
             Double y,
             String addressName,
             RoadAddress roadAddress) {
-        public LocationResponse toLocationResponse() {
-            return LocationResponse.of(
+        public LocationData toLocationResponse() {
+            return LocationData.of(
                     addressName,
                     address.region1depthName, address.region2depthName, address.getRegion3(),
                     x, y);

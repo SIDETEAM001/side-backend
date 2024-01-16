@@ -1,9 +1,8 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
-import com.sideteam.groupsaver.domain.location.Region1TypeAttributeConverter;
-import com.sideteam.groupsaver.domain.location.dto.response.LocationResponse;
-import com.sideteam.groupsaver.domain.location.service.LocationUtils;
+import com.sideteam.groupsaver.domain.location.converter.Region1TypeAttributeConverter;
+import com.sideteam.groupsaver.domain.location.dto.LocationData;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,8 +13,12 @@ import org.hibernate.annotations.SQLInsert;
 @Getter
 @ToString
 @SQLInsert(sql =
-        "REPLACE `location` (create_at,coord,name,region1,region2,region3,update_at) " +
-        "VALUES (?,?,?,?,?,?,?)")
+        "INSERT INTO `location` (create_at, coord, name, region1, region2, region3, update_at) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+        "ON DUPLICATE KEY UPDATE " +
+        "create_at = VALUES(create_at), coord = VALUES(coord), name = VALUES(name), " +
+        "region1 = VALUES(region1), region2 = VALUES(region2), region3 = VALUES(region3), update_at = VALUES(update_at)")
+
 @Entity
 @Table(name = "location",
         indexes = {
@@ -40,11 +43,11 @@ public class Location extends BaseTimeEntity {
     private String region3; // 동읍리
 
 
-    public static Location of(LocationResponse locationResponse) {
+    public static Location of(LocationData locationData) {
         return Location.of(
-                locationResponse.longitude(), locationResponse.latitude(),
-                locationResponse.addressName(),
-                locationResponse.region1(), locationResponse.region2(), locationResponse.region3()
+                locationData.longitude(), locationData.latitude(),
+                locationData.name(),
+                locationData.region1(), locationData.region2(), locationData.region3()
         );
     }
 
