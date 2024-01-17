@@ -1,4 +1,4 @@
-package com.sideteam.groupsaver.global.config;
+package com.sideteam.groupsaver.global.config.swagger;
 
 import com.sideteam.groupsaver.global.auth.AuthConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.security.config.Elements.JWT;
@@ -51,6 +53,17 @@ public class SwaggerConfig {
                 .addSecurityItem(securityRequirement)
                 .components(securitySchemes());
     }
+
+    @Bean
+    public OperationCustomizer disableSwaggerSecurity() {
+        return (operation, handlerMethod) -> {
+            if (handlerMethod.getMethodAnnotation(DisableSwaggerSecurity.class) != null) {
+                operation.setSecurity(Collections.emptyList());
+            }
+            return operation;
+        };
+    }
+
 
     private Info info() {
         final String activeProfile = getActiveProfile();

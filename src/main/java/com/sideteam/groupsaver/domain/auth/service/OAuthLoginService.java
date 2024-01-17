@@ -4,7 +4,7 @@ import com.sideteam.groupsaver.domain.auth.dto.response.TokenDto;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
-import com.sideteam.groupsaver.global.auth.TokenService;
+import com.sideteam.groupsaver.global.auth.TokenFacade;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthInfoResponse;
 import com.sideteam.groupsaver.global.auth.oauth.OAuthLoginParams;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OAuthLoginService {
     private final MemberRepository memberRepository;
-    private final TokenService tokenService;
+    private final TokenFacade tokenFacade;
     private final RequestOAuthInfoService requestOAuthInfoService;
 
     public TokenDto login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long memberId = findOrCreateMember(oAuthInfoResponse);
-        return tokenService.generate(memberId.toString());
+        return tokenFacade.generate(memberId.toString());
     }
 
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {

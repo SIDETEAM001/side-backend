@@ -6,12 +6,12 @@ import com.sideteam.groupsaver.global.auth.refresh_token.RefreshToken;
 import com.sideteam.groupsaver.global.auth.refresh_token.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Slf4j
-@Service
-public class TokenService {
+@Component
+public class TokenFacade {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
