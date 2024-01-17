@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public enum ApiErrorCode implements ErrorCode {
 
     FAILED_VALIDATION(BAD_REQUEST, "Request is invalid and falls outside the valid range"),
+    FAILED_PARSING(BAD_REQUEST, "Failed to parse JSON request body"),
     SERVER_ERROR(INTERNAL_SERVER_ERROR, "Internal server error"),
 
     ;

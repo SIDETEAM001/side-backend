@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
@@ -26,6 +25,16 @@ public class ApiErrorResponse {
                 .body(of(errorCode, exception, request));
     }
 
+    public static ResponseEntity<ApiErrorResponse> toResponseEntity(
+            @NotNull ErrorCode errorCode,
+            String reason,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(of(errorCode, reason, request));
+    }
+
     private static ApiErrorResponse of(
             @NotNull ErrorCode errorCode,
             Exception exception,
@@ -38,6 +47,21 @@ public class ApiErrorResponse {
                 .codeName(errorCode.getName())
                 .detail(errorCode.getDetail())
                 .reason(exception.getMessage())
+                .build();
+    }
+
+    private static ApiErrorResponse of(
+            @NotNull ErrorCode errorCode,
+            String reason,
+            HttpServletRequest request
+    ) {
+        return ApiErrorResponse.builder()
+                .path(request.getServletPath())
+                .statusCode(errorCode.getHttpStatus().value())
+                .error(errorCode.getHttpStatus().name())
+                .codeName(errorCode.getName())
+                .detail(errorCode.getDetail())
+                .reason(reason)
                 .build();
     }
 

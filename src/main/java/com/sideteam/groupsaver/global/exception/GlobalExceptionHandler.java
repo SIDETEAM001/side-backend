@@ -6,6 +6,7 @@ import com.sideteam.groupsaver.global.exception.club.ClubErrorException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -62,8 +63,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_VALIDATION, ex, request);
+        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_VALIDATION, ex.getBindingResult().getAllErrors().toString(), request);
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_PARSING, ex, request);
+    }
+
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ApiErrorResponse> handleException(Exception ex, HttpServletRequest request) {

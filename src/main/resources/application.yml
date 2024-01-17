@@ -31,14 +31,15 @@ app:
       expiration: ${JWT_EXPIRATION_ACCESS}
     refresh:
       expiration: ${JWT_EXPIRATION_REFRESH}
-
+  backend-api: ${BACKEND_API}
+  allow-origins: ${ALLOWED_ORIGINS}
 
 oauth:
   kakao:
     client-id: ${KAKAO_REST_API_KEY}
     url:
-     auth: https://kauth.kakao.com
-     api: https://kapi.kakao.com
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
 
 location:
   kakao:
@@ -58,4 +59,3 @@ cloud:
       bucket: ${S3_BUCKET}
     stack:
       auto: false
-

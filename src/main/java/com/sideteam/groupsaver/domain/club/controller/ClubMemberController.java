@@ -2,10 +2,12 @@ package com.sideteam.groupsaver.domain.club.controller;
 
 import com.sideteam.groupsaver.domain.club.service.ClubMemberService;
 import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Club")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/club-members")
 @RestController
