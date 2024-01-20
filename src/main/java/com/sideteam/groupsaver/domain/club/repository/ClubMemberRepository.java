@@ -5,11 +5,9 @@ import com.sideteam.groupsaver.domain.club.domain.ClubMemberRole;
 import com.sideteam.groupsaver.domain.club.domain.ClubMemberStatus;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.global.exception.club.ClubErrorException;
-import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
@@ -17,13 +15,10 @@ import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_M
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
     Page<ClubMember> findByMemberAndStatus(Member member, ClubMemberStatus status, Pageable pageable);
 
-    boolean existsByMemberIdAndClubId(Long memberId, Long clubId);
-
     boolean existsByClubIdAndMemberId(Long clubId, Long memberId);
 
     void deleteByClubIdAndMemberId(Long clubId, Long memberId);
 
-    @Lock(LockModeType.PESSIMISTIC_READ)
     @Query("SELECT CASE WHEN COUNT(cm) >= c.memberMaxNumber THEN true ELSE false END " +
             "FROM Club c JOIN ClubMember cm ON c.id = cm.club.id WHERE cm.club.id = :clubId ")
     boolean hasExceededMemberLimit(Long clubId);
@@ -31,6 +26,9 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
     @Query("SELECT CASE WHEN COUNT(*) >= 1 THEN true ELSE false END " +
             "FROM Club c JOIN ClubMember cm ON c.id = cm.club.id WHERE cm.club.id = :clubId AND cm.member.id = :memberId AND cm.role = :role")
     boolean hasClubRole(Long clubId, Long memberId, ClubMemberRole role);
+
+    @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
+    Page<Member> findAllMembersByClubId(Long clubId, Pageable pageable);
 
     default void throwIfMemberNotInClub(Long memberId, Long clubId) {
         if (!existsByClubIdAndMemberId(clubId, memberId)) {

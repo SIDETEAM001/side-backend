@@ -34,7 +34,10 @@ public class ClubScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ClubScheduleResponse> getScheduleByClubId(Long clubId, Pageable pageable) {
+    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
+            " AND @clubMemberRepository.existsByClubIdAndMemberId(#clubId, #memberId) " +
+            " OR hasRole('ADMIN'))")
+    public Page<ClubScheduleResponse> getScheduleByClubId(Long clubId, Long memberId, Pageable pageable) {
         Page<ClubSchedule> clubSchedulePage = clubScheduleRepository.findAllByClubId(clubId, pageable);
 
         List<ClubScheduleResponse> clubScheduleResponses = clubSchedulePage.getContent().stream()
@@ -44,8 +47,8 @@ public class ClubScheduleService {
     }
 
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
-            " AND @clubMemberRepository.existsByMemberIdAndClubId(#memberId, #clubId) " +
-            " OR hasRole('ROLE_ADMIN'))")
+            " AND @clubMemberRepository.existsByClubIdAndMemberId(#clubId, #memberId) " +
+            " OR hasRole('ADMIN'))")
     public ClubScheduleResponse createSchedule(Long clubId, ClubScheduleRequest clubScheduleRequest, Long memberId) {
         Club club = clubRepository.getReferenceById(clubId);
         ClubSchedule clubSchedule = clubScheduleRepository.save(ClubSchedule.of(club, clubScheduleRequest));
@@ -54,7 +57,7 @@ public class ClubScheduleService {
 
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
             " AND @clubScheduleRepository.isCreatorOrLeader(#memberId, #clubScheduleId) " +
-            " OR hasRole('ROLE_ADMIN'))")
+            " OR hasRole('ADMIN'))")
     public ClubScheduleResponse updateSchedule(Long clubScheduleId, ClubScheduleRequest clubScheduleRequest, Long memberId) {
         ClubSchedule clubSchedule = clubScheduleRepository.getReferenceById(clubScheduleId);
         clubSchedule.update(clubScheduleRequest);

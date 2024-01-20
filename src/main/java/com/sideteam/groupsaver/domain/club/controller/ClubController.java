@@ -25,6 +25,11 @@ public class ClubController {
         return ResponseEntity.ok(clubFacade.createClubAndJoin(clubRequest));
     }
 
+    @GetMapping("/{clubId}")
+    public ResponseEntity<ClubInfoResponse> getClubInformation(@PathVariable("clubId") Long clubId) {
+        return ResponseEntity.ok(clubService.getClubInformation(clubId));
+    }
+
     @PatchMapping("/{clubId}")
     public ResponseEntity<ClubInfoResponse> updateClubInformation(
             @PathVariable("clubId") Long clubId,

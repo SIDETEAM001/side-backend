@@ -7,8 +7,10 @@ import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.location.service.LocationUtils;
 import com.sideteam.groupsaver.global.exception.BusinessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,9 +23,11 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
     @Query("UPDATE Club c SET c.isActive = false WHERE c.id = :clubId")
     void deactivateClub(@Param("clubId") Long clubId);
 
-    Slice<Club> findByNameContaining(String name, Pageable pageable);
+    @EntityGraph(attributePaths = {"location"}, type = EntityGraph.EntityGraphType.FETCH)
+    Page<Club> findByNameContaining(String name, Pageable pageable);
 
 
+    @EntityGraph(attributePaths = {"location"}, type = EntityGraph.EntityGraphType.FETCH)
     @Query("SELECT c " +
             "FROM Club c JOIN Location lo ON c.location.id = lo.id " +
             "WHERE FUNCTION('ST_Contains', FUNCTION('ST_Buffer', FUNCTION('ST_GeomFromText', " +

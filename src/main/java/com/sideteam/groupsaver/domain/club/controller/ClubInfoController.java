@@ -6,6 +6,8 @@ import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.club.dto.response.ClubInfoResponse;
 import com.sideteam.groupsaver.domain.club.service.ClubSearchService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +37,7 @@ public class ClubInfoController {
     @GetMapping("/coordinate")
     public ResponseEntity<Slice<ClubInfoResponse>> searchByCoordinate(
             @RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude,
+            @Parameter(description = "검색 범위 (meter 단위)")
             @RequestParam(value = "radius", defaultValue = "20000") Integer radiusMeter,
             Pageable pageable) {
         return ResponseEntity.ok(clubSearchService.searchByCoordinate(longitude, latitude, radiusMeter, pageable));
