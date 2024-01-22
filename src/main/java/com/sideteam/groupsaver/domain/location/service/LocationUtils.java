@@ -10,6 +10,12 @@ public class LocationUtils {
 
     public static final int SRID = 4326; // Spatial Reference System ID
 
+    public static final String DEFAULT_LOCATION = "서울 중구 명동1가";
+    public static final double DEFAULT_LONGITUDE = 126.98464;
+    public static final double DEFAULT_LATITUDE = 37.56429;
+    public static final String DEFAULT_LONGITUDE_STRING = "126.98464";
+    public static final String DEFAULT_LATITUDE_STRING = "37.56429";
+
 
     private static final double EARTH_RADIUS_KM = 6371.0; // 지구 반지름(km)
     private static final double ROUND_POSITION = 1E+5;
