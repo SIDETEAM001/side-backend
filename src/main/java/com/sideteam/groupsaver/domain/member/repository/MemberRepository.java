@@ -20,4 +20,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND, "멤버 정보를 가져올 수 없습니다."));
     }
 
+    boolean existsByNickname(String nickname);
 }

@@ -38,7 +38,8 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private LocalDate birth;
-    private String profileUrl;
+    private String gender;
+    private String profileUrl = "https://sabuzac-bucket.s3.ap-northeast-2.amazonaws.com/user/profile_default_image/profile.png";
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -58,9 +59,13 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<WantClubCategory> wantClubCategories = new ArrayList<>();
 
+    private boolean ageTerm;
+    private boolean serviceTerm;
+    private boolean userInfoTerm;
+    private boolean locationTerm;
 
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, String gender, LocalDate birth, boolean ageTerm, boolean locationTerm, boolean serviceTerm, boolean userInfoTerm) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -68,6 +73,12 @@ public class Member extends BaseTimeEntity {
         this.oAuthProvider = oAuthProvider;
         this.roles = roles;
         this.jobCategory = jobCategory;
+        this.gender = gender;
+        this.birth = birth;
+        this.ageTerm = ageTerm;
+        this.serviceTerm = serviceTerm;
+        this.locationTerm = locationTerm;
+        this.userInfoTerm = userInfoTerm;
     }
 
     public void update(MyInfoUpdateRequest myInfoUpdateRequest) {
@@ -78,5 +89,7 @@ public class Member extends BaseTimeEntity {
     }
 
 
-
+    public void updateWantClubCategory(List<WantClubCategory> categories) {
+        this.wantClubCategories.addAll(categories);
+    }
 }

@@ -1,14 +1,19 @@
 package com.sideteam.groupsaver.domain.auth.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.global.auth.AuthConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.*;
 
 public record SignupRequest(
 
@@ -29,6 +34,17 @@ public record SignupRequest(
         String password,
 
         JobMajor jobCategory,
+
+        String gender,
+
+        @Schema(description = "생년월일", example = LOCAL_DATE_PATTERN_EXAMPLE, type = "string")
+        @JsonFormat(pattern = LOCAL_DATE_PATTERN)
+        LocalDate birth,
+
+        boolean ageTerm,
+        boolean serviceTerm,
+        boolean userInfoTerm,
+        boolean locationTerm,
 
         List<ClubCategoryMajor> categories
 ) {
