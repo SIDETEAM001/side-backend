@@ -17,9 +17,6 @@ public interface ClubRepository extends JpaRepository<Club, Long>, ClubRepositor
     @Query("UPDATE Club c SET c.isActive = false WHERE c.id = :clubId")
     void deactivateClub(@Param("clubId") Long clubId);
 
-    @EntityGraph(attributePaths = {"location"}, type = EntityGraph.EntityGraphType.FETCH)
-    Page<Club> findByNameContaining(String name, Pageable pageable);
-
     default Club findByIdOrThrow(Long id) {
         return findById(id).orElseThrow(() ->
                 new BusinessException(CLUB_NOT_FOUND, "잘못된 모임 아이디 : " + id));

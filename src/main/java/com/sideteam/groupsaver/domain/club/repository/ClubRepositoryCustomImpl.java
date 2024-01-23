@@ -45,6 +45,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
                         eq(club.categorySub, categorySub), eq(club.type, type))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(club.memberCurrentNumber.asc())
                 .fetch()
                 .stream().map(ClubInfoResponse::of).toList();
 
@@ -63,7 +64,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
     private BooleanTemplate containsLocation(Double longitude, Double latitude, Integer radiusMeter) {
         return Expressions.booleanTemplate(
                 "ST_Contains(ST_Buffer(ST_GeomFromText(concat('POINT(',{0},' ',{1},')'), {2}), {3}), {4}) ",
-                longitude, latitude, SRID, radiusMeter, location.locationCoordinate.coord);
+                latitude, longitude, SRID, radiusMeter, location.locationCoordinate.coord);
     }
 
 }

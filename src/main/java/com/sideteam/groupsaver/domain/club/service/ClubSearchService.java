@@ -19,15 +19,12 @@ public class ClubSearchService {
 
     private final ClubRepository clubRepository;
 
-    public Slice<ClubInfoResponse> searchByText(String text, Pageable pageable) {
-        return clubRepository.findByNameContaining(text, pageable).map(ClubInfoResponse::of);
-    }
 
     public Slice<ClubInfoResponse> search(
             String text,
             Double longitude, Double latitude, Integer radiusMeter,
-            ClubCategory category, ClubCategoryMajor categoryMajor, ClubCategorySub categorySub,
-            ClubType type, Pageable pageable) {
+            ClubCategory category, ClubCategoryMajor categoryMajor, ClubCategorySub categorySub, ClubType type,
+            Pageable pageable) {
 
         return clubRepository.search(
                 text,
