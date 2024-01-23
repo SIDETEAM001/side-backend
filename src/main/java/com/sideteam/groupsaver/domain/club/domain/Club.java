@@ -60,11 +60,10 @@ public class Club extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ClubCategorySub categorySub;
 
-
     private Integer memberMaxNumber;
 
     @Formula("(SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = id)")
-    private Integer memberCurrentNumber;
+    private int memberCurrentNumber = 0;
 
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private final List<ClubMember> members = new ArrayList<>();

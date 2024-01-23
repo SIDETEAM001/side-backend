@@ -1,14 +1,14 @@
-package com.sideteam.groupsaver.domain.club_schedule.dto.response;
+package com.sideteam.groupsaver.domain.club.dto.response;
 
 import com.sideteam.groupsaver.domain.member.domain.Member;
 
-public record ClubScheduleMemberResponse(
+public record ClubMemberResponse(
         Long memberId,
         String memberProfileUrl,
         String nickname
 ) {
-    public static ClubScheduleMemberResponse from(Member member) {
-        return new ClubScheduleMemberResponse(
+    public static ClubMemberResponse from(Member member) {
+        return new ClubMemberResponse(
                 member.getId(),
                 member.getProfileUrl(),
                 member.getNickname()

@@ -7,10 +7,10 @@ import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.defaultImage.repository.DefaultMainImageRepository;
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -20,7 +20,6 @@ import java.util.Random;
 public class ClubService {
 
     private final ClubRepository clubRepository;
-    private final DefaultMainImageRepository defaultMainImageRepository;
 
     private final LocationRepository locationRepository;
 
@@ -29,6 +28,11 @@ public class ClubService {
         Location location = locationRepository.getReferenceById(clubRequest.locationInfo().id());
         Club club = clubRepository.save(Club.of(clubRequest, location));
         return ClubInfoResponse.of(club);
+    }
+
+    @Transactional(readOnly = true)
+    public ClubInfoResponse getClubInformation(Long clubId) {
+        return ClubInfoResponse.of(clubRepository.findByIdOrThrow(clubId));
     }
 
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
@@ -51,10 +55,5 @@ public class ClubService {
         clubRepository.deactivateClub(clubId);
     }
 
-
-    private String randomDefaultMainImage() {
-        Long randomId = new Random().nextLong(11) + 1;
-        return defaultMainImageRepository.findById(randomId).orElseThrow(IllegalArgumentException::new).getUrl();
-    }
 
 }

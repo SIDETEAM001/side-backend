@@ -12,6 +12,7 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
@@ -19,9 +20,9 @@ import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_T
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN_EXAMPLE;
 
 public record ClubRequest(
-        @Size(min = 1, max = 100)
+        @Length(min = 1, max = 100)
         String name,
-        @Size(min = 10, max = 1000)
+        @Length(min = 10, max = 1000)
         String description,
         @Min(value = 1, message = "최소 모임 인원수는 1명 이상이어야 합니다")
         Integer memberMaxNumber,
@@ -35,7 +36,6 @@ public record ClubRequest(
         ClubType type,
         @NotNull
         ClubActivityType activityType,
-        @NotNull
         LocationInfoRequest locationInfo,
         String locationDetail
 ) {
