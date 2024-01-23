@@ -24,6 +24,20 @@ spring:
       url: jdbc:redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${PORT}
       password: ${REDIS_PASSWORD}
 
+  #mail
+  mail:
+    host: smtp.gmail.com
+    port: ${GMAIL_PORT}
+    username: ${GMAIL_USER}
+    password: ${GMAIL_PW}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: ${GMAIL_TIME}
+          starttls:
+            enable: true
+
 app:
   token:
     access:
