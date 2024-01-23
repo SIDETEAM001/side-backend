@@ -33,7 +33,7 @@ public class SearchHistoryService {
     }
 
 
-    @PreAuthorize("@authorityChecker.currentMemberOrAdmin(#memberId)")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
     public void saveSearchWord(String text, Long memberId) {
         if (!StringUtils.hasText(text)) {
             return;
@@ -44,7 +44,7 @@ public class SearchHistoryService {
                 -(maxHistorySaveCount + 1), -(maxHistorySaveCount));
     }
 
-    @PreAuthorize("@authorityChecker.currentMemberOrAdmin(#memberId)")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
     public ClubSearchHistoryResponse getRecentSearchHistory(Long memberId) {
         Set<String> words = zSetOperations.reverseRange(
                 PREFIX_SEARCH_HISTORY + memberId,
