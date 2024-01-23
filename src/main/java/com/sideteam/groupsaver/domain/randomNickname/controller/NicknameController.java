@@ -22,10 +22,11 @@ public class NicknameController {
 
     @DisableSwaggerSecurity
     @PostMapping("/checkDuplication")
-    public ResponseEntity<Boolean> checkNickname(@RequestBody nickNameDto nickname) {
+    public ResponseEntity<Boolean> checkNickname(@RequestBody NickNameDto nickname) {
         return ResponseEntity.ok(nickNameService.checkNickname(nickname.get()));
     }
-    record nickNameDto(
+
+    record NickNameDto(
             String nickname
     ) {
         public String get() {
