@@ -4,7 +4,7 @@ import com.sideteam.groupsaver.domain.auth.dto.request.LoginRequest;
 import com.sideteam.groupsaver.domain.auth.dto.response.TokenDto;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
-import com.sideteam.groupsaver.global.auth.TokenService;
+import com.sideteam.groupsaver.global.auth.TokenFacade;
 import com.sideteam.groupsaver.global.auth.userdetails.CustomUserDetails;
 import com.sideteam.groupsaver.global.exception.auth.AuthErrorCode;
 import com.sideteam.groupsaver.global.exception.auth.AuthErrorException;
@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthTokenService {
 
     private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final TokenFacade tokenFacade;
 
     private final MemberRepository memberRepository;
 
@@ -45,7 +45,7 @@ public class AuthTokenService {
 
         final String memberId = userDetails.getId().toString();
 
-        return tokenService.generate(memberId);
+        return tokenFacade.generate(memberId);
     }
 
 
@@ -56,7 +56,7 @@ public class AuthTokenService {
      * @return - 재발급된 토클들 반환
      */
     public TokenDto refreshTokens(final String requestRefreshToken) {
-        return tokenService.refreshTokens(requestRefreshToken);
+        return tokenFacade.refreshTokens(requestRefreshToken);
     }
 
 

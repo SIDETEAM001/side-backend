@@ -1,29 +1,31 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
-import com.sideteam.groupsaver.domain.club.domain.ClubMember;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
-import com.sideteam.groupsaver.domain.hobby.domain.HobbyMember;
-import com.sideteam.groupsaver.domain.join.domain.WantDevelop;
-import com.sideteam.groupsaver.domain.join.domain.WantHobby;
+import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
+import com.sideteam.groupsaver.domain.mypage.dto.request.MyInfoUpdateRequest;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Objects.requireNonNullElse;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 @Entity
 public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // nullalbe을 해제해도 되는지?
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -35,8 +37,9 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String birth;
-    private String profileUrl;
+    private LocalDate birth;
+    private String gender;
+    private String profileUrl = "https://sabuzac-bucket.s3.ap-northeast-2.amazonaws.com/user/profile_default_image/profile.png";
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -49,25 +52,20 @@ public class Member extends BaseTimeEntity {
     )
     private Set<MemberRole> roles = new HashSet<>();
 
-    // 직무 & 자기계발 & 취미생활 데이터 받기
+    @Enumerated(EnumType.STRING)
     @Column
     private JobMajor jobCategory;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<WantDevelop> wantDevelopList = new ArrayList<>();
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<WantClubCategory> wantClubCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<WantHobby> wantHobbyList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<ClubMember> clubMemberList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<HobbyMember> hobbyMemberList = new ArrayList<>();
-
+    private boolean ageTerm;
+    private boolean serviceTerm;
+    private boolean userInfoTerm;
+    private boolean locationTerm;
 
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, List<WantDevelop> wantDevelopList, List<WantHobby> wantHobbyList) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, String gender, LocalDate birth, boolean ageTerm, boolean locationTerm, boolean serviceTerm, boolean userInfoTerm) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -75,15 +73,23 @@ public class Member extends BaseTimeEntity {
         this.oAuthProvider = oAuthProvider;
         this.roles = roles;
         this.jobCategory = jobCategory;
-        this.wantDevelopList = wantDevelopList;
-        this.wantHobbyList = wantHobbyList;
+        this.gender = gender;
+        this.birth = birth;
+        this.ageTerm = ageTerm;
+        this.serviceTerm = serviceTerm;
+        this.locationTerm = locationTerm;
+        this.userInfoTerm = userInfoTerm;
     }
 
-    public void addAClubMember(ClubMember clubMember) {
-        this.getClubMemberList().add(clubMember);
+    public void update(MyInfoUpdateRequest myInfoUpdateRequest) {
+        this.nickname = requireNonNullElse(myInfoUpdateRequest.getNickname(), this.nickname);
+        this.birth = requireNonNullElse(myInfoUpdateRequest.getBirth(), this.birth);
+        this.profileUrl = requireNonNullElse(myInfoUpdateRequest.getUrl(), this.profileUrl);
+        this.jobCategory = requireNonNullElse(myInfoUpdateRequest.getJobCategory(), this.jobCategory);
     }
 
-    public void addAHobbyMember(HobbyMember hobbyMember) {
-        this.getHobbyMemberList().add(hobbyMember);
+
+    public void updateWantClubCategory(List<WantClubCategory> categories) {
+        this.wantClubCategories.addAll(categories);
     }
 }
