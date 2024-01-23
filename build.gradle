@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.4'
-    id 'io.spring.dependency-management' version '1.1.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 def buildTimestamp = new Date().format('yyyy-MM-dd\'T\'HH-mm-ss zzz')
@@ -59,6 +59,13 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.522' // AWS SDK
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0' // Swagger
 
+    // QueryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation 'com.querydsl:querydsl-spatial'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -68,3 +75,17 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+sourceSets.main.java.srcDirs += "$projectDir/build/generated"
+
+// QueryDSL 설정 시작
+def querydslSrcDir = 'src/main/generated'
+clean {
+    delete file(querydslSrcDir)
+}
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+// QueryDSL 설정 끝
+
+

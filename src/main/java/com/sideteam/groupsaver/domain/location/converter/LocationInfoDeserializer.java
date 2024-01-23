@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+import static com.sideteam.groupsaver.domain.location.service.LocationUtils.DEFAULT_LOCATION;
+
 @NoArgsConstructor
 @Component
 public class LocationInfoDeserializer extends JsonDeserializer<LocationInfoRequest> {
@@ -61,8 +63,7 @@ public class LocationInfoDeserializer extends JsonDeserializer<LocationInfoReque
     }
 
     private LocationInfoRequest getDefaultLocation() {
-        String defaultLocationName = "서울 중구 명동1가";
-        List<LocationInfoResponse> locationInfoResponses = locationService.searchByName(defaultLocationName);
+        List<LocationInfoResponse> locationInfoResponses = locationService.searchByName(DEFAULT_LOCATION);
         return of(locationInfoResponses);
     }
 

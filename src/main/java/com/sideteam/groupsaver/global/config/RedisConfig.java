@@ -24,9 +24,9 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
 
-        if (StringUtils.hasText(password))
+        if (StringUtils.hasText(password)) {
             config.setPassword(password);
-
+        }
         return new LettuceConnectionFactory(config);
     }
 
