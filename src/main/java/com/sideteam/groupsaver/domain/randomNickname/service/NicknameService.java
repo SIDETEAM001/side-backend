@@ -25,4 +25,8 @@ public class NicknameService {
         } while (memberRepository.existsByNickname(nickname));
         return NicknameResponseDto.of(nickname);
     }
+
+    public boolean checkNickname(String nickname) {
+        return memberRepository.countByNickname(nickname) == 0;
+    }
 }

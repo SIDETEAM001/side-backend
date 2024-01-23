@@ -6,9 +6,7 @@ import com.sideteam.groupsaver.global.config.swagger.DisableSwaggerSecurity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +17,20 @@ public class NicknameController {
     @DisableSwaggerSecurity
     @GetMapping("/getNickname")
     public ResponseEntity<NicknameResponseDto> getNickName() {
-        return new ResponseEntity<NicknameResponseDto>(nickNameService.createNickName(), HttpStatus.CREATED);
+        return new ResponseEntity<>(nickNameService.createNickName(), HttpStatus.CREATED);
     }
+
+    @DisableSwaggerSecurity
+    @PostMapping("/checkDuplication")
+    public ResponseEntity<Boolean> checkNickname(@RequestBody nickNameDto nickname) {
+        return ResponseEntity.ok(nickNameService.checkNickname(nickname.get()));
+    }
+    record nickNameDto(
+            String nickname
+    ) {
+        public String get() {
+            return nickname;
+        }
+    }
+
 }
