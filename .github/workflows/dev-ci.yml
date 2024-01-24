@@ -56,16 +56,12 @@ jobs:
         run: ./gradlew clean test
 
 
-      - name: Send slack when failed
-        if: ${{ failure() }}
-        uses: ./.github/actions/slack-notify
+      - name: Send Slack message
+        uses: 8398a7/action-slack@v3
         with:
-          status: failure
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_BACKEND_TEAM_URL }}
-
-      - name: Send slack if completed
-        if: ${{ success() }}
-        uses: ./.github/actions/slack-notify
-        with:
-          status: success
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_BACKEND_TEAM_URL }}
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_BACKEND_TEAM_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
