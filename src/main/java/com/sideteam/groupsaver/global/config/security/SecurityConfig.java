@@ -40,6 +40,9 @@ public class SecurityConfig {
             "/api/v1/auth/**",
             "/api/v1/test/**",
             "/api/v1/nickname/**",
+            "/api/v1/email/**",
+            "/api/v1/pw/**",
+            "/api/v1/phone/**",
 
             // Swagger
             "/v3/api-docs/**",

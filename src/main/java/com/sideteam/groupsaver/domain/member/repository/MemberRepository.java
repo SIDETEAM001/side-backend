@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +28,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT COUNT(*) FROM Member m WHERE LOWER(REPLACE(m.nickname, ' ', '')) = LOWER(REPLACE(:nickname, ' ', ''))")
     Long countByNickname(String nickname);
+
+    LocalDateTime findCreateAtByEmail(String email);
+
+    @Query("UPDATE Member m SET m.password = :password WHERE m.email = :email")
+    void updatePasswordByEmail(String email, String password);
+
+    String findEmailByPhoneNumber(String phone);
+
+    @Query("UPDATE Member m SET m.password = :password WHERE m.phoneNumber = :phoneNumber")
+    void updatePasswordByPhoneNumber(String password, String phoneNumber);
 }

@@ -11,12 +11,12 @@ import org.springframework.data.redis.core.TimeToLive;
 @Getter
 public class AuthCode {
     @Id
-    private String email;
+    private final String email;
 
-    private String code;
+    private final String code;
 
     @TimeToLive
-    private long timeToLive;
+    private final long timeToLive;
 
     @Builder
     protected AuthCode(String email, String code, long timeToLive) {
