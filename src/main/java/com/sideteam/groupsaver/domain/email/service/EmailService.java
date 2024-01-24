@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import static com.sideteam.groupsaver.global.exception.member.MemberErrorCode.EMAIL_NOT_FOUND;
 
@@ -55,8 +56,9 @@ public class EmailService {
         return message;
     }
 
-    public FindEmailResponse findEmail(String email) {
-        LocalDate createAt = memberRepository.findCreateAtByEmail(email).toLocalDate();
+    private FindEmailResponse findEmail(String email) {
+        LocalDate createAt = memberRepository.findCreateAtByEmail(email)
+                .atZone(ZoneId.systemDefault()).toLocalDate();
         return FindEmailResponse.of(email, createAt);
     }
 }

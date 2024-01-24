@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class EmailPhoneService {
     @Transactional(readOnly = true)
     public FindEmailResponse findEmail(FindEmailByPhoneRequest phoneRequest) {
         String email = memberRepository.findEmailByPhoneNumber(phoneRequest.getPhone());
-        return FindEmailResponse.of(email, memberRepository.findCreateAtByEmail(email).toLocalDate());
+        return FindEmailResponse.of(email, memberRepository.findCreateAtByEmail(email)
+                .atZone(ZoneId.systemDefault()).toLocalDate());
     }
 }

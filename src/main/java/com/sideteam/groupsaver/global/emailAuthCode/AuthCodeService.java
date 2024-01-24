@@ -1,10 +1,12 @@
 package com.sideteam.groupsaver.global.emailAuthCode;
 
 import com.sideteam.groupsaver.global.exception.BusinessException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,6 +15,7 @@ import static com.sideteam.groupsaver.global.exception.auth.AuthErrorCode.FAILED
 
 @Service
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class AuthCodeService {
     private final AuthCodeRepository authCodeRepository;
@@ -23,7 +26,7 @@ public class AuthCodeService {
         }
         String code = UUID.randomUUID().toString().substring(0, 6);
         log.info("이메일 인증 코드 저장 : {} / {}", email, code);
-        return authCodeRepository.save(AuthCode.of(email, code, 3)).getCode();
+        return authCodeRepository.save(AuthCode.of(email, code, Duration.ofMinutes(3).toSeconds())).getCode();
     }
 
     public void checkCode(String email, String code) {

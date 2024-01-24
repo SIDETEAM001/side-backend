@@ -29,9 +29,4 @@ public class EmailController {
     public ResponseEntity<FindEmailResponse> checkCode(@RequestBody CheckEmailCodeRequest codeRequest) {
         return ResponseEntity.ok(emailService.checkAuthCode(codeRequest));
     }
-
-    @PostMapping("/findEmail/{email}")
-    public ResponseEntity<FindEmailResponse> findEmail(@PathVariable("email") String email) {
-        return ResponseEntity.ok(emailService.findEmail(email));
-    }
 }
