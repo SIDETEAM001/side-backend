@@ -13,28 +13,28 @@ import lombok.NoArgsConstructor;
 public class ClubMember extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLUB_ID")
     private Club club;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
     @Enumerated(value = EnumType.STRING)
-    private ClubMemberStatus status = ClubMemberStatus.ACTIVITY;
+    private ClubMemberStatus status;
+
+    @Enumerated(value = EnumType.STRING)
     private ClubMemberRole role;
 
-    public ClubMember(Club club, Member member, ClubMemberRole role) {
+    private ClubMember(Club club, Member member, ClubMemberRole role) {
         this.club = club;
         this.member = member;
         this.role = role;
+        this.status = ClubMemberStatus.ACTIVITY;
     }
 
     public static ClubMember of(Club club, Member member, ClubMemberRole role) {
         return new ClubMember(club, member, role);
     }
 
-    public void updateMemberStatus(ClubMemberStatus status) {
-        this.status = status;
-    }
 }

@@ -14,7 +14,7 @@ public class BusinessException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "AUTH 에러 코드: " + errorCode + ", 사유: " + causedBy;
+        return "에러 코드: " + errorCode + ", 사유: " + causedBy;
     }
 
 }

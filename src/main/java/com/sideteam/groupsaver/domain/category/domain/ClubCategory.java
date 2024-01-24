@@ -1,19 +1,17 @@
 package com.sideteam.groupsaver.domain.category.domain;
 
-import com.sideteam.groupsaver.domain.club.domain.Club;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Entity(name = "club_category")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClubCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Enumerated(value = EnumType.STRING)
-    private DevelopMajor major;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLUB_ID")
-    private Club club;
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+public enum ClubCategory {
+
+    DEVELOP("자기계발"),
+    HOBBY("취미"),
+    ;
+
+    private final String type;
+
 }

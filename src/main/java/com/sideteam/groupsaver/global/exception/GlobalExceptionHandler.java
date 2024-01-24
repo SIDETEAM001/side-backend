@@ -2,20 +2,19 @@ package com.sideteam.groupsaver.global.exception;
 
 import com.sideteam.groupsaver.global.exception.auth.AuthErrorCode;
 import com.sideteam.groupsaver.global.exception.auth.AuthErrorException;
+import com.sideteam.groupsaver.global.exception.club.ClubErrorException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @RestControllerAdvice
@@ -24,6 +23,22 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthErrorException.class)
     public ResponseEntity<ApiErrorResponse> handleAuthErrorException(AuthErrorException ex, HttpServletRequest request) {
         return ApiErrorResponse.toResponseEntity(ex.getErrorCode(), ex, request);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+        return ApiErrorResponse.toResponseEntity(ex.getErrorCode(), ex, request);
+    }
+
+    @ExceptionHandler(ClubErrorException.class)
+    public ResponseEntity<ApiErrorResponse> handleClubErrorException(ClubErrorException ex, HttpServletRequest request) {
+        return ApiErrorResponse.toResponseEntity(ex.getErrorCode(), ex, request);
+    }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        return ApiErrorResponse.toResponseEntity(AuthErrorCode.ACCESS_DENIED, ex, request);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -48,8 +63,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_VALIDATION, ex, request);
+        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_VALIDATION, ex.getBindingResult().getAllErrors().toString(), request);
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return ApiErrorResponse.toResponseEntity(ApiErrorCode.FAILED_PARSING, ex, request);
+    }
+
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ApiErrorResponse> handleException(Exception ex, HttpServletRequest request) {

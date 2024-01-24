@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.global.resolver;
 
 import com.sideteam.groupsaver.global.resolver.access_token.AccessTokenInfoResolver;
+import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParameterResolver;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,12 @@ import java.util.List;
 public class ArgumentResolverConfig implements WebMvcConfigurer {
 
     private final AccessTokenInfoResolver accessTokenInfoResolver;
+    private final MemberIdParameterResolver memberIdParameterResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(accessTokenInfoResolver);
+        resolvers.addAll(List.of(
+                accessTokenInfoResolver, memberIdParameterResolver
+        ));
     }
 }

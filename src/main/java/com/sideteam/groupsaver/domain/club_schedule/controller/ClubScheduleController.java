@@ -1,53 +1,60 @@
 package com.sideteam.groupsaver.domain.club_schedule.controller;
 
-import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleRequestDto;
-import com.sideteam.groupsaver.domain.club_schedule.dto.ClubScheduleResponseDto;
+import com.sideteam.groupsaver.domain.club_schedule.dto.request.ClubScheduleRequest;
+import com.sideteam.groupsaver.domain.club_schedule.dto.response.ClubScheduleResponse;
 import com.sideteam.groupsaver.domain.club_schedule.service.ClubScheduleService;
+import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Tag(name = "Club")
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/club-schedule")
+@RequestMapping("/api/v1/club-schedules")
 @RestController
 public class ClubScheduleController {
 
     private final ClubScheduleService clubScheduleService;
 
     @GetMapping("/{clubScheduleId}")
-    public ResponseEntity<ClubScheduleResponseDto> getSchedule(@PathVariable Long clubScheduleId) {
+    public ResponseEntity<ClubScheduleResponse> getSchedule(@PathVariable Long clubScheduleId) {
         return ResponseEntity.ok(clubScheduleService.getSchedule(clubScheduleId));
     }
 
     @GetMapping("/club/{clubId}")
-    public ResponseEntity<Page<ClubScheduleResponseDto>> getSchedules(
+    public ResponseEntity<Page<ClubScheduleResponse>> getSchedules(
             @PathVariable Long clubId,
+            @MemberIdParam Long memberId,
             Pageable pageable) {
-        return ResponseEntity.ok(clubScheduleService.getScheduleByClubId(clubId, pageable));
+        return ResponseEntity.ok(clubScheduleService.getScheduleByClubId(clubId, memberId, pageable));
     }
 
     @PostMapping("/club/{clubId}")
-    public ResponseEntity<ClubScheduleResponseDto> createSchedule(
+    public ResponseEntity<ClubScheduleResponse> createSchedule(
             @PathVariable Long clubId,
-            @RequestBody ClubScheduleRequestDto clubScheduleRequestDto) {
-        return ResponseEntity.ok(clubScheduleService.createSchedule(clubId, clubScheduleRequestDto));
+            @Valid @RequestBody ClubScheduleRequest clubScheduleRequest,
+            @MemberIdParam Long memberId) {
+        return ResponseEntity.ok(clubScheduleService.createSchedule(clubId, clubScheduleRequest, memberId));
     }
 
-    @PostMapping("/{clubScheduleId}")
-    public ResponseEntity<ClubScheduleResponseDto> updateSchedule(
+    @PatchMapping("/{clubScheduleId}")
+    public ResponseEntity<ClubScheduleResponse> updateSchedule(
             @PathVariable Long clubScheduleId,
-            @RequestBody ClubScheduleRequestDto clubScheduleRequestDto) {
-        return ResponseEntity.ok(clubScheduleService.updateSchedule(clubScheduleId, clubScheduleRequestDto));
+            @Valid @RequestBody ClubScheduleRequest clubScheduleRequest,
+            @MemberIdParam Long memberId) {
+        return ResponseEntity.ok(clubScheduleService.updateSchedule(
+                clubScheduleId, clubScheduleRequest, memberId));
     }
 
     @DeleteMapping("/{clubScheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long clubScheduleId) {
-        clubScheduleService.deleteSchedule(clubScheduleId);
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable Long clubScheduleId,
+            @MemberIdParam Long memberId) {
+        clubScheduleService.deleteSchedule(clubScheduleId, memberId);
         return ResponseEntity.noContent().build();
     }
 

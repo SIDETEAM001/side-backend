@@ -1,15 +1,25 @@
 package com.sideteam.groupsaver.domain.club.repository;
 
 import com.sideteam.groupsaver.domain.club.domain.Club;
-
+import com.sideteam.groupsaver.global.exception.BusinessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ClubRepository extends JpaRepository<Club, Long> {
-    @Query("SELECT isStatus FROM Club WHERE id = :clubId")
-    boolean findStatusByClubId(@Param("clubId") long clubId);
+import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_NOT_FOUND;
 
-    @Query("UPDATE Club SET isStatus = false WHERE id = :clubId")
-    void updateIsStatusByClubId(@Param("clubId") long clubId);
+public interface ClubRepository extends JpaRepository<Club, Long>, ClubRepositoryCustom {
+    @Modifying
+    @Query("UPDATE Club c SET c.isActive = false WHERE c.id = :clubId")
+    void deactivateClub(@Param("clubId") Long clubId);
+
+    default Club findByIdOrThrow(Long id) {
+        return findById(id).orElseThrow(() ->
+                new BusinessException(CLUB_NOT_FOUND, "잘못된 모임 아이디 : " + id));
+    }
+
 }
