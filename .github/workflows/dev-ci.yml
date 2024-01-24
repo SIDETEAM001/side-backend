@@ -44,13 +44,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
       - name: Set up App configuration
         run: |
           echo "${{ secrets.APPLICATION_TEST }}" > ./src/test/resources/application-test.yml
         shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Test App
         run: ./gradlew clean test
