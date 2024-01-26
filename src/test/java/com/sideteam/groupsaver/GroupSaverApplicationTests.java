@@ -1,13 +1,13 @@
 package com.sideteam.groupsaver;
 
+import com.sideteam.groupsaver.config.IntegrationSpringBootTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@IntegrationSpringBootTest
 class GroupSaverApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

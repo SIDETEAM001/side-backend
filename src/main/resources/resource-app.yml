@@ -1,0 +1,14 @@
+app:
+  token:
+    access:
+      secret-key: ${JWT_SECRET_KEY_ACCESS}
+      expiration: ${JWT_EXPIRATION_ACCESS}
+    refresh:
+      expiration: ${JWT_EXPIRATION_REFRESH}
+  backend-api: ${BACKEND_API}
+  allow-origins: ${ALLOWED_ORIGINS}
+
+  search:
+    history:
+      max: 100
+      display: 7
