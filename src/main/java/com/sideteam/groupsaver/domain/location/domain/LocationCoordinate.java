@@ -1,16 +1,14 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
 import com.sideteam.groupsaver.domain.location.service.LocationUtils;
+import com.sideteam.groupsaver.global.util.SpatialExpressions;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.PrecisionModel;
 
 import static com.sideteam.groupsaver.domain.location.service.LocationUtils.SRID;
 
@@ -42,10 +40,9 @@ public class LocationCoordinate {
 
 
     private LocationCoordinate(Double longitude, Double latitude) {
-        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
-        this.coord = geometryFactory.createPoint(new Coordinate(
+        this.coord = SpatialExpressions.createPoint(
                 LocationUtils.roundCoordinate(longitude),
-                LocationUtils.roundCoordinate(latitude)));
+                LocationUtils.roundCoordinate(latitude), SRID);
     }
 
 }
