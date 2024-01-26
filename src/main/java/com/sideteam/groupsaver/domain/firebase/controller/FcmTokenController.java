@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.firebase.controller;
 
 import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenDto;
+import com.sideteam.groupsaver.domain.firebase.dto.DeleteFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.service.FcmTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,12 @@ public class FcmTokenController {
     @PostMapping("/submit")
     public HttpStatus submitFcmToken(@RequestBody CreateFcmTokenDto dto) {
         fcmTokenService.createFcmToken(dto);
+        return HttpStatus.OK;
+    }
+
+    @DeleteMapping("/delete")
+    public HttpStatus deleteFcmToken(@RequestBody DeleteFcmTokenRequest request) {
+        fcmTokenService.deleteFcmToken(request);
         return HttpStatus.OK;
     }
 }

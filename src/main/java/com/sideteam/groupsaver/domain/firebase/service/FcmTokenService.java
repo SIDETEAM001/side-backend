@@ -6,6 +6,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.sideteam.groupsaver.domain.firebase.domain.FcmToken;
 import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenDto;
+import com.sideteam.groupsaver.domain.firebase.dto.DeleteFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.repository.FcmTokenRepository;
 import com.sideteam.groupsaver.domain.member.service.MemberService;
 import jakarta.transaction.Transactional;
@@ -53,5 +54,9 @@ public class FcmTokenService {
                 .setToken(token)
                 .build();
         firebaseMessaging.send(message);
+    }
+
+    public void deleteFcmToken(DeleteFcmTokenRequest request) {
+        fcmRepository.deleteByToken(request.getToken());
     }
 }
