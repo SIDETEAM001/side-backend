@@ -1,6 +1,5 @@
 package com.sideteam.groupsaver.domain.firebase.controller;
 
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenDto;
 import com.sideteam.groupsaver.domain.firebase.service.FcmTokenService;
 import lombok.RequiredArgsConstructor;
