@@ -13,7 +13,6 @@ public record ClubScheduleResponse(
         String description,
         String location,
         Long participationFee,
-        @JsonFormat(pattern = ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN, timezone = "Asia/Seoul")
         LocalDateTime meetAt,
         Integer currentParticipation
 ) {
