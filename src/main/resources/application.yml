@@ -7,3 +7,17 @@ spring:
 
   jpa:
     open-in-view: false
+
+  #mail
+  mail:
+    host: smtp.gmail.com
+    port: ${GMAIL_PORT}
+    username: ${GMAIL_USER}
+    password: ${GMAIL_PW}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: ${GMAIL_TIME}
+          starttls:
+            enable: true

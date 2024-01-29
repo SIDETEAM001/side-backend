@@ -30,14 +30,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m.createAt FROM Member m WHERE m.email = :email")
     Instant findCreateAtByEmail(String email);
 
-    @Modifying
-    @Query("UPDATE Member m SET m.password = :password WHERE m.email = :email")
-    void updatePasswordByEmail(String email, String password);
-
     @Query("SELECT m.email FROM Member m WHERE m.phoneNumber = :phone")
     String findEmailByPhoneNumber(String phone);
 
-    @Modifying
-    @Query("UPDATE Member m SET m.password = :password WHERE m.phoneNumber = :phoneNumber")
-    void updatePasswordByPhoneNumber(String password, String phoneNumber);
+    Optional<Member> findByPhoneNumber(String phoneNumber);
 }

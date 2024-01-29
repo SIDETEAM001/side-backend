@@ -12,15 +12,16 @@ import com.sideteam.groupsaver.global.exception.BusinessException;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 import static com.sideteam.groupsaver.global.exception.member.MemberErrorCode.EMAIL_NOT_FOUND;
+import static com.sideteam.groupsaver.global.exception.member.MemberErrorCode.MEMBER_NOT_FOUND;
 
 @Service
 @Transactional
@@ -44,7 +45,9 @@ public class PasswordService {
     }
 
     public void changePassword(ChangePwRequest pwRequest) {
-        memberRepository.updatePasswordByEmail(pwRequest.getEmail(), passwordEncoder.encode(pwRequest.getPassword()));
+        Member member = memberRepository.findByEmail(pwRequest.getEmail()).orElseThrow(() ->
+                new BusinessException(MEMBER_NOT_FOUND, "존재하지 않는 이메일 : " + pwRequest.getEmail()));
+        member.updatePassword(passwordEncoder.encode(pwRequest.getPassword()));
     }
 
     private MimeMessage createMessage(String email, String code) throws MessagingException, IOException {
