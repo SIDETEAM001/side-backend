@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.member.repository;
 
 import com.sideteam.groupsaver.domain.member.domain.Member;
+import com.sideteam.groupsaver.domain.member.domain.MemberActive;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import com.sideteam.groupsaver.global.exception.member.MemberErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT COUNT(*) FROM Member m WHERE LOWER(REPLACE(m.nickname, ' ', '')) = LOWER(REPLACE(:nickname, ' ', ''))")
     Long countByNickname(String nickname);
+
+    Optional<Member> findByIdAndActiveStatus(Long id, MemberActive activeStatus);
 }

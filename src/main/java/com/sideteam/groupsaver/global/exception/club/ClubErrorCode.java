@@ -19,6 +19,7 @@ public enum ClubErrorCode implements ErrorCode {
     CLUB_NOT_FOUND(NOT_FOUND, "찾을 수 없는 모임입니다"),
     CLUB_MEMBER_IS_FULL(NOT_FOUND, "모임의 정원이 다 찼습니다."),
     CLUB_MEMBER_ALREADY_EXIST(NOT_FOUND, "이미 가입되어 있습니다."),
+    CLUB_IS_SUSPENDED(NOT_FOUND, "정지된 모임입니다"),
 
     ;
 
