@@ -49,7 +49,7 @@ public final class JwtTokenProvider {
      * @param headerAuth - 헤더 문자열
      * @return - 추출한 JWT 토큰
      */
-    private static String parseJwt(final String headerAuth) {
+    public static String parseJwt(final String headerAuth) {
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(AuthConstants.TOKEN_TYPE)) {
             return headerAuth.substring(AuthConstants.TOKEN_TYPE.length()).trim();
