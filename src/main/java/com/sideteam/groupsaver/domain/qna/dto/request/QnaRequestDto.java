@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.qna.dto.request;
 
+import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.qna.domain.Qna;
 import lombok.*;
 

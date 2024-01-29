@@ -4,6 +4,7 @@ import com.sideteam.groupsaver.domain.qna.domain.Qna;
 import com.sideteam.groupsaver.domain.qna.dto.request.QnaRequestDto;
 import com.sideteam.groupsaver.domain.qna.dto.response.QnaResponseDto;
 import com.sideteam.groupsaver.domain.qna.service.QnaService;
+import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
