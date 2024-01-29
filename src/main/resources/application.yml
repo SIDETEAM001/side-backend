@@ -2,12 +2,6 @@ spring:
   profiles:
     active: dev
 
-  config:
-    import: classpath:resource-app.yml, classpath:resource-infra.yml
-
-  jpa:
-    open-in-view: false
-
   #mail
   mail:
     host: smtp.gmail.com
@@ -21,3 +15,9 @@ spring:
           timeout: ${GMAIL_TIME}
           starttls:
             enable: true
+
+  config:
+    import: classpath:resource-app.yml, classpath:resource-infra.yml
+
+  jpa:
+    open-in-view: false
