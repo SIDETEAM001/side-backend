@@ -2,7 +2,7 @@ name: Continuous Integration (prod)
 
 on:
   pull_request:
-    branches: [ "release" ]
+    branches: [ "main", "release" ]
   workflow_dispatch:
     inputs:
       logLevel:
@@ -49,11 +49,17 @@ jobs:
           echo "${{ secrets.APPLICATION_TEST }}" > ./src/test/resources/application-test.yml
         shell: bash
 
+      - name: Create Json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "./src/test/resources/firebase-config.json"
+          json: ${{ secrets.FIREBASE_PROD_JSON }}
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Test App
-        run: ./gradlew clean test
+        run: ./gradlew clean test --stacktrace
 
 
       - name: Send Slack message

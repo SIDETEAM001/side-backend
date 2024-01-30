@@ -35,14 +35,14 @@ public class FcmTokenService {
         List<String> tokenList = fcmRepository.findAllTokenByEmail(memberService.findMember().getEmail());
         tokenList.forEach(token -> {
             try {
-                fcm_transmit(token, title, body);
-            } catch (FirebaseMessagingException f1) {
-                log.error(f1.toString());
+                fcmTransmit(token, title, body);
+            } catch (FirebaseMessagingException exception) {
+                log.error(exception.toString());
             }
         });
     }
 
-    public void fcm_transmit(String token, String title, String body) throws FirebaseMessagingException {
+    public void fcmTransmit(String token, String title, String body) throws FirebaseMessagingException {
         Notification notification = Notification.builder()
                 .setTitle(title)
                 .setBody(body)
