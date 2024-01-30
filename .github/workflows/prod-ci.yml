@@ -46,6 +46,7 @@ jobs:
 
       - name: Set up App configuration
         run: |
+          mkdir -p ./src/test/resources/firebase
           echo "${{ secrets.APPLICATION_TEST }}" > ./src/test/resources/application-test.yml
           echo "${{ secrets.FIREBASE_CONFIG }}" > ./src/test/resources/firebase/config.json
         shell: bash
