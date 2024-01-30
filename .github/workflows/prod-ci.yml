@@ -2,7 +2,7 @@ name: Continuous Integration (prod)
 
 on:
   pull_request:
-    branches: [ "release" ]
+    branches: [ "main", "release" ]
   workflow_dispatch:
     inputs:
       logLevel:
@@ -47,6 +47,7 @@ jobs:
       - name: Set up App configuration
         run: |
           echo "${{ secrets.APPLICATION_TEST }}" > ./src/test/resources/application-test.yml
+          echo "${{ secrets.FIREBASE_CONFIG }}" > ./src/test/resources/firebase/config.json
         shell: bash
 
       - name: Grant execute permission for gradlew
