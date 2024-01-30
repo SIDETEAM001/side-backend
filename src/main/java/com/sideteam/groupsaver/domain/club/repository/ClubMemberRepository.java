@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.function.BooleanSupplier;
+
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
@@ -38,6 +40,10 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
     default boolean isLeader(Long clubId, Long memberId) {
         return hasClubRole(clubId, memberId, ClubMemberRole.LEADER);
+    }
+
+    default BooleanSupplier isInClub(Long clubId, Long memberId) {
+        return () -> existsByClubIdAndMemberId(clubId, memberId);
     }
 
 }
