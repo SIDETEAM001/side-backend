@@ -82,6 +82,7 @@ dependencies {
     testImplementation 'org.testcontainers:jdbc:1.19.3'
     testImplementation "org.testcontainers:mysql:1.19.3"
     testImplementation 'org.signal:embedded-redis:0.8.3'
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
