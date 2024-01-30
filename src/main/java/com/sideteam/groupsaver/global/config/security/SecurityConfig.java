@@ -44,6 +44,7 @@ public class SecurityConfig {
             "/api/v1/pw/**",
             "/api/v1/phone/**",
             "/ws/**",
+            "/api/v1/fcm/**",
 
             // Swagger
             "/v3/api-docs/**",
