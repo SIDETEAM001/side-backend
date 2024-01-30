@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -22,6 +21,8 @@ public enum AuthErrorCode implements ErrorCode {
     UNSUPPORTED_JWT_TOKEN(UNAUTHORIZED, "지원하지 않는 토큰입니다"),
     REFRESH_TOKEN_NOT_FOUND(UNAUTHORIZED, "다시 로그인 해주세요. (없거나 삭제된 리프래시 토큰)"),
     FAILED_AUTHENTICATION(UNAUTHORIZED, "인증에 실패했습니다"),
+    AUTH_CODE_IS_NULL(NOT_FOUND, "저장된 인증코드가 없습니다"),
+    FAILED_AUTH_CODE(NOT_ACCEPTABLE, "잘못된 인증코드입니다"),
 
     // 403 FORBIDDEN: 인증된 클라이언트가 권한이 없는 자원에 접근
     ACCESS_DENIED(FORBIDDEN, "접근할 수 없는 자료입니다"),
