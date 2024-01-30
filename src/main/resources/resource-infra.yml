@@ -23,3 +23,7 @@ location:
     api-key: ${KAKAO_REST_API_KEY}
     search-api: https://dapi.kakao.com/v2/local/search/address
     coord-api: https://dapi.kakao.com/v2/local/geo/coord2regioncode
+
+firebase:
+  fcm:
+    config-path: ${FCM_URL}
