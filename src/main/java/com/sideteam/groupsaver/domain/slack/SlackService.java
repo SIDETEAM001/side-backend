@@ -5,15 +5,18 @@ import com.sideteam.groupsaver.domain.report.domain.ReportUser;
 import lombok.RequiredArgsConstructor;
 import net.gpedro.integrations.slack.SlackApi;
 import net.gpedro.integrations.slack.SlackMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SlackService {
-    private final String reportURL = System.getenv("SLACK_CLUB_REPORT");
+    private final String reportURL;
     private static final String LINE_SEPARATOR = "---------------------------------------------------------\n";
     private static final String LINE_FOOTER = "---------------------------------------------------------";
 
+    public SlackService(@Value("${slack.report}") String reportURL) {
+        this.reportURL = reportURL;
+    }
 
     public void sendReportClub(ReportClub reportClub, int reportNum) {
         String message =
@@ -33,8 +36,8 @@ public class SlackService {
         String message =
                 LINE_SEPARATOR +
                         "회원 신고가 접수되었습니다 \n" +
-                        "회원 Id : " + reportUser.getMember().getId() + "\n" +
-                        "회원 이메일 : " + reportUser.getMember().getEmail() + "\n" +
+                        "회원 Id : " + reportUser.getReportedMember().getId() + "\n" +
+                        "회원 이메일 : " + reportUser.getReportedMember().getEmail() + "\n" +
                         "신고자 Id : " + reportUser.getCreator().getId() + "\n" +
                         "신고자 이메일 : " + reportUser.getCreator().getEmail() + "\n" +
                         "신고 내용 : " + reportUser.getCategory().getIssue() + "\n" +

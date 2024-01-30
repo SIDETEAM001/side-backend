@@ -110,7 +110,7 @@ public class Club extends BaseEntity {
         this.location = requireNonNullElse(location, this.location);
     }
 
-    public void updateIsActive() {
+    public void deactivate() {
         this.isActive = false;
     }
 

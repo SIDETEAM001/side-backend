@@ -20,21 +20,21 @@ public class ReportUser extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member reportedMember;
 
     private String etcReason;
 
     @Builder
-    protected ReportUser(ReportUserCategory category, Member member, String etcReason) {
+    protected ReportUser(ReportUserCategory category, Member reportedMember, String etcReason) {
         this.category = category;
-        this.member = member;
+        this.reportedMember = reportedMember;
         this.etcReason = etcReason;
     }
 
-    public static ReportUser of(ReportUserCategory category, Member member, String etcReason) {
+    public static ReportUser of(ReportUserCategory category, Member reportedMember, String etcReason) {
         return ReportUser.builder()
                 .category(category)
-                .member(member)
+                .reportedMember(reportedMember)
                 .etcReason(etcReason)
                 .build();
     }

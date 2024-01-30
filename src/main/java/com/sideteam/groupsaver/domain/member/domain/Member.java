@@ -60,11 +60,11 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<WantClubCategory> wantClubCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "reportedMember", fetch = FetchType.LAZY)
     private final List<ReportUser> reports = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
-    private MemberActive activeStatus = MemberActive.ACTIVE;
+    private MemberActive activeStatus;
 
     private boolean ageTerm;
     private boolean serviceTerm;
@@ -86,6 +86,7 @@ public class Member extends BaseTimeEntity {
         this.serviceTerm = serviceTerm;
         this.locationTerm = locationTerm;
         this.userInfoTerm = userInfoTerm;
+        this.activeStatus = MemberActive.ACTIVE;
     }
 
     public void update(MyInfoUpdateRequest myInfoUpdateRequest) {

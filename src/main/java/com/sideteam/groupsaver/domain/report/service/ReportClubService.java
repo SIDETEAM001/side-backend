@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_IS_SUSPENDED;
-import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_NOT_FOUND;
 
 @Service
 @Transactional
@@ -28,7 +27,7 @@ public class ReportClubService {
         ReportClub reportClub = ReportClub.of(club, request.getCategory(), request.getEtcReason());
         club.addReport(reportClubRepository.save(reportClub));
         if (club.getReports().size() == 3) {
-            club.updateIsActive();
+            club.deactivate();
         }
         slackService.sendReportClub(reportClub, club.getReports().size());
     }

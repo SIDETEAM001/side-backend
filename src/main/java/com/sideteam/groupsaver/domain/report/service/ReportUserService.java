@@ -23,13 +23,13 @@ public class ReportUserService {
 
 
     public void reportUser(ReportUserRequest request) {
-        Member member = checkMember(request.getMemberId());
-        ReportUser reportUser = ReportUser.of(request.getCategory(), member, request.getEtcReason());
-        member.addReport(reportUserRepository.save(reportUser));
-        if (member.getReports().size() == 3) {
-            member.suspend();
+        Member reportedMember = checkMember(request.getReportedMemberId());
+        ReportUser reportUser = ReportUser.of(request.getCategory(), reportedMember, request.getEtcReason());
+        reportedMember.addReport(reportUserRepository.save(reportUser));
+        if (reportedMember.getReports().size() == 3) {
+            reportedMember.suspend();
         }
-        slackService.sendReportUser(reportUser, member.getReports().size());
+        slackService.sendReportUser(reportUser, reportedMember.getReports().size());
     }
 
     private Member checkMember(Long memberId) {

@@ -24,7 +24,6 @@ public interface ClubRepository extends JpaRepository<Club, Long>, ClubRepositor
                 new BusinessException(CLUB_NOT_FOUND, "잘못된 모임 아이디 : " + id));
     }
 
-    @Query("SELECT c FROM Club c WHERE c.id = :id AND c.isActive = true")
-    Optional<Club> findByIdAndIsActive(Long id);
+    Optional<Club> findByIdAndIsActiveTrue(Long id);
 
 }

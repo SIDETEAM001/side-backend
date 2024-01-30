@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ReportUserRequest {
-    private long memberId;
+    private long reportedMemberId;
     private ReportUserCategory category;
     private String etcReason;
 }
