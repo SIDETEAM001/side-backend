@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.sideteam.groupsaver.domain.club.domain.ClubActivityType.ONLINE;
 import static com.sideteam.groupsaver.domain.club.domain.QClub.club;
 import static com.sideteam.groupsaver.domain.location.domain.QLocation.location;
 import static com.sideteam.groupsaver.domain.location.service.LocationUtils.SRID;
@@ -40,37 +41,41 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
             Pageable pageable) {
 
         List<ClubInfoResponse> clubs = queryFactory
-                .select(club)
-                .from(club)
+                .selectFrom(club)
                 .join(club.location, location).fetchJoin()
                 .where(hasCategoryAndTextWithin(text, longitude, latitude, radiusMeter, category, categoryMajor, categorySub, type))
+                .orderBy(QueryUtils.getOrderSpecifiers(pageable, club))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()
                 .stream().map(ClubInfoResponse::of).toList();
 
         JPQLQuery<Club> count = queryFactory
-                .select(club)
-                .from(club)
+                .selectFrom(club)
                 .where(hasCategoryAndTextWithin(text, longitude, latitude, radiusMeter, category, categoryMajor, categorySub, type));
 
         return QueryUtils.createPage(clubs, pageable, count::fetchCount);
     }
 
 
-    public Page<ClubInfoResponse> randomClub(
+    @Override
+    public Page<ClubInfoResponse> searchInCategories(
             Double longitude, Double latitude, Integer radiusMeter,
-            ClubCategory category, ClubCategoryMajor categoryMajor, ClubCategorySub categorySub, ClubType type) {
+            List<ClubCategoryMajor> categoryMajors, ClubType type,
+            Pageable pageable, int randomValue) {
 
         List<ClubInfoResponse> clubs = queryFactory
-                .select(club)
-                .from(club)
+                .selectFrom(club)
                 .join(club.location, location).fetchJoin()
-                .where(hasClubCategoryWithin(longitude, latitude, radiusMeter, category, categoryMajor, categorySub, type))
-                .limit(30L)
+                .where(club.isActive, club.randomId.gt(randomValue),
+                        club.activityType.eq(ONLINE)
+                                .or(SpatialExpressions.within(longitude, latitude, SRID, location.locationCoordinate.coord, radiusMeter)),
+                        isIn(categoryMajors), eq(club.type, type))
+                .orderBy(QueryUtils.getOrderSpecifiers(pageable, club))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch()
                 .stream().map(ClubInfoResponse::of).toList();
-
         return new PageImpl<>(clubs);
     }
 
@@ -103,6 +108,13 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
         expressions.add(QueryUtils.contains(club.name, text));
         Collections.addAll(expressions, hasClubCategoryWithin(longitude, latitude, radiusMeter, category, categoryMajor, categorySub, type));
         return expressions.toArray(new BooleanExpression[0]);
+    }
+
+    private BooleanExpression isIn(List<ClubCategoryMajor> categoryMajors) {
+        if (categoryMajors == null || categoryMajors.isEmpty()) {
+            return null;
+        }
+        return club.categoryMajor.in(categoryMajors);
     }
 
 }

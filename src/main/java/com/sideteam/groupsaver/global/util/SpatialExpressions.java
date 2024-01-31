@@ -4,12 +4,13 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.ComparablePath;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SpatialExpressions {
+public final class SpatialExpressions {
 
     public static BooleanExpression within(Point centerPoint, ComparablePath<Point> otherPoint, int radiusMeter) {
         Expression<Geometry> buffer = SpatialExpressions.buffer(centerPoint, radiusMeter);
@@ -32,6 +33,10 @@ public class SpatialExpressions {
     public static Point createPoint(double longitude, double latitude, int SRID) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), SRID);
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));
+    }
+
+    public static NumberTemplate<Double> distanceSphere(Expression<Geometry> geometryExpression, ComparablePath<Point> point) {
+        return Expressions.numberTemplate(Double.class, "ST_DISTANCE_SPHERE({0}, {1})", geometryExpression, point);
     }
 
 }

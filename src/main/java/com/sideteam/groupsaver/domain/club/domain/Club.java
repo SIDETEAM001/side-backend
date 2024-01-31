@@ -18,9 +18,14 @@ import static java.util.Objects.requireNonNullElse;
 
 @Builder
 @AllArgsConstructor
-@Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Table(name = "club",
+        indexes = {
+                @Index(name = "idx_random_id", columnList = "randomId")
+        }
+)
+@Entity
 public class Club extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +65,9 @@ public class Club extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ClubCategorySub categorySub;
 
+    @Column(nullable = false)
+    private Integer randomId;
+
     private Integer memberMaxNumber;
 
     @Formula("(SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = id)")
@@ -84,6 +92,7 @@ public class Club extends BaseEntity {
                 .activityType(clubRequest.activityType())
                 .location(location)
                 .locationDetail(clubRequest.locationDetail())
+                .randomId((int) (Math.random() * 100_000_000))
                 .build();
     }
 
