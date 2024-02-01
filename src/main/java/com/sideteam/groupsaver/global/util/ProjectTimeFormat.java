@@ -13,5 +13,7 @@ public class ProjectTimeFormat {
     public static final String LOCAL_CREATE_DATE_PATTERN = "yyyy.MM.dd";
     public static final String LOCAL_CREATE_DATE_PATTERN_EXAMPLE = "2024.01.11";
 
+    public static final String SERVER_TIMEZONE = "Asia/Seoul";
+
 
 }
