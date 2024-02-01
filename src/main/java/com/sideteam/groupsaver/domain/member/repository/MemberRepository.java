@@ -25,8 +25,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickname(String nickname);
 
-    @Query("SELECT COUNT(*) FROM Member m WHERE LOWER(REPLACE(m.nickname, ' ', '')) = LOWER(REPLACE(:nickname, ' ', ''))")
-    Long countByNickname(String nickname);
+    @Query("SELECT COUNT(*) FROM Member m WHERE REPLACE(m.nickname, ' ', '') = REPLACE(:nickname, ' ', '')")
+    int countByNickname(String nickname);
 
     @Query("SELECT m.createAt FROM Member m WHERE m.email = :email")
     Instant findCreateAtByEmail(String email);
