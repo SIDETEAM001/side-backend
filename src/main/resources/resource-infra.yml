@@ -24,5 +24,9 @@ location:
     search-api: https://dapi.kakao.com/v2/local/search/address
     coord-api: https://dapi.kakao.com/v2/local/geo/coord2regioncode
 
+firebase:
+  fcm:
+    config-path: ${FCM_URL}
+
 slack:
   report: ${SLACK_REPORT_URL}
