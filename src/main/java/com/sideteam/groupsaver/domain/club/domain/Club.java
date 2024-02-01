@@ -6,6 +6,7 @@ import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.dto.request.ClubRequest;
 import com.sideteam.groupsaver.domain.common.BaseEntity;
 import com.sideteam.groupsaver.domain.location.domain.Location;
+import com.sideteam.groupsaver.domain.report.domain.ReportClub;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
@@ -68,6 +69,9 @@ public class Club extends BaseEntity {
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private final List<ClubMember> members = new ArrayList<>();
 
+    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
+    private final List<ReportClub> reports = new ArrayList<>();
+
 
     public static Club of(ClubRequest clubRequest, Location location) {
         ClubCategoryMajor categoryMajor = clubRequest.getMajor();
@@ -106,4 +110,11 @@ public class Club extends BaseEntity {
         this.location = requireNonNullElse(location, this.location);
     }
 
+    public void deactivate() {
+        this.isActive = false;
+    }
+
+    public void addReport(ReportClub reportClub) {
+        this.reports.add(reportClub);
+    }
 }

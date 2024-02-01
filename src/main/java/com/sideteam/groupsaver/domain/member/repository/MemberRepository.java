@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.member.repository;
 
 import com.sideteam.groupsaver.domain.member.domain.Member;
+import com.sideteam.groupsaver.domain.member.domain.MemberActive;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import com.sideteam.groupsaver.global.exception.member.MemberErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,8 +25,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickname(String nickname);
 
-    @Query("SELECT COUNT(*) FROM Member m WHERE LOWER(REPLACE(m.nickname, ' ', '')) = LOWER(REPLACE(:nickname, ' ', ''))")
-    Long countByNickname(String nickname);
+    @Query("SELECT COUNT(*) FROM Member m WHERE REPLACE(m.nickname, ' ', '') = REPLACE(:nickname, ' ', '')")
+    int countByNickname(String nickname);
 
     @Query("SELECT m.createAt FROM Member m WHERE m.email = :email")
     Instant findCreateAtByEmail(String email);
@@ -34,4 +35,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     String findEmailByPhoneNumber(String phone);
 
     Optional<Member> findByPhoneNumber(String phoneNumber);
+
+    Optional<Member> findByIdAndActiveStatus(Long id, MemberActive activeStatus);
 }

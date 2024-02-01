@@ -27,3 +27,6 @@ location:
 firebase:
   fcm:
     config-path: ${FCM_URL}
+
+slack:
+  report: ${SLACK_REPORT_URL}
