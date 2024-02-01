@@ -2,6 +2,20 @@ spring:
   profiles:
     active: dev
 
+  #mail
+  mail:
+    host: smtp.gmail.com
+    port: ${GMAIL_PORT}
+    username: ${GMAIL_USER}
+    password: ${GMAIL_PW}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: ${GMAIL_TIME}
+          starttls:
+            enable: true
+
   config:
     import: classpath:resource-app.yml, classpath:resource-infra.yml
 

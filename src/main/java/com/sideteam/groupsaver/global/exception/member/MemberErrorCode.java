@@ -17,6 +17,8 @@ public enum MemberErrorCode implements ErrorCode {
     DUPLICATED_EMAIL(BAD_REQUEST, "기존에 존재하는 이메일은 사용할 수 없습니다"),
 
     MEMBER_NOT_FOUND(NOT_FOUND, "찾을 수 없는 사용자입니다"),
+
+    EMAIL_NOT_FOUND(BAD_REQUEST, "찾을 수 없는 이메일입니다")
     ;
 
     private final HttpStatus httpStatus;

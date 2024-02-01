@@ -92,4 +92,8 @@ public class Member extends BaseTimeEntity {
     public void updateWantClubCategory(List<WantClubCategory> categories) {
         this.wantClubCategories.addAll(categories);
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
