@@ -7,11 +7,13 @@ import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.defaultImage.repository.DefaultMainImageRepository;
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
+import com.sideteam.groupsaver.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -54,6 +56,5 @@ public class ClubService {
     public void deactivateClub(Long clubId, Long memberId) {
         clubRepository.deactivateClub(clubId);
     }
-
 
 }

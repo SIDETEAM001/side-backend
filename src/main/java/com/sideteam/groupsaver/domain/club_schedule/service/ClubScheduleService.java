@@ -8,6 +8,7 @@ import com.sideteam.groupsaver.domain.club_schedule.dto.response.ClubScheduleRes
 import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class ClubScheduleService {
 
     private final ClubRepository clubRepository;
     private final ClubScheduleRepository clubScheduleRepository;
+    private final ApplicationEventPublisher publisher;
 
 
     @Transactional(readOnly = true)
@@ -52,6 +54,7 @@ public class ClubScheduleService {
     public ClubScheduleResponse createSchedule(Long clubId, ClubScheduleRequest clubScheduleRequest, Long memberId) {
         Club club = clubRepository.getReferenceById(clubId);
         ClubSchedule clubSchedule = clubScheduleRepository.save(ClubSchedule.of(club, clubScheduleRequest));
+        publisher.publishEvent(clubSchedule);
         return ClubScheduleResponse.from(clubSchedule);
     }
 

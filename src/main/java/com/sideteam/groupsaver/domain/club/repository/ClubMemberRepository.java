@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
@@ -31,6 +32,9 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
     @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
     Page<Member> findAllMembersByClubId(Long clubId, Pageable pageable);
+
+    @Query("SELEcT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
+    List<Member> findAllMembersByClubId(Long clubId);
 
     default void throwIfMemberNotInClub(Long memberId, Long clubId) {
         if (!existsByClubIdAndMemberId(clubId, memberId)) {

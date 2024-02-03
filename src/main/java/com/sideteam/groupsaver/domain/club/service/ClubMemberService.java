@@ -8,6 +8,7 @@ import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ public class ClubMemberService {
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly = true)
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
@@ -51,6 +53,7 @@ public class ClubMemberService {
                 memberRepository.getReferenceById(memberId),
                 role);
         clubMemberRepository.save(clubMember);
+        publisher.publishEvent(clubMember);
     }
 
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ADMIN'))")
