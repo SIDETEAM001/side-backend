@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class QnaResponseDto {
         if (qna.getQnaReplyList() != null) {
             responseDto.setQnaReplyList(QnaReplyResponseDto.listOf(qna.getQnaReplyList()));
         } else {
-            responseDto.setQnaReplyList(null);
+            responseDto.setQnaReplyList(Collections.emptyList()); // null이 아닌 빈 리스트로 반환
         }
         return responseDto;
     }

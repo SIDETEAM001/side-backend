@@ -32,16 +32,16 @@ public class QnaReplyController {
     }
 
     /* 댓글 수정 */
-    @PatchMapping("/{qnaId}/{id}")
-    public ResponseEntity<QnaReplyResponseDto> updateQnaReply(@PathVariable long qnaId, @PathVariable Long id,
+    @PatchMapping("/{id}")
+    public ResponseEntity<QnaReplyResponseDto> updateQnaReply(@PathVariable Long id,
                                                               @Valid @RequestBody QnaReplyRequestDto qnaReplyRequestDto) {
-        return ResponseEntity.ok(qnaReplyService.updateQnaReply(qnaId, id, qnaReplyRequestDto));
+        return ResponseEntity.ok(qnaReplyService.updateQnaReply(id, qnaReplyRequestDto));
     }
 
     /* 댓글 삭제 */
-    @DeleteMapping("/{qnaId}/{id}")
-    public ResponseEntity<Void> deleteQnaReply(@PathVariable long qnaId, @PathVariable Long id) {
-        qnaReplyService.deleteQnaReply(qnaId, id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteQnaReply(@PathVariable Long id) {
+        qnaReplyService.deleteQnaReply(id);
         return ResponseEntity.noContent().build();
     }
 

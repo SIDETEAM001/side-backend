@@ -5,6 +5,7 @@ import com.sideteam.groupsaver.domain.qna.domain.Qna;
 import com.sideteam.groupsaver.domain.qna.dto.request.QnaRequestDto;
 import com.sideteam.groupsaver.domain.qna_reply.dto.request.QnaReplyRequestDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class QnaReply extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
     /* 댓글 내용 */
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
@@ -43,6 +44,7 @@ public class QnaReply extends BaseEntity {
     private List<QnaReply> childReply = new ArrayList<>();
 
     /* 생성자 */
+    @Builder
     private QnaReply(String body, Qna qna, QnaReply parentReply) {
         this.body = body;
         this.qna = qna;
@@ -51,11 +53,11 @@ public class QnaReply extends BaseEntity {
 
     /* DTO -> Entity */
     public static QnaReply of(Qna qna, QnaReplyRequestDto qnaReplyRequestDto, QnaReply parentReply) {
-        return new QnaReply(
-                qnaReplyRequestDto.getBody(),
-                qna,
-                parentReply
-        );
+        return QnaReply.builder()
+                .body(qnaReplyRequestDto.getBody())
+                .qna(qna)
+                .parentReply(parentReply)
+                .build();
     }
 
     // 수정 시 null처리

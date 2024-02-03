@@ -46,10 +46,7 @@ public class QnaReplyService {
 
     /* 댓글 수정 */
     @Transactional
-    public QnaReplyResponseDto updateQnaReply(long qnaId, Long id, QnaReplyRequestDto qnaReplyRequestDto) {
-        Qna qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new EntityNotFoundException("QNA 게시글이 없습니다 ! : " + qnaId));
-
+    public QnaReplyResponseDto updateQnaReply(Long id, QnaReplyRequestDto qnaReplyRequestDto) {
         Long parentReplyId = qnaReplyRequestDto.getParentReplyId();
 
         if (parentReplyId != null) {
@@ -75,9 +72,7 @@ public class QnaReplyService {
 
     /* 댓글 삭제 */
     @Transactional
-    public void deleteQnaReply(long qnaId, Long id) {
-        Qna qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new EntityNotFoundException("QNA 게시글이 없습니다 ! : " + qnaId));
+    public void deleteQnaReply(Long id) {
         QnaReply qnaReply = qnaReplyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("QNA 댓글이 없습니다 ! : " + id));
 
