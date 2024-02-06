@@ -2,6 +2,7 @@ package com.sideteam.groupsaver.domain.club.controller;
 
 import com.sideteam.groupsaver.domain.club.dto.request.ClubRequest;
 import com.sideteam.groupsaver.domain.club.dto.response.ClubInfoResponse;
+import com.sideteam.groupsaver.domain.club.service.ClubAssembler;
 import com.sideteam.groupsaver.domain.club.service.ClubFacade;
 import com.sideteam.groupsaver.domain.club.service.ClubService;
 import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
@@ -35,7 +36,7 @@ public class ClubController {
             @PathVariable("clubId") Long clubId,
             @Valid @RequestBody ClubRequest clubRequest,
             @MemberIdParam Long memberId) {
-        return ResponseEntity.ok(clubService.updateClub(clubId, clubRequest, memberId));
+        return ResponseEntity.ok(clubFacade.updateClubInfo(clubId, clubRequest, memberId));
     }
 
     @DeleteMapping("/{clubId}")

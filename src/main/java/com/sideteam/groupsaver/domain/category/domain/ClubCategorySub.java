@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.category.domain;
 
+import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -84,8 +85,20 @@ public enum ClubCategorySub {
     private final ClubCategoryMajor major;
     private final String name;
 
-    public ClubCategory getCategory() {
-        return this.major.getCategory();
+//    public ClubCategory getCategory() {
+//        return this.major.getCategory();
+//    }
+
+    public static String getMajorName(String categoryName) {
+        return getCategory(categoryName).getMajor().getName();
     }
 
+    public static ClubCategorySub getCategory(String categoryName) {
+        for (ClubCategorySub sub : values()) {
+            if (sub.getName().equals(categoryName)) {
+                return sub;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }

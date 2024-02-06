@@ -38,4 +38,13 @@ public enum ClubCategoryMajor {
     private final ClubCategory category;
     private final String name;
 
+    public static ClubCategoryMajor getCategory(String categoryName) {
+        for (ClubCategoryMajor major : values()) {
+            if (major.getName().equals(categoryName)) {
+                return major;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
 }

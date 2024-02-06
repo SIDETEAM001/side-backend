@@ -12,11 +12,16 @@ public class ClubFacade {
 
     private final ClubService clubService;
     private final ClubMemberService clubMemberService;
+    private final ClubAssembler clubAssembler;
 
     public ClubInfoResponse createClubAndJoin(ClubRequest clubRequest) {
-        ClubInfoResponse clubInfoResponse = clubService.createClub(clubRequest);
+        ClubInfoResponse clubInfoResponse = clubService.createClub(clubAssembler.toClubRequestDto(clubRequest));
         clubMemberService.joinClub(clubInfoResponse.id(), clubInfoResponse.creatorId(), ClubMemberRole.LEADER);
         return clubInfoResponse;
+    }
+
+    public ClubInfoResponse updateClubInfo(long clubId, ClubRequest clubRequest, long memberId) {
+        return clubService.updateClub(clubId, clubAssembler.toClubRequestDto(clubRequest), memberId);
     }
 
 }

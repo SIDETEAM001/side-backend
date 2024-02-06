@@ -1,15 +1,11 @@
 package com.sideteam.groupsaver.domain.club.dto.response;
 
-import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
-import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.domain.Club;
-import com.sideteam.groupsaver.domain.club.domain.ClubActivityType;
-import com.sideteam.groupsaver.domain.club.domain.ClubType;
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import lombok.Builder;
-
 import java.time.LocalDateTime;
+
 
 @Builder
 public record ClubInfoResponse(
@@ -18,15 +14,15 @@ public record ClubInfoResponse(
         String description,
         Integer memberCurrentNumber,
         Integer memberMaxNumber,
-        ClubType clubType,
+        String clubType,
         String mainImage,
         Long creatorId,
-        ClubCategory category,
-        ClubCategoryMajor categoryMajor,
-        ClubCategorySub categorySub,
+        String category,
+        String categoryMajor,
+        String categorySub,
         Boolean isActive,
         LocalDateTime startAt,
-        ClubActivityType activityType,
+        String activityType,
         LocationInfo location
 ) {
     public record LocationInfo(
@@ -47,18 +43,25 @@ public record ClubInfoResponse(
                 .name(club.getName())
                 .memberCurrentNumber(club.getMemberCurrentNumber())
                 .memberMaxNumber(club.getMemberMaxNumber())
-                .clubType(club.getType())
+                .clubType(club.getType().getClubType())
                 .description(club.getDescription())
-                .category(club.getCategory())
-                .categoryMajor(club.getCategoryMajor())
-                .categorySub(club.getCategorySub())
+                .category(club.getCategory().getType())
+                .categoryMajor(club.getCategoryMajor().getName())
+                .categorySub(getCategory(club.getCategorySub()))
                 .mainImage(club.getMainImage())
                 .isActive(club.isActive())
                 .startAt(club.getStartAt())
-                .activityType(club.getActivityType())
+                .activityType(club.getActivityType().getActivityType())
                 .creatorId(club.getCreator().getId())
                 .location(LocationInfo.of(club.getLocation()))
                 .build();
+    }
+
+    private static String getCategory(ClubCategorySub sub) {
+        if (sub != null) {
+            return sub.getName();
+        }
+        return null;
     }
 
 }

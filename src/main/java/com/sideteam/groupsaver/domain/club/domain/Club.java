@@ -4,6 +4,7 @@ import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
 import com.sideteam.groupsaver.domain.club.dto.request.ClubRequest;
+import com.sideteam.groupsaver.domain.club.dto.request.ClubRequestDto;
 import com.sideteam.groupsaver.domain.common.BaseEntity;
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.report.domain.ReportClub;
@@ -81,37 +82,37 @@ public class Club extends BaseEntity {
     private final List<ReportClub> reports = new ArrayList<>();
 
 
-    public static Club of(ClubRequest clubRequest, Location location) {
-        ClubCategoryMajor categoryMajor = clubRequest.getMajor();
+    public static Club of(ClubRequestDto clubRequestDto, Location location) {
+        ClubCategoryMajor categoryMajor = clubRequestDto.categoryMajor();
         return Club.builder()
-                .name(clubRequest.name())
-                .description(clubRequest.description())
-                .memberMaxNumber(clubRequest.memberMaxNumber())
-                .startAt(clubRequest.startAt())
-                .mainImage(clubRequest.mainImage())
+                .name(clubRequestDto.name())
+                .description(clubRequestDto.description())
+                .memberMaxNumber(clubRequestDto.memberMaxNumber())
+                .startAt(clubRequestDto.startAt())
+                .mainImage(clubRequestDto.mainImage())
                 .category(categoryMajor.getCategory())
                 .categoryMajor(categoryMajor)
-                .categorySub(clubRequest.categorySub())
-                .type(clubRequest.type())
-                .activityType(clubRequest.activityType())
+                .categorySub(clubRequestDto.categorySub())
+                .type(clubRequestDto.type())
+                .activityType(clubRequestDto.activityType())
                 .location(location)
-                .locationDetail(clubRequest.locationDetail())
+                .locationDetail(clubRequestDto.locationDetail())
                 .randomId((int) (Math.random() * 100_000_000))
                 .build();
     }
 
 
-    public void update(ClubRequest clubRequest) {
-        this.name = requireNonNullElse(clubRequest.name(), this.name);
-        this.memberMaxNumber = requireNonNullElse(clubRequest.memberMaxNumber(), this.memberMaxNumber);
-        this.type = requireNonNullElse(clubRequest.type(), this.type);
-        this.description = requireNonNullElse(clubRequest.description(), this.description);
-        this.mainImage = requireNonNullElse(clubRequest.mainImage(), this.mainImage);
-        this.startAt = requireNonNullElse(clubRequest.startAt(), this.startAt);
-        this.category = requireNonNullElse(clubRequest.getMajor().getCategory(), this.category);
-        this.categoryMajor = requireNonNullElse(clubRequest.categoryMajor(), this.categoryMajor);
-        this.categorySub = requireNonNullElse(clubRequest.categorySub(), this.categorySub);
-        this.activityType = requireNonNullElse(clubRequest.activityType(), this.activityType);
+    public void update(ClubRequestDto clubRequestDto) {
+        this.name = requireNonNullElse(clubRequestDto.name(), this.name);
+        this.memberMaxNumber = requireNonNullElse(clubRequestDto.memberMaxNumber(), this.memberMaxNumber);
+        this.type = requireNonNullElse(clubRequestDto.type(), this.type);
+        this.description = requireNonNullElse(clubRequestDto.description(), this.description);
+        this.mainImage = requireNonNullElse(clubRequestDto.mainImage(), this.mainImage);
+        this.startAt = requireNonNullElse(clubRequestDto.startAt(), this.startAt);
+        this.category = requireNonNullElse(clubRequestDto.categoryMajor().getCategory(), this.category);
+        this.categoryMajor = requireNonNullElse(clubRequestDto.categoryMajor(), this.categoryMajor);
+        this.categorySub = requireNonNullElse(clubRequestDto.categorySub(), this.categorySub);
+        this.activityType = requireNonNullElse(clubRequestDto.activityType(), this.activityType);
     }
 
 

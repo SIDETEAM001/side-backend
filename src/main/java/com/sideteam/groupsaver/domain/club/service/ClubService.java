@@ -2,6 +2,7 @@ package com.sideteam.groupsaver.domain.club.service;
 
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.dto.request.ClubRequest;
+import com.sideteam.groupsaver.domain.club.dto.request.ClubRequestDto;
 import com.sideteam.groupsaver.domain.club.dto.response.ClubInfoResponse;
 import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.defaultImage.repository.DefaultMainImageRepository;
@@ -24,9 +25,9 @@ public class ClubService {
     private final LocationRepository locationRepository;
 
 
-    public ClubInfoResponse createClub(ClubRequest clubRequest) {
-        Location location = locationRepository.getReferenceById(clubRequest.locationInfo().id());
-        Club club = clubRepository.save(Club.of(clubRequest, location));
+    public ClubInfoResponse createClub(ClubRequestDto clubRequestDto) {
+        Location location = locationRepository.getReferenceById(clubRequestDto.locationInfo().id());
+        Club club = clubRepository.save(Club.of(clubRequestDto, location));
         return ClubInfoResponse.of(club);
     }
 
@@ -38,11 +39,11 @@ public class ClubService {
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
             " AND @clubMemberRepository.isLeader(#clubId, #memberId) " +
             " OR hasRole('ADMIN'))")
-    public ClubInfoResponse updateClub(Long clubId, ClubRequest clubRequest, Long memberId) {
+    public ClubInfoResponse updateClub(Long clubId, ClubRequestDto clubRequestDto, Long memberId) {
         Club club = clubRepository.getReferenceById(clubId);
-        club.update(clubRequest);
+        club.update(clubRequestDto);
 
-        Location location = locationRepository.getReferenceById(clubRequest.locationInfo().id());
+        Location location = locationRepository.getReferenceById(clubRequestDto.locationInfo().id());
         club.updateLocation(location);
 
         return ClubInfoResponse.of(club);

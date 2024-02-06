@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.club.domain;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import lombok.Getter;
 
 @Getter
@@ -13,5 +14,14 @@ public enum ClubType {
 
     ClubType(String clubType) {
         this.clubType = clubType;
+    }
+
+    public static ClubType getType(String type) {
+        for (ClubType clubType : values()) {
+            if (clubType.getClubType().equals(type)) {
+                return clubType;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }
