@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,6 +43,24 @@ public enum Region1Type implements EnumValue {
     public static boolean matchesRegion1TypeName(String inputName) {
         return Arrays.stream(Region1Type.values())
                 .anyMatch(region1Type -> inputName.equals(region1Type.name) || inputName.equals(region1Type.longName));
+    }
+
+    public static String removeRegion1InString(String inputName) {
+        return Arrays.stream(Region1Type.values())
+                .filter(region1Type -> inputName.startsWith(region1Type.name) || inputName.startsWith(region1Type.longName))
+                .findFirst()
+                .map(region1Type -> removeRegion1InString(inputName, region1Type))
+                .orElse(inputName);
+    }
+
+    public static String removeRegion1InString(String inputName, Region1Type region1Type) {
+        return inputName.replaceFirst(region1Type.name, "").replaceFirst(region1Type.longName, "").trim();
+    }
+
+    public static Optional<Region1Type> findStartWithRegion1Name(String inputName) {
+        return Arrays.stream(Region1Type.values())
+                .filter(region1Type -> inputName.startsWith(region1Type.name) || inputName.startsWith(region1Type.longName))
+                .findFirst();
     }
 
 

@@ -19,5 +19,5 @@ app:
        pattern: 'MATCH(?1) AGAINST(?2 IN BOOLEAN MODE)'
        type: 'BOOLEAN'
      - name: 'match_against3'
-       pattern: 'MATCH(?1, ?2, ?3) AGAINST(?4 IN NATURAL LANGUAGE MODE)'
+       pattern: 'MATCH(?1, ?2, ?3) AGAINST(?4 IN BOOLEAN MODE)'
        type: 'BOOLEAN'

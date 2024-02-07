@@ -36,11 +36,9 @@ public class LocationCustomRepositoryImpl implements LocationCustomRepository {
                     .fetch();
         }
 
-        return queryFactory
-                .selectFrom(location)
-                .where(QueryUtils.contains(location.region2, location.region3, location.region4, text))
-                .limit(limit)
-                .fetch();
+        return Region1Type.findStartWithRegion1Name(text)
+                .map(region1Type -> findByRegionNameWithRegion1(text, region1Type))
+                .orElseGet(() -> findByRegionName(text));
     }
 
     @Override
@@ -48,6 +46,27 @@ public class LocationCustomRepositoryImpl implements LocationCustomRepository {
         return queryFactory
                 .selectFrom(location)
                 .where(SpatialExpressions.within(longitude, latitude, SRID, location.locationCoordinate.coord, radiusMeter))
+                .fetch();
+    }
+
+
+    private List<Location> findByRegionNameWithRegion1(String text, Region1Type region1Type) {
+        return queryFactory
+                .selectFrom(location)
+                .where(QueryUtils.contains(location.region2, location.region3, location.region4,
+                                Region1Type.removeRegion1InString(text, region1Type)),
+                        location.region1.eq(region1Type)
+                )
+                .limit(limit)
+                .fetch();
+    }
+
+    private List<Location> findByRegionName(String text) {
+        return queryFactory
+                .selectFrom(location)
+                .where(QueryUtils.contains(location.region2, location.region3, location.region4,
+                        Region1Type.removeRegion1InString(text)))
+                .limit(limit)
                 .fetch();
     }
 

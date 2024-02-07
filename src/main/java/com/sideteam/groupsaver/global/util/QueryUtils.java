@@ -53,13 +53,14 @@ public final class QueryUtils {
     }
 
 
-    public static BooleanExpression contains(StringPath path, StringPath path2, StringPath path3, String text) {
-        if (isBlank(text)) {
+    public static BooleanExpression contains(StringPath path, StringPath path2, StringPath path3, String word) {
+        if (isBlank(word)) {
             return null;
         }
-        String template = "'" + text + "*'";
+
+        String searchText = word + "*";
         return Expressions.booleanTemplate(
-                "function('match_against3', {0}, {1}, {2}, {3})", path, path2, path3, template
+                "function('match_against3', {0}, {1}, {2}, {3})", path, path2, path3, searchText
         );
     }
 
