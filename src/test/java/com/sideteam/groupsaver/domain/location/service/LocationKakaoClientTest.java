@@ -1,9 +1,13 @@
 package com.sideteam.groupsaver.domain.location.service;
 
 import com.sideteam.groupsaver.domain.location.dto.LocationData;
+import com.sideteam.groupsaver.global.exception.BusinessException;
+import com.sideteam.groupsaver.global.exception.location.LocationErrorCode;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
@@ -19,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @Slf4j
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
@@ -69,6 +74,15 @@ class LocationKakaoClientTest {
         List<LocationData> locations = locationClient.fetchByCoordinate(longitude, latitude);
 
         assertThat(locations).isEqualTo(expected);
+    }
+
+    @DisplayName("지원하지 않는 좌표 에러 테스트")
+    @Test
+    void givenUnsupportedCoordinate_whenFetchByCoordinate_thenThrowException() {
+        Double longitude = 12.23;
+        Double latitude = 23.23;
+        Assertions.assertThrows(BusinessException.class, () ->
+                locationClient.fetchByCoordinate(longitude, latitude), LocationErrorCode.FAILED_API_REQUEST.getDetail());
     }
 
 }
