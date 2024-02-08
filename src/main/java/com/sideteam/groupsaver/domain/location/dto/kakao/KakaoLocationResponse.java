@@ -7,8 +7,8 @@ import com.sideteam.groupsaver.domain.location.dto.LocationData;
 
 import java.util.List;
 
-import static io.micrometer.common.util.StringUtils.isBlank;
 import static io.micrometer.common.util.StringUtils.isNotBlank;
+import static org.springframework.util.StringUtils.hasText;
 
 public record KakaoLocationResponse(
         List<Document> documents,
@@ -18,19 +18,18 @@ public record KakaoLocationResponse(
     public record Document(
             Address address,
             String addressType,
-            Double x,
-            Double y,
+            Double x, // longitude
+            Double y, // latitude
             String addressName,
             RoadAddress roadAddress) {
         public LocationData toLocationResponse() {
             return LocationData.of(
-                    addressName,
-                    address.region1depthName, address.region2depthName, address.getRegion3(),
+                    address.region1depthName, address.region2depthName, address.getRegion3(), address.subAddressNo,
                     x, y);
         }
 
         public boolean hasRegion3Value() {
-            return !(isBlank(address.region3depthHName()) && isBlank(address.region3depthName()));
+            return hasText(address.region3depthHName()) || hasText(address.region3depthName());
         }
     }
 
@@ -39,9 +38,9 @@ public record KakaoLocationResponse(
             String mountainYn,
             String hCode,
             String mainAddressNo,
-            Double x,
+            Double x, // longitude
+            Double y, // latitude
             String subAddressNo,
-            Double y,
             String addressName,
             @JsonProperty("region_1depth_name")
             String region1depthName,
@@ -54,7 +53,7 @@ public record KakaoLocationResponse(
             String bCode,
             RoadAddress roadAddress
     ) {
-        public String getRegion3() {
+        String getRegion3() {
             if (isNotBlank(region3depthName)) {
                 return region3depthName;
             }
@@ -70,8 +69,8 @@ public record KakaoLocationResponse(
             String region3depthName,
             String undergroundYn,
             String subBuildingNo,
-            Double x,
-            Double y,
+            Double x, // longitude
+            Double y, // latitude
             String addressName,
             String zoneNo,
             @JsonProperty("region_1depth_name")

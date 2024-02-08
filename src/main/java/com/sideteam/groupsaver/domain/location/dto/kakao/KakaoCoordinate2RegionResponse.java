@@ -31,8 +31,7 @@ public record KakaoCoordinate2RegionResponse(
     ) {
         public LocationData toLocationResponse() {
             return LocationData.of(
-                    addressName,
-                    region1depthName, region2depthName, region3depthName,
+                    region1depthName, region2depthName, region3depthName, region4depthName,
                     x, y);
         }
     }
