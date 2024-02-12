@@ -18,15 +18,15 @@ public record ClubInfoResponse(
         String description,
         Integer memberCurrentNumber,
         Integer memberMaxNumber,
-        ClubType clubType,
+        String clubType,
         String mainImage,
         Long creatorId,
-        ClubCategory category,
-        ClubCategoryMajor categoryMajor,
-        ClubCategorySub categorySub,
+        String category,
+        String categoryMajor,
+        String categorySub,
         Boolean isActive,
         LocalDateTime startAt,
-        ClubActivityType activityType,
+        String activityType,
         LocationInfo location
 ) {
     public record LocationInfo(
@@ -47,18 +47,27 @@ public record ClubInfoResponse(
                 .name(club.getName())
                 .memberCurrentNumber(club.getMemberCurrentNumber())
                 .memberMaxNumber(club.getMemberMaxNumber())
-                .clubType(club.getType())
+                .clubType(club.getType().getType())
                 .description(club.getDescription())
-                .category(club.getCategory())
-                .categoryMajor(club.getCategoryMajor())
-                .categorySub(club.getCategorySub())
+                .category(club.getCategory().getType())
+                .categoryMajor(club.getCategoryMajor().getName())
+                .categorySub(getCategorySub(club.getCategorySub()))
                 .mainImage(club.getMainImage())
                 .isActive(club.isActive())
                 .startAt(club.getStartAt())
-                .activityType(club.getActivityType())
+                .activityType(club.getActivityType().getActivityType())
                 .creatorId(club.getCreator().getId())
                 .location(LocationInfo.of(club.getLocation()))
                 .build();
+    }
+
+    private static String getCategorySub(ClubCategorySub sub) {
+        if (sub == null) {
+            return null;
+        } else if (sub.isEtc()) {
+            return "기타";
+        }
+        return sub.getName();
     }
 
 }

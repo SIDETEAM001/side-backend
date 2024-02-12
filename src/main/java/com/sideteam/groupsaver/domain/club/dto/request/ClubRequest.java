@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN;
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN_EXAMPLE;
