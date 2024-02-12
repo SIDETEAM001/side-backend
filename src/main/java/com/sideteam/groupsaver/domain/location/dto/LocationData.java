@@ -1,38 +1,33 @@
 package com.sideteam.groupsaver.domain.location.dto;
 
-import com.sideteam.groupsaver.domain.location.domain.Location;
+import com.sideteam.groupsaver.domain.location.domain.Region1Type;
+
+import static org.springframework.util.StringUtils.hasText;
 
 public record LocationData(
         String name,
-        String region1,
+        Region1Type region1,
         String region2,
         String region3,
+        String region4,
         Double longitude,
         Double latitude
 ) {
 
-    public static LocationData of(String locationName,
-                                  String region1, String region2, String region3,
-                                  Double x, Double y) {
+    public static LocationData of(String region1, String region2, String region3, String region4,
+                                  Double longitude, Double latitude) {
+        Region1Type region1Type = Region1Type.of(region1);
         return new LocationData(
-                locationName,
-                region1, region2, region3,
-                x, y);
+                region1Type.getName() + " " + region2 + " " + region3 + (hasText(region4) ? " " + region4 : ""),
+                region1Type, region2, region3, region4,
+                longitude, latitude);
     }
 
-    public static LocationData of(String locationName,
-                                  String region1, String region2, String region3,
+    public static LocationData of(String region1, String region2, String region3, String region4,
                                   String x, String y) {
         return LocationData.of(
-                locationName,
-                region1, region2, region3,
+                region1, region2, region3, region4,
                 Double.parseDouble(x), Double.parseDouble(y));
     }
 
-    public static LocationData of(Location location) {
-        return LocationData.of(
-                location.getName(),
-                location.getRegion1().getName(), location.getRegion2(), location.getRegion3(),
-                location.getLocationCoordinate().getLongitude(), location.getLocationCoordinate().getLatitude());
-    }
 }

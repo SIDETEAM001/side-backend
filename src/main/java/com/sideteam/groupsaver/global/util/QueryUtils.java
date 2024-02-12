@@ -1,9 +1,10 @@
 package com.sideteam.groupsaver.global.util;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.*;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
-import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
@@ -13,11 +14,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
+
+import static io.micrometer.common.util.StringUtils.isBlank;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class QueryUtils {
@@ -27,11 +28,11 @@ public final class QueryUtils {
     }
 
     public static BooleanExpression eq(@Nonnull StringPath path, @Nullable String input) {
-        return StringUtils.isBlank(input) ? null : path.eq(input);
+        return isBlank(input) ? null : path.eq(input);
     }
 
     public static BooleanExpression contains(@Nonnull StringPath path, @Nullable String input) {
-        return StringUtils.isBlank(input) ? null : path.contains(input);
+        return isBlank(input) ? null : path.contains(input);
     }
 
 
@@ -51,11 +52,25 @@ public final class QueryUtils {
         }
     }
 
+
+    public static BooleanExpression contains(StringPath path, StringPath path2, StringPath path3, String word) {
+        if (isBlank(word)) {
+            return null;
+        }
+
+        String searchText = word + "*";
+        return Expressions.booleanTemplate(
+                "function('match_against3', {0}, {1}, {2}, {3})", path, path2, path3, searchText
+        );
+    }
+
+
     public static OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable, Path<?> path) {
         return QueryUtils.getOrderSpecifiers(pageable.getSort(), path).toArray(OrderSpecifier[]::new);
     }
 
 
+    @SuppressWarnings("unchecked")
     private static <T extends Comparable<T>> List<OrderSpecifier<T>> getOrderSpecifiers(Sort sort, Path<?> parent) {
         return sort.stream()
                 .map(order -> createOrderSpecifier(order, parent, (Class<? extends T>) parent.getClass()))
