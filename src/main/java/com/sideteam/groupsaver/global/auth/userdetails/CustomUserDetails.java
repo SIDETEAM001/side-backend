@@ -36,14 +36,13 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public static CustomUserDetails of(Member member) {
-        final var authorities = MemberRole.convertToAuthorities(member.getRoles());
 
         return CustomUserDetails.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .password(member.getPassword())
-                .authorities(authorities)
+                .authorities(MemberRole.convertToAuthorities(member.getRole()))
                 .build();
     }
 

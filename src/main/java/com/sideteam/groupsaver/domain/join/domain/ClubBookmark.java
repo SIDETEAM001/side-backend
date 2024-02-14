@@ -4,6 +4,8 @@ import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -13,9 +15,19 @@ public class ClubBookmark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
+
+    public static ClubBookmark of(Member member, Club club) {
+        ClubBookmark clubBookmark = new ClubBookmark();
+        clubBookmark.member = member;
+        clubBookmark.club = club;
+        return clubBookmark;
+    }
+
 }

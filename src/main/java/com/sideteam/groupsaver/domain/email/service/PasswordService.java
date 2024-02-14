@@ -47,7 +47,7 @@ public class PasswordService {
     public void changePassword(ChangePwRequest pwRequest) {
         Member member = memberRepository.findByEmail(pwRequest.getEmail()).orElseThrow(() ->
                 new BusinessException(MEMBER_NOT_FOUND, "존재하지 않는 이메일 : " + pwRequest.getEmail()));
-        member.updatePassword(passwordEncoder.encode(pwRequest.getPassword()));
+        member.updatePassword(passwordEncoder, pwRequest.getPassword());
     }
 
     private MimeMessage createMessage(String email, String code) throws MessagingException, IOException {
