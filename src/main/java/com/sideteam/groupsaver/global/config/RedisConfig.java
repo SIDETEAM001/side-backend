@@ -1,30 +1,30 @@
 package com.sideteam.groupsaver.global.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.util.StringUtils;
 
+import static org.springframework.util.StringUtils.hasText;
+
+@RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String host;
+    private final RedisProperties redisProperties;
 
-    @Value("${spring.data.redis.port}")
-    private int port;
-
-    @Value("${spring.data.redis.password:}")
-    private String password;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(
+                redisProperties.getHost(), redisProperties.getPort());
 
-        if (StringUtils.hasText(password)) {
+        String password = redisProperties.getPassword();
+
+        if (hasText(password)) {
             config.setPassword(password);
         }
         return new LettuceConnectionFactory(config);
