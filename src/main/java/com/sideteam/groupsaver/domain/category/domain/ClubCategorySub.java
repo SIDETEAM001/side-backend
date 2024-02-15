@@ -1,10 +1,15 @@
 package com.sideteam.groupsaver.domain.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import static com.sideteam.groupsaver.global.exception.category.CategoryErrorCode.CATEGORY_SUB_NOT_FOUND;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -98,16 +103,19 @@ public enum ClubCategorySub {
         return this.major.getCategory();
     }
 
+
     @JsonCreator
-    public static ClubCategorySub getClubCategorySub(String sub) {
-        if (sub == null) {
-            return null;
-        }
-        for (ClubCategorySub clubCategorySub : ClubCategorySub.values()) {
-            if (clubCategorySub.getName().equals(sub)) {
-                return clubCategorySub;
-            }
-        }
-        throw new BusinessException(CATEGORY_SUB_NOT_FOUND, CATEGORY_SUB_NOT_FOUND.getDetail());
+    public static ClubCategorySub getClubCategorySub(final String sub) {
+        return Optional.ofNullable(sub)
+                .flatMap(s -> Arrays.stream(ClubCategorySub.values())
+                        .filter(clubCategorySub -> clubCategorySub.name.equals(s))
+                        .findFirst())
+                .orElseThrow(() -> new BusinessException(CATEGORY_SUB_NOT_FOUND, sub + ", 해당 카테고리가 존재하지 않습니다."));
     }
+
+    @JsonValue
+    public String getJsonValue() {
+        return this.etc ? "기타" : this.name;
+    }
+
 }

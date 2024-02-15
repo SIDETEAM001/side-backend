@@ -1,10 +1,15 @@
 package com.sideteam.groupsaver.domain.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import static com.sideteam.groupsaver.domain.category.domain.ClubCategory.DEVELOP;
 import static com.sideteam.groupsaver.domain.category.domain.ClubCategory.HOBBY;
 import static com.sideteam.groupsaver.global.exception.category.CategoryErrorCode.CATEGORY_MAJOR_NOT_FOUND;
@@ -40,16 +45,20 @@ public enum ClubCategoryMajor {
     private final ClubCategory category;
     private final String name;
 
+
     @JsonCreator
-    public static ClubCategoryMajor getClubCategoryMajor(String major) {
-        if (major == null) {
-            return null;
-        }
-        for (ClubCategoryMajor clubCategoryMajor : ClubCategoryMajor.values()) {
-            if (clubCategoryMajor.getName().equals(major)) {
-                return clubCategoryMajor;
-            }
-        }
-        throw new BusinessException(CATEGORY_MAJOR_NOT_FOUND, CATEGORY_MAJOR_NOT_FOUND.getDetail());
+    public static ClubCategoryMajor getClubCategoryMajor(final String major) {
+        return Optional.ofNullable(major)
+                .map(m -> Arrays.stream(ClubCategoryMajor.values())
+                        .filter(clubCategoryMajor -> clubCategoryMajor.name.equals(m))
+                        .findFirst()
+                        .orElseThrow(() -> new BusinessException(CATEGORY_MAJOR_NOT_FOUND, major + ", 해당하는 카테고리가 없습니다.")))
+                .orElse(null);
     }
+
+    @JsonValue
+    public String getJsonValue() {
+        return name;
+    }
+
 }

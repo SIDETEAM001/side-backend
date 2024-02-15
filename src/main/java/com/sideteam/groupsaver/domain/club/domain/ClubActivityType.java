@@ -1,12 +1,13 @@
 package com.sideteam.groupsaver.domain.club.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.sideteam.groupsaver.domain.category.domain.ClubCategorySub;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 import static com.sideteam.groupsaver.global.exception.category.CategoryErrorCode.ACTIVITY_TYPE_NOT_FOUND;
-import static com.sideteam.groupsaver.global.exception.category.CategoryErrorCode.CATEGORY_SUB_NOT_FOUND;
 
 @Getter
 public enum ClubActivityType {
@@ -20,13 +21,18 @@ public enum ClubActivityType {
         this.activityType = activityType;
     }
 
+
     @JsonCreator
-    public static ClubActivityType getClubActivityType(String activityType) {
-        for (ClubActivityType clubCategorySub : ClubActivityType.values()) {
-            if (clubCategorySub.getActivityType().equals(activityType)) {
-                return clubCategorySub;
-            }
-        }
-        throw new BusinessException(ACTIVITY_TYPE_NOT_FOUND, ACTIVITY_TYPE_NOT_FOUND.getDetail());
+    public static ClubActivityType getClubActivityType(final String activityType) {
+        return Arrays.stream(ClubActivityType.values())
+                .filter(clubCategorySub -> clubCategorySub.getActivityType().equals(activityType))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ACTIVITY_TYPE_NOT_FOUND, activityType + ", 해당하는 활동 유형을 찾을 수 없습니다."));
     }
+
+    @JsonValue
+    public String getJsonValue() {
+        return activityType;
+    }
+
 }
