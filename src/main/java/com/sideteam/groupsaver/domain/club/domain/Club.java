@@ -102,6 +102,9 @@ public class Club extends BaseEntity {
 
     public static Club of(ClubRequest clubRequest, Location location) {
         Club club = of(clubRequest);
+        if (ClubActivityType.ONLINE.equals(club.activityType)) { // 온라인 모임은 위치 정보 저장을 생략
+            return club;
+        }
         club.location = location;
         club.locationDetail = clubRequest.locationDetail();
         return club;

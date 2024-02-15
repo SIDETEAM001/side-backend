@@ -35,6 +35,10 @@ public class LocationInfoDeserializer extends JsonDeserializer<LocationInfoReque
         ObjectCodec codec = jsonParser.getCodec();
         JsonNode node = codec.readTree(jsonParser);
 
+        if (node == null) {
+            return LocationInfoRequest.empty();
+        }
+
         JsonNode locationNode = node.get("location");
         if (locationNode != null && !locationNode.isNull()) {
             List<LocationInfoResponse> locationResponses = locationService.searchByName(locationNode.asText());
