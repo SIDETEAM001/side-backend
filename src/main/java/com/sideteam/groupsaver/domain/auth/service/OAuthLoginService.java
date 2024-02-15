@@ -10,8 +10,6 @@ import com.sideteam.groupsaver.global.auth.oauth.OAuthLoginParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class OAuthLoginService {
@@ -32,11 +30,10 @@ public class OAuthLoginService {
     }
 
     private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
-        final var roles = Set.of(MemberRole.USER);
         return memberRepository.save(Member.builder()
                 .email(oAuthInfoResponse.getEmail())
                 .nickname(oAuthInfoResponse.getNickname())
-                .roles(roles)
+                .role(MemberRole.USER)
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build()).getId();
     }

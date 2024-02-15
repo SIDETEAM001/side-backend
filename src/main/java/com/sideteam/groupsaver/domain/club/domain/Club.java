@@ -66,13 +66,14 @@ public class Club extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ClubCategorySub categorySub;
 
+    @Builder.Default
     @Column(nullable = false)
-    private Integer randomId;
+    private Integer randomId = (int) (Math.random() * 100_000_000);
 
     private Integer memberMaxNumber;
 
-    @Formula("(SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = id)")
-    private int memberCurrentNumber = 0;
+    @Formula("(SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = id AND cm.status = 'ACTIVITY')")
+    private int memberCurrentNumber;
 
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private final List<ClubMember> members = new ArrayList<>();
@@ -87,6 +88,7 @@ public class Club extends BaseEntity {
                 .name(clubRequest.name())
                 .description(clubRequest.description())
                 .memberMaxNumber(clubRequest.memberMaxNumber())
+                .memberCurrentNumber(1)
                 .startAt(clubRequest.startAt())
                 .mainImage(clubRequest.mainImage())
                 .category(categoryMajor.getCategory())
@@ -96,7 +98,6 @@ public class Club extends BaseEntity {
                 .activityType(clubRequest.activityType())
                 .location(location)
                 .locationDetail(clubRequest.locationDetail())
-                .randomId((int) (Math.random() * 100_000_000))
                 .build();
     }
 

@@ -21,6 +21,6 @@ public class PasswordPhoneService {
     public void changePassword(ChangePwPhoneRequest phoneRequest) {
         Member member = memberRepository.findByPhoneNumber(phoneRequest.getPhone()).orElseThrow(() ->
                 new BusinessException(MEMBER_NOT_FOUND, "존재하지 않는 전화번호 : " + phoneRequest.getPhone()));
-        member.updatePassword(passwordEncoder.encode(phoneRequest.getPassword()));
+        member.updatePassword(passwordEncoder, phoneRequest.getPassword());
     }
 }

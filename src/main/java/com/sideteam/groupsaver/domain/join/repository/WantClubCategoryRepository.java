@@ -13,4 +13,6 @@ public interface WantClubCategoryRepository extends JpaRepository<WantClubCatego
     @Query("SELECT wcc.categoryMajor FROM WantClubCategory wcc WHERE wcc.member.id = :memberId")
     List<ClubCategoryMajor> findAllCategoryMajorByMemberId(@Param("memberId") Long memberId);
 
+    void deleteAllByMemberId(@Param("memberId") Long memberId);
+
 }

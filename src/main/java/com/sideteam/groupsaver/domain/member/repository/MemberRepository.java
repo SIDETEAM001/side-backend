@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
     Optional<Member> findByEmail(String email);
 
