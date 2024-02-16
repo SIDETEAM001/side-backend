@@ -1,6 +1,13 @@
 package com.sideteam.groupsaver.domain.auth.dto.response;
 
+import com.sideteam.groupsaver.domain.member.domain.Member;
+
 public record SignupResult(
-    // TODO 회원가입 완료시 프론트에서 필요한 값
+        Long id,
+        String nickname,
+        String profileUrl
 ) {
+    public static SignupResult of(Member member) {
+        return new SignupResult(member.getId(), member.getNickname(), member.getProfileUrl());
+    }
 }

@@ -8,19 +8,17 @@ import com.sideteam.groupsaver.domain.auth.dto.response.SignupResult;
 import com.sideteam.groupsaver.domain.auth.dto.response.TokenDto;
 import com.sideteam.groupsaver.domain.auth.service.AuthSignupService;
 import com.sideteam.groupsaver.domain.auth.service.AuthTokenService;
-import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.auth.refresh_token.RefreshTokenRepository;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import com.sideteam.groupsaver.global.exception.ErrorCode;
 import com.sideteam.groupsaver.global.exception.member.MemberErrorCode;
+import com.sideteam.groupsaver.utils.provider.MemberProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
-
-import java.time.LocalDate;
-import java.util.Collections;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -45,8 +43,10 @@ class AuthIntegrationTest {
         final String nickname = "TestName";
         final String email = "1@test.com";
         final String password = "123456789!@#$a";
-        final SignupRequest signupRequest = createSignupRequest("09011112222", nickname, email, password);
+        final SignupRequest signupRequest = MemberProvider.createSignupRequest(nickname, email, password);
         final SignupResult signupResult = authSignupService.signup(signupRequest);
+
+        assertThat(signupResult.nickname()).isEqualTo(nickname);
         log.debug("종료: 테스트를 위한 회원가입");
     }
 
@@ -60,21 +60,19 @@ class AuthIntegrationTest {
 
 
     @Test
-    @DisplayName("중복되는 이메일로 회원가입 시도 후, 에러 코드 일치 확인")
+    @DisplayName("중복되는 이메일로 회원가입 시도 후, 종복으로 인해 발생하는 예외 확인")
     void givenInvalidMemberInput_whenSignup_thenReturnSignupResponse() {
         // given
         final String nickname = "test1";
         final String duplicatedEmail = "1@test.com";
         final String password = "111111!q";
-        final SignupRequest signupRequest = createSignupRequest("09099990000", nickname, duplicatedEmail, password);
+        final SignupRequest signupRequest = MemberProvider.createSignupRequest(nickname, duplicatedEmail, password);
 
         // when
-        final ErrorCode errorCode = Assertions.assertThrows(BusinessException.class, () -> {
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
             authSignupService.signup(signupRequest);
-        }, "비정상 회원가입 시도가 정상적으로 처리됨!").getErrorCode();
+        }, "비정상 회원가입 시도가 정상적으로 처리됨!");
 
-        // then
-        assertThat(errorCode).isEqualTo(MemberErrorCode.DUPLICATED_EMAIL);
     }
 
     @Test
@@ -105,13 +103,6 @@ class AuthIntegrationTest {
         // then
         // 새로 발급 받은 refresh 토큰이 기존의 refresh 토큰과 다른지 확인
         assertThat(refreshedTokens.refreshToken()).isNotEqualTo(tokenDto.refreshToken());
-    }
-
-    private SignupRequest createSignupRequest(String phoneNumber, String nickname, String email, String password) {
-        return new SignupRequest(
-                phoneNumber, nickname, email, password,
-                JobMajor.DATA, "M", LocalDate.now(),
-                true, true, true, true, Collections.emptyList());
     }
 
 }

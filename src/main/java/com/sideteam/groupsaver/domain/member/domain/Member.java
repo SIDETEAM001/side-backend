@@ -1,8 +1,10 @@
 package com.sideteam.groupsaver.domain.member.domain;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
+import com.sideteam.groupsaver.domain.member.dto.request.MemberProfileUpdateRequest;
 import com.sideteam.groupsaver.domain.mypage.dto.request.MyInfoUpdateRequest;
 import com.sideteam.groupsaver.domain.notification.domain.Notification;
 import com.sideteam.groupsaver.domain.report.domain.ReportUser;
@@ -11,13 +13,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import static jakarta.persistence.EnumType.STRING;
 import static java.util.Objects.requireNonNullElse;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,22 +42,22 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private LocalDate birth;
-    private String gender;
-    private String profileUrl = "https://sabuzac-bucket.s3.ap-northeast-2.amazonaws.com/user/profile_default_image/profile.png";
+
+    @Enumerated(STRING)
+    private MemberGender gender;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    private String profileUrl = "https://sabuzac-bucket.s3.ap-northeast-2.amazonaws.com/user/profile_default_image/profile.png";
+
+    @Enumerated(STRING)
+    @Column(nullable = false)
     private OAuthProvider oAuthProvider;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-            name = "member_roles",
-            joinColumns = @JoinColumn(name = "MEMBER_ID")
-    )
-    private Set<MemberRole> roles = new HashSet<>();
+    @Convert(converter = MemberRoleConverter.class)
+    @Column(nullable = false)
+    private MemberRole role;
 
-    @Enumerated(EnumType.STRING)
-    @Column
+    @Enumerated(STRING)
     private JobMajor jobCategory;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -64,40 +66,41 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "reportedMember", fetch = FetchType.LAZY)
     private final List<ReportUser> reports = new ArrayList<>();
 
+    @Enumerated(STRING)
+    @Column(nullable = false)
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private final List<Notification> notifications = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private MemberActive activeStatus;
 
-    private boolean ageTerm;
-    private boolean serviceTerm;
-    private boolean userInfoTerm;
-    private boolean locationTerm;
+    @Embedded
+    private MemberAgreeTerms agreeTerms;
 
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, Set<MemberRole> roles, JobMajor jobCategory, String gender, LocalDate birth, boolean ageTerm, boolean locationTerm, boolean serviceTerm, boolean userInfoTerm) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, MemberRole role, JobMajor jobCategory, MemberGender gender, LocalDate birth, MemberAgreeTerms agreeTerms) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;
-        this.roles = roles;
+        this.role = role;
         this.jobCategory = jobCategory;
         this.gender = gender;
         this.birth = birth;
-        this.ageTerm = ageTerm;
-        this.serviceTerm = serviceTerm;
-        this.locationTerm = locationTerm;
-        this.userInfoTerm = userInfoTerm;
+        this.agreeTerms = agreeTerms;
         this.activeStatus = MemberActive.ACTIVE;
     }
 
-    public void update(MyInfoUpdateRequest myInfoUpdateRequest) {
-        this.nickname = requireNonNullElse(myInfoUpdateRequest.getNickname(), this.nickname);
-        this.birth = requireNonNullElse(myInfoUpdateRequest.getBirth(), this.birth);
-        this.profileUrl = requireNonNullElse(myInfoUpdateRequest.getUrl(), this.profileUrl);
-        this.jobCategory = requireNonNullElse(myInfoUpdateRequest.getJobCategory(), this.jobCategory);
+    public List<ClubCategoryMajor> getClubCategories() {
+        return wantClubCategories.stream().map(WantClubCategory::getCategoryMajor).toList();
+    }
+
+    public void update(MemberProfileUpdateRequest updateRequest) {
+        this.nickname = requireNonNullElse(updateRequest.nickname(), this.nickname);
+        this.birth = requireNonNullElse(updateRequest.birth(), this.birth);
+        this.profileUrl = requireNonNullElse(updateRequest.profileImageUrl(), this.profileUrl);
+        this.jobCategory = requireNonNullElse(updateRequest.jobCategory(), this.jobCategory);
     }
 
 
@@ -105,8 +108,8 @@ public class Member extends BaseTimeEntity {
         this.wantClubCategories.addAll(categories);
     }
 
-    public void updatePassword(String password) {
-        this.password = password;
+    public void updatePassword(PasswordEncoder encoder, String rawPassword) {
+        this.password = encoder.encode(rawPassword);
     }
 
     public void addReport(ReportUser report) {
@@ -116,6 +119,11 @@ public class Member extends BaseTimeEntity {
     public void suspend() {
         this.activeStatus = MemberActive.SUSPEND;
     }
+
+    public void withdraw() {
+        this.activeStatus = MemberActive.EXIT;
+    }
+
 
     public void addNotification(Notification notification) {
         this.notifications.add(notification);

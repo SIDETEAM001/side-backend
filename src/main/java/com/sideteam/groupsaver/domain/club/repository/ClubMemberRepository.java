@@ -7,6 +7,7 @@ import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.global.exception.club.ClubErrorException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,7 +17,8 @@ import java.util.function.BooleanSupplier;
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
-    Page<ClubMember> findByMemberAndStatus(Member member, ClubMemberStatus status, Pageable pageable);
+    @EntityGraph(attributePaths = {"club.location"}, type = EntityGraph.EntityGraphType.FETCH)
+    Page<ClubMember> findByMemberIdAndStatus(Long memberId, ClubMemberStatus status, Pageable pageable);
 
     boolean existsByClubIdAndMemberId(Long clubId, Long memberId);
 

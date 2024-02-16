@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -15,8 +17,11 @@ public class ClubMember extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
+
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
@@ -35,6 +40,10 @@ public class ClubMember extends BaseTimeEntity {
 
     public static ClubMember of(Club club, Member member, ClubMemberRole role) {
         return new ClubMember(club, member, role);
+    }
+
+    public boolean isLeader() {
+        return this.role.equals(ClubMemberRole.LEADER);
     }
 
 }
