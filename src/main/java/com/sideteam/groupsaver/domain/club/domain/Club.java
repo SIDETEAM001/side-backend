@@ -70,6 +70,7 @@ public class Club extends BaseEntity {
     @Column(nullable = false)
     private Integer randomId = (int) (Math.random() * 100_000_000);
 
+    @Column(nullable = false)
     private Integer memberMaxNumber;
 
     @Formula("(SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = id AND cm.status = 'ACTIVITY')")
@@ -82,7 +83,7 @@ public class Club extends BaseEntity {
     private final List<ReportClub> reports = new ArrayList<>();
 
 
-    public static Club of(ClubRequest clubRequest, Location location) {
+    public static Club of(ClubRequest clubRequest) {
         ClubCategoryMajor categoryMajor = clubRequest.getMajor();
         return Club.builder()
                 .name(clubRequest.name())
@@ -96,9 +97,17 @@ public class Club extends BaseEntity {
                 .categorySub(clubRequest.categorySub())
                 .type(clubRequest.type())
                 .activityType(clubRequest.activityType())
-                .location(location)
-                .locationDetail(clubRequest.locationDetail())
                 .build();
+    }
+
+    public static Club of(ClubRequest clubRequest, Location location) {
+        Club club = of(clubRequest);
+        if (ClubActivityType.ONLINE.equals(club.activityType)) { // 온라인 모임은 위치 정보 저장을 생략
+            return club;
+        }
+        club.location = location;
+        club.locationDetail = clubRequest.locationDetail();
+        return club;
     }
 
 

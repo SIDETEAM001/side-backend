@@ -15,21 +15,14 @@ import java.util.function.BooleanSupplier;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
 
-public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
+public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>, ClubMemberRepositoryCustom {
+
     @EntityGraph(attributePaths = {"club.location"}, type = EntityGraph.EntityGraphType.FETCH)
     Page<ClubMember> findByMemberIdAndStatus(Long memberId, ClubMemberStatus status, Pageable pageable);
 
     boolean existsByClubIdAndMemberId(Long clubId, Long memberId);
 
     void deleteByClubIdAndMemberId(Long clubId, Long memberId);
-
-    @Query("SELECT CASE WHEN COUNT(cm) >= c.memberMaxNumber THEN true ELSE false END " +
-            "FROM Club c JOIN ClubMember cm ON c.id = cm.club.id WHERE cm.club.id = :clubId ")
-    boolean hasExceededMemberLimit(Long clubId);
-
-    @Query("SELECT CASE WHEN COUNT(*) >= 1 THEN true ELSE false END " +
-            "FROM Club c JOIN ClubMember cm ON c.id = cm.club.id WHERE cm.club.id = :clubId AND cm.member.id = :memberId AND cm.role = :role")
-    boolean hasClubRole(Long clubId, Long memberId, ClubMemberRole role);
 
     @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
     Page<Member> findAllMembersByClubId(Long clubId, Pageable pageable);

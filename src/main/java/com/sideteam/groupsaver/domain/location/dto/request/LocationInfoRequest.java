@@ -2,6 +2,7 @@ package com.sideteam.groupsaver.domain.location.dto.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sideteam.groupsaver.domain.location.converter.LocationInfoDeserializer;
+import com.sideteam.groupsaver.domain.location.domain.Region1Type;
 import com.sideteam.groupsaver.domain.location.dto.response.LocationInfoResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,17 +19,26 @@ public record LocationInfoRequest(
         @Hidden
         String name,
         @Hidden
-        String region1,
+        Region1Type region1,
         @Hidden
         String region2,
         @Hidden
         String region3,
         Double longitude,
-        Double latitude
+        Double latitude,
+        @Hidden
+        boolean isValidLocation
 ) {
     public static LocationInfoRequest of(LocationInfoResponse locationInfoResponse) {
         return new LocationInfoRequest(locationInfoResponse.id(), locationInfoResponse.name(),
                 locationInfoResponse.region1(), locationInfoResponse.region2(), locationInfoResponse.region3(),
-                locationInfoResponse.longitude(), locationInfoResponse.latitude());
+                locationInfoResponse.longitude(), locationInfoResponse.latitude(), true);
     }
+
+    public static LocationInfoRequest empty() {
+        return new LocationInfoRequest(null, "",
+                null, null, null,
+                null, null, false);
+    }
+
 }

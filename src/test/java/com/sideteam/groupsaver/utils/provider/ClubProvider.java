@@ -18,6 +18,19 @@ public final class ClubProvider {
                 .category(createClubCategory())
                 .categoryMajor(createClubCategoryMajor())
                 .activityType(createClubActivityType())
+                .memberMaxNumber(10_000)
+                .build();
+    }
+
+    public static Club createClub(int maxMemberCount) {
+        return Club.builder()
+                .name("test-club-" + UUID.randomUUID())
+                .description("test-description " + UUID.randomUUID())
+                .type(createClubType())
+                .category(createClubCategory())
+                .categoryMajor(createClubCategoryMajor())
+                .activityType(createClubActivityType())
+                .memberMaxNumber(maxMemberCount)
                 .build();
     }
 

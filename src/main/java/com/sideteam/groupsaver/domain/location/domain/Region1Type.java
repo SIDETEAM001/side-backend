@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.location.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.ApiErrorCode;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import com.sideteam.groupsaver.global.util.converter.EnumValue;
@@ -22,15 +23,15 @@ public enum Region1Type implements EnumValue {
     DAEJEON("대전", "대전", 25, "대전"),
     ULSAN("울산", "울산", 26, "울산"),
     SEJONG("세종", "세종", 29, "세종"),
-    GYEONGGI("경기", "경기", 31, "경기"),
-    GANGWON("강원", "강원", 32, "강원"),
+    GYEONGGI("경기", "경기도", 31, "경기"),
+    GANGWON("강원", "강원도", 32, "강원"),
     CHUNGBUK("충북", "충청북도", 33, "충북"),
     CHUNGNAM("충남", "충청남도", 34, "충남"),
     GYUENGBUK("경북", "경상북도", 35, "경북"),
     GYUENGNAM("경남", "경상남도", 36, "경남"),
     JEONBUK("전북", "전라북도", 37, "전북"),
     JEONNAM("전남", "전라남도", 38, "전남"),
-    JEJU("제주", "제주", 39, "제주"),
+    JEJU("제주", "제주도", 39, "제주"),
 
     ;
 
@@ -39,6 +40,11 @@ public enum Region1Type implements EnumValue {
     private final Integer regionCode;
     private final String code;
 
+
+    @JsonValue
+    public String getJsonValue() {
+        return name;
+    }
 
     public static boolean matchesRegion1TypeName(String inputName) {
         return Arrays.stream(Region1Type.values())
