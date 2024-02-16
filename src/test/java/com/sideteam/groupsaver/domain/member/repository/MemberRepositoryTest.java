@@ -1,6 +1,5 @@
 package com.sideteam.groupsaver.domain.member.repository;
 
-import com.sideteam.groupsaver.config.IntegrationSpringBootTest;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
@@ -13,7 +12,9 @@ import com.sideteam.groupsaver.domain.join.repository.ClubBookmarkRepository;
 import com.sideteam.groupsaver.domain.join.repository.WantClubCategoryRepository;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.dto.response.MyProfileResponse;
+import com.sideteam.groupsaver.utils.context.DataJpaTestcontainersTest;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import static com.sideteam.groupsaver.utils.provider.MemberProvider.createMember
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
-@IntegrationSpringBootTest
+@DataJpaTestcontainersTest
 class MemberRepositoryTest {
 
     @Autowired
@@ -51,22 +52,31 @@ class MemberRepositoryTest {
         memberId = member.getId();
 
         // 원하는 모임 카테고리 저장
-        wantClubCategoryRepository.saveAll(wantCategories.stream()
+        wantClubCategoryRepository.saveAllAndFlush(wantCategories.stream()
                 .map(category -> WantClubCategory.of(member, category)).toList());
 
         // 모임 생성
         final Club clubForJoin = clubRepository.save(createClub());
         // 모임에 멤버 추가
-        clubMemberRepository.save(ClubMember.of(clubForJoin, member, ClubMemberRole.MEMBER));
+        clubMemberRepository.saveAndFlush(ClubMember.of(clubForJoin, member, ClubMemberRole.MEMBER));
 
         // 북마크할 모임 생성
         final List<Club> clubsForBookmark = clubRepository.saveAll(List.of(createClub(), createClub()));
 
         // 모임 북마크
-        clubBookmarkRepository.saveAll(clubsForBookmark.stream()
+        clubBookmarkRepository.saveAllAndFlush(clubsForBookmark.stream()
                 .map(club -> ClubBookmark.of(member, club)).toList());
 
         log.debug("setup 끝");
+    }
+
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAll();
+        wantClubCategoryRepository.deleteAll();
+        clubRepository.deleteAll();
+        clubMemberRepository.deleteAll();
+        clubBookmarkRepository.deleteAll();
     }
 
     @Test

@@ -1,10 +1,14 @@
+import java.time.ZoneId
+import java.time.ZonedDateTime
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.4'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-def buildTimestamp = new Date().format('yyyy-MM-dd\'T\'HH-mm-ss zzz')
+
+def buildTimestamp = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).getDateTimeString()
 def appVersion = '1.0.0'
 
 springBoot {
@@ -59,9 +63,8 @@ dependencies {
     runtimeOnly "io.jsonwebtoken:jjwt-impl:0.11.5"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.11.5"
 
-    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.522' // AWS SDK
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.658' // AWS SDK
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0' // Swagger
-
 
 
     // QueryDSL
@@ -76,13 +79,12 @@ dependencies {
 
     //slack
     implementation("net.gpedro.integrations.slack:slack-webhook:1.4.0")
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 
     testImplementation 'org.testcontainers:testcontainers:1.19.3'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
     testImplementation 'org.testcontainers:jdbc:1.19.3'
     testImplementation "org.testcontainers:mysql:1.19.3"
-    testImplementation 'org.signal:embedded-redis:0.8.3'
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {

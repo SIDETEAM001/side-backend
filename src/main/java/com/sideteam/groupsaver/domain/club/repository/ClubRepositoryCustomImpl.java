@@ -42,7 +42,7 @@ public class ClubRepositoryCustomImpl implements ClubRepositoryCustom {
 
         List<ClubInfoResponse> clubs = queryFactory
                 .selectFrom(club)
-                .join(club.location, location).fetchJoin()
+                .leftJoin(club.location, location).fetchJoin()
                 .where(hasCategoryAndTextWithin(text, longitude, latitude, radiusMeter, category, categoryMajor, categorySub, type))
                 .orderBy(QueryUtils.getOrderSpecifiers(pageable, club))
                 .offset(pageable.getOffset())

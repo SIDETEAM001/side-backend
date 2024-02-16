@@ -1,11 +1,17 @@
 package com.sideteam.groupsaver.domain.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 import static com.sideteam.groupsaver.global.exception.category.CategoryErrorCode.CATEGORY_MAJOR_NOT_FOUND;
 
+@RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 @Getter
 public enum JobMajor {
     MANAGEMENT("기획 · 전략 · 경영"),
@@ -28,25 +34,25 @@ public enum JobMajor {
     LAW("법률 · 법무직"),
     PUBLIC("공공 · 복지"),
     SERVICE("서비스직"),
-    ETC("기타")
+    ETC("기타"),
     ;
 
-    private final String category;
+    private final String name;
 
-    JobMajor(String category) {
-        this.category = category;
-    }
 
     @JsonCreator
-    public static JobMajor getJobMajor(String major) {
-        if (major == null) {
-            return null;
-        }
-        for (JobMajor jobMajor : JobMajor.values()) {
-            if (jobMajor.getCategory().equals(major)) {
-                return jobMajor;
-            }
-        }
-        throw new BusinessException(CATEGORY_MAJOR_NOT_FOUND, CATEGORY_MAJOR_NOT_FOUND.getDetail());
+    public static JobMajor getJobMajor(final String major) {
+        return Optional.ofNullable(major)
+                .map(m -> Arrays.stream(JobMajor.values())
+                        .filter(jobMajor -> jobMajor.name.equals(m))
+                        .findFirst()
+                        .orElseThrow(() -> new BusinessException(CATEGORY_MAJOR_NOT_FOUND, major + ", 해당 직종을 찾을 수 없습니다.")))
+                .orElse(null);
     }
+
+    @JsonValue
+    public String getJsonValue() {
+        return name;
+    }
+
 }

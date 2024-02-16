@@ -5,11 +5,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
 @Getter
 public enum CategoryErrorCode implements ErrorCode {
+
+    INVALID_CATEGORY(BAD_REQUEST, "찾을 수 없는 모임 분류입니다"),
     CATEGORY_MAJOR_NOT_FOUND(NOT_FOUND, "찾을 수 없는 대분류입니다"),
     CATEGORY_SUB_NOT_FOUND(NOT_FOUND, "찾을 수 없는 소분류입니다"),
     ACTIVITY_TYPE_NOT_FOUND(NOT_FOUND, "찾을 수 없는 활동 분야입니다"),

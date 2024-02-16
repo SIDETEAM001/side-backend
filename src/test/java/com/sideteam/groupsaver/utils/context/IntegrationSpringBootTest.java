@@ -1,5 +1,6 @@
-package com.sideteam.groupsaver.config;
+package com.sideteam.groupsaver.utils.context;
 
+import com.sideteam.groupsaver.config.TestRedisConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -13,7 +14,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 
-@ActiveProfiles(profiles = "test")
+@ActiveProfiles("test")
 @Testcontainers
 @SpringBootTest(classes = TestRedisConfiguration.class)
 public @interface IntegrationSpringBootTest {

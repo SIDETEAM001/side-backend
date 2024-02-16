@@ -1,7 +1,7 @@
 package com.sideteam.groupsaver.domain.firebase.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.sideteam.groupsaver.config.IntegrationSpringBootTest;
+import com.sideteam.groupsaver.utils.context.IntegrationSpringBootTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

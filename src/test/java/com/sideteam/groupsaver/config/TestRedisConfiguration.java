@@ -1,32 +1,25 @@
 package com.sideteam.groupsaver.config;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.TestConfiguration;
-import redis.embedded.RedisServer;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration
 public class TestRedisConfiguration {
 
-    private final RedisServer redisServer;
+    private static final String REDIS_DOCKER_IMAGE = "redis:7.2.0-alpine";
 
     public TestRedisConfiguration(RedisProperties redisProperties) {
-        this.redisServer = RedisServer.builder()
-                .port(redisProperties.getPort())
-                .setting("bind 127.0.0.1")
-                .setting("maxmemory 128M")
-                .build();
-    }
 
-    @PostConstruct
-    public void postConstruct() {
-        redisServer.start();
-    }
+        GenericContainer<?> redisContainer = new GenericContainer<>(DockerImageName.parse(REDIS_DOCKER_IMAGE))
+                .withExposedPorts(redisProperties.getPort())
+                .withReuse(true);
 
-    @PreDestroy
-    public void preDestroy() {
-        redisServer.stop();
+        redisContainer.start();
+
+        redisProperties.setHost(redisContainer.getHost());
+        redisProperties.setPort(redisContainer.getFirstMappedPort());
     }
 
 }

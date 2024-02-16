@@ -11,11 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN;
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN_EXAMPLE;
@@ -52,6 +50,14 @@ public record ClubRequest(
     public boolean isCategoryAtLeastExist() {
         return categoryMajor != null || categorySub != null;
     }
+
+    @Hidden
+    @AssertTrue(message = "오프라인 모임은 위치 정보가 필수입니다")
+    public boolean isOfflineClubAndHasLocation() {
+        return ClubActivityType.ONLINE.equals(activityType) ||
+                (locationInfo != null && locationInfo.isValidLocation());
+    }
+
 
     @Hidden
     public ClubCategoryMajor getMajor() {

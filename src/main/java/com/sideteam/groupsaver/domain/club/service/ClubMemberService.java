@@ -30,15 +30,13 @@ public class ClubMemberService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly = true)
-    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
-            "AND @clubMemberRepository.existsByClubIdAndMemberId(#clubId, #memberId) " +
-            "OR hasRole('ADMIN'))")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId, @clubMemberRepository.isInClub(#clubId, #memberId))")
     public Slice<ClubMemberResponse> getClubMembers(Long clubId, Long memberId, Pageable pageable) {
         return clubMemberRepository.findAllMembersByClubId(clubId, pageable)
                 .map(ClubMemberResponse::from);
     }
 
-    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ADMIN'))")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
     public void joinClub(Long clubId, Long memberId, ClubMemberRole role) {
         if (clubMemberRepository.existsByClubIdAndMemberId(clubId, memberId)) {
             throw new BusinessException(CLUB_MEMBER_ALREADY_EXIST, "이미 존재하는 인원 : " + memberId);
@@ -56,14 +54,12 @@ public class ClubMemberService {
         publisher.publishEvent(clubMember);
     }
 
-    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ADMIN'))")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
     public void joinClub(Long clubId, Long memberId) {
         joinClub(clubId, memberId, ClubMemberRole.MEMBER);
     }
 
-    @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) " +
-            " AND @clubMemberRepository.isLeader(#clubId, #memberId) " +
-            " OR hasRole('ADMIN'))")
+    @PreAuthorize("@authorityChecker.hasAuthority(#memberId, @clubMemberRepository.isLeader(#clubId, #memberId))")
     public void leaveClub(Long clubId, Long memberId) {
         clubMemberRepository.deleteByClubIdAndMemberId(clubId, memberId);
     }

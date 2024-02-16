@@ -1,6 +1,5 @@
 package com.sideteam.groupsaver.integration.auth;
 
-import com.sideteam.groupsaver.config.IntegrationSpringBootTest;
 import com.sideteam.groupsaver.domain.auth.dto.request.LoginRequest;
 import com.sideteam.groupsaver.domain.auth.dto.request.SignupRequest;
 import com.sideteam.groupsaver.domain.auth.dto.request.TokenRefreshRequest;
@@ -10,9 +9,7 @@ import com.sideteam.groupsaver.domain.auth.service.AuthSignupService;
 import com.sideteam.groupsaver.domain.auth.service.AuthTokenService;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
 import com.sideteam.groupsaver.global.auth.refresh_token.RefreshTokenRepository;
-import com.sideteam.groupsaver.global.exception.BusinessException;
-import com.sideteam.groupsaver.global.exception.ErrorCode;
-import com.sideteam.groupsaver.global.exception.member.MemberErrorCode;
+import com.sideteam.groupsaver.utils.context.IntegrationSpringBootTest;
 import com.sideteam.groupsaver.utils.provider.MemberProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
