@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.member.domain.MemberActive;
 import com.sideteam.groupsaver.domain.member.dto.response.MyProfileResponse;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.sideteam.groupsaver.domain.category.domain.ClubCategory.DEVELOP;
+import static com.sideteam.groupsaver.domain.category.domain.ClubCategory.HOBBY;
 import static com.sideteam.groupsaver.domain.club.domain.QClubMember.clubMember;
 import static com.sideteam.groupsaver.domain.join.domain.QClubBookmark.clubBookmark;
 import static com.sideteam.groupsaver.domain.join.domain.QWantClubCategory.wantClubCategory;
@@ -37,6 +40,8 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .from(clubBookmark)
                 .where(clubBookmark.member.id.eq(memberId));
 
+        List<ClubCategoryMajor> clubCategoryMajors = findAllCategoryMajorByMemberId(memberId);
+
         return queryFactory.select(new QMyProfileResponse(
                         member.id,
                         member.phoneNumber,
@@ -45,7 +50,8 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                         member.birth,
                         member.profileUrl,
                         member.jobCategory,
-                        Expressions.constant(findAllCategoryMajorByMemberId(memberId)),
+                        Expressions.constant(filterCategories(clubCategoryMajors, DEVELOP)),
+                        Expressions.constant(filterCategories(clubCategoryMajors, HOBBY)),
                         ExpressionUtils.as(clubMemberCountSubQuery, "myClubCount"),
                         ExpressionUtils.as(clubBookmarkCountSubQuery, "clubBookmarkCount")
                 ))
@@ -61,6 +67,12 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .from(wantClubCategory)
                 .where(wantClubCategory.member.id.eq(memberId))
                 .fetch();
+    }
+
+    private List<ClubCategoryMajor> filterCategories(List<ClubCategoryMajor> clubCategoryMajors, ClubCategory clubCategory) {
+        return clubCategoryMajors.stream()
+                .filter(clubCategoryMajor -> clubCategoryMajor.getCategory().equals(clubCategory))
+                .toList();
     }
 
 }
