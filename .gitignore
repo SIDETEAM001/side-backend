@@ -42,6 +42,7 @@ out/
 /src/main/generated/
 /src/main/resources/firebase/*
 /src/main/resources/.env
+/src/main/resources/.env.*
 
 /src/test/resources/application-test.yml
 /src/test/resources/firebase-config.json

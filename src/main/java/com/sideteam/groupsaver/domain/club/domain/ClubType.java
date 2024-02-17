@@ -3,6 +3,7 @@ package com.sideteam.groupsaver.domain.club.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.sideteam.groupsaver.global.exception.BusinessException;
+import com.sideteam.groupsaver.global.util.converter.param.ParamCreator;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public enum ClubType {
         this.type = type;
     }
 
-
+    @ParamCreator
     @JsonCreator
     public static ClubType getClubType(String type) {
         return Arrays.stream(ClubType.values())
