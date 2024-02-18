@@ -15,7 +15,8 @@ public record MyProfileResponse(
         LocalDate birth,
         String profileImageUrl,
         JobMajor jobMajor,
-        List<ClubCategoryMajor> clubCategories,
+        List<ClubCategoryMajor> develops,
+        List<ClubCategoryMajor> hobbies,
         long myClubCount,
         long clubBookmarkCount
 ) {

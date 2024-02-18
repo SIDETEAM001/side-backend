@@ -1,5 +1,6 @@
 package com.sideteam.groupsaver.domain.member.repository;
 
+import com.sideteam.groupsaver.domain.category.domain.ClubCategory;
 import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.club.domain.Club;
 import com.sideteam.groupsaver.domain.club.domain.ClubMember;
@@ -16,6 +17,7 @@ import com.sideteam.groupsaver.utils.context.DataJpaTestcontainersTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,7 +44,8 @@ class MemberRepositoryTest {
     private ClubBookmarkRepository clubBookmarkRepository;
 
     private long memberId;
-    private final List<ClubCategoryMajor> wantCategories = List.of(ClubCategoryMajor.BOOK, ClubCategoryMajor.CRAFT);
+    private final List<ClubCategoryMajor> wantCategories = List.of(
+            ClubCategoryMajor.CHANGE, ClubCategoryMajor.BOOK, ClubCategoryMajor.CRAFT, ClubCategoryMajor.ETC_HOBBY);
 
 
     @BeforeEach
@@ -79,12 +82,24 @@ class MemberRepositoryTest {
         clubBookmarkRepository.deleteAll();
     }
 
+
     @Test
+    @DisplayName("내 프로필 조회 성공 - 회원 ID로 조회")
     void findMyProfileByMemberId() {
+        // given
+        final List<ClubCategoryMajor> expectedDevelops = wantCategories.stream()
+                .filter(category -> category.getCategory().equals(ClubCategory.DEVELOP)).toList();
+
+        final List<ClubCategoryMajor> expectedHobbies = wantCategories.stream()
+                .filter(category -> category.getCategory().equals(ClubCategory.HOBBY)).toList();
+
+        // when
         MyProfileResponse myProfileResponse = memberRepository.findMyProfileByMemberId(memberId);
 
+        // then
         assertThat(myProfileResponse.myClubCount()).isEqualTo(1);
-        assertThat(myProfileResponse.clubCategories()).isEqualTo(wantCategories);
+        assertThat(myProfileResponse.develops()).isEqualTo(expectedDevelops);
+        assertThat(myProfileResponse.hobbies()).isEqualTo(expectedHobbies);
         assertThat(myProfileResponse.clubBookmarkCount()).isEqualTo(2);
     }
 
