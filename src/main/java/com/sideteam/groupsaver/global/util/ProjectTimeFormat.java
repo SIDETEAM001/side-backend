@@ -3,6 +3,9 @@ package com.sideteam.groupsaver.global.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,5 +21,12 @@ public class ProjectTimeFormat {
     public static final String SERVER_TIMEZONE = "Asia/Seoul";
     public static final ZoneId SERVER_ZONE_ID = ZoneId.of(SERVER_TIMEZONE);
 
+    public static LocalDate toLocalDate(Instant instant) {
+        return instant.atZone(SERVER_ZONE_ID).toLocalDate();
+    }
+
+    public static LocalDateTime toLocalDateTime(Instant instant) {
+        return instant.atZone(SERVER_ZONE_ID).toLocalDateTime();
+    }
 
 }
