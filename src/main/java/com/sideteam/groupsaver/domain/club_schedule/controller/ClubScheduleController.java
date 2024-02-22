@@ -7,6 +7,7 @@ import com.sideteam.groupsaver.global.resolver.member_info.MemberIdParam;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/club-schedules")
 @RestController
+@Slf4j
 public class ClubScheduleController {
 
     private final ClubScheduleService clubScheduleService;

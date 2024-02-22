@@ -5,7 +5,6 @@ import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
 import com.sideteam.groupsaver.domain.member.dto.request.MemberProfileUpdateRequest;
-import com.sideteam.groupsaver.domain.mypage.dto.request.MyInfoUpdateRequest;
 import com.sideteam.groupsaver.domain.notification.domain.Notification;
 import com.sideteam.groupsaver.domain.report.domain.ReportUser;
 import jakarta.persistence.*;

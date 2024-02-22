@@ -7,10 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public enum NotificationType {
-    REC_CLUB("추천 모임"),
-    CLUB_SCHEDULE("모임 일정"),
-    NEW_MEMBER("새로운 모임 회원"),
-    PUBLIC("공지"),
+    PUBLIC_NOTI("전체알림"),
+    PRIVATE_NOTI("내알림"),
     ;
     private final String type;
 }

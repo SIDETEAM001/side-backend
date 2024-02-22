@@ -7,6 +7,8 @@ import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.location.domain.Location;
 import com.sideteam.groupsaver.domain.location.repository.LocationRepository;
 import com.sideteam.groupsaver.domain.member.domain.Member;
+import com.sideteam.groupsaver.domain.notification.service.NotificationService;
+import com.sideteam.groupsaver.global.auth.userdetails.GetAuthUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,9 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Transactional
 public class ClubService {
-
     private final ClubRepository clubRepository;
-
     private final LocationRepository locationRepository;
-
+    private final NotificationService notificationService;
 
     public ClubInfoResponse createClub(ClubRequest clubRequest) {
         if (clubRequest.locationInfo() != null && clubRequest.locationInfo().isValidLocation()) {
@@ -33,6 +33,7 @@ public class ClubService {
         }
 
         Club club = clubRepository.save(Club.of(clubRequest));
+        notificationService.createNewClub(club, GetAuthUserUtils.getAuthUserId());
         return ClubInfoResponse.of(club);
     }
 

@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.domain.notification.dto;
 
 import com.sideteam.groupsaver.domain.notification.domain.Notification;
+import com.sideteam.groupsaver.domain.notification.domain.NotificationRemoteType;
 import com.sideteam.groupsaver.domain.notification.domain.NotificationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,29 +15,23 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class NotificationResponse {
+    private long id;
     private String title;
     private String body;
     private String image;
     private long remoteId;
-    private NotificationType type;
+    private NotificationRemoteType remoteType;
+    private boolean isOpen;
 
-    public static NotificationResponse of(String title, String body, String image, long remoteId, NotificationType type) {
+    public static NotificationResponse of(long id, String title, String body, String image, long remoteId, NotificationRemoteType remoteType, boolean isOpen) {
         return NotificationResponse.builder()
+                .id(id)
                 .title(title)
                 .body(body)
                 .image(image)
                 .remoteId(remoteId)
-                .type(type)
+                .remoteType(remoteType)
+                .isOpen(isOpen)
                 .build();
-    }
-
-    public static List<NotificationResponse> listOf(List<Notification> notifications) {
-        return notifications.stream().map(notification ->
-                NotificationResponse.of(
-                        notification.getTitle(),
-                        notification.getBody(),
-                        notification.getImage(),
-                        notification.getRemoteId(),
-                        notification.getType())).collect(Collectors.toList());
     }
 }

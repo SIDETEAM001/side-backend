@@ -3,7 +3,7 @@ package com.sideteam.groupsaver.domain.firebase.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateFcmTokenDto {
+public class CreateFcmTokenRequest {
     private String email;
     private String token;
 }

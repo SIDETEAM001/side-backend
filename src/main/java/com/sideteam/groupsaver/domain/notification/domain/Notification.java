@@ -20,29 +20,35 @@ public class Notification extends BaseTimeEntity {
     private String image;
     private long remoteId;
     @Enumerated(value = EnumType.STRING)
-    private NotificationType type;
+    private NotificationRemoteType remoteType;
+    private boolean isOpen;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Notification(String title, String body, String image, long remoteId, NotificationType type, Member member) {
+    public Notification(String title, String body, String image, long remoteId, NotificationRemoteType remoteType,Member member) {
         this.title = title;
         this.body = body;
         this.image = image;
         this.remoteId = remoteId;
-        this.type = type;
+        this.remoteType = remoteType;
         this.member = member;
+        this.isOpen = false;
     }
 
-    public static Notification of(String title, String body, String image, long remoteId, NotificationType type, Member member) {
+    public static Notification of(String title, String body, String image, long remoteId, NotificationRemoteType remoteType ,Member member) {
         return Notification.builder()
                 .title(title)
                 .body(body)
                 .image(image)
                 .remoteId(remoteId)
-                .type(type)
                 .member(member)
+                .remoteType(remoteType)
                 .build();
+    }
+
+    public void updateIsOpen() {
+        this.isOpen = true;
     }
 }

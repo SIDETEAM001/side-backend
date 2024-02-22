@@ -28,8 +28,8 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>, C
     @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
     Page<Member> findAllMembersByClubId(Long clubId, Pageable pageable);
 
-    @Query("SELEcT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
-    List<Member> findAllMembersByClubId(Long clubId);
+    @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId AND cm.member.id != :creatorId")
+    List<Member> findAllMembersExceptCreatorByClubId(Long clubId, long creatorId);
 
     default void throwIfMemberNotInClub(Long memberId, Long clubId) {
         if (!existsByClubIdAndMemberId(clubId, memberId)) {
@@ -45,4 +45,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>, C
         return () -> existsByClubIdAndMemberId(clubId, memberId);
     }
 
+    @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId AND cm.member.id != :newMemberId")
+    List<Member> findAllMembersExceptNewMemberByClubId(long clubId, long newMemberId);
 }
