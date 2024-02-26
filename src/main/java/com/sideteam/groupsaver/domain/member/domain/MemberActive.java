@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum MemberActive {
     ACTIVE("활동중"),
-    EXIT("탈퇴"),
     SUSPEND("정지"),
     ;
 
