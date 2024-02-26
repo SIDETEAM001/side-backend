@@ -61,7 +61,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<WantClubCategory> wantClubCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "reportedMember", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "reportedMember", fetch = FetchType.LAZY)
     private final List<ReportUser> reports = new ArrayList<>();
 
     @Enumerated(STRING)
