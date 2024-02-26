@@ -19,9 +19,7 @@ import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_T
 import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.LOCAL_DATE_TIME_PATTERN_EXAMPLE;
 
 public record ClubRequest(
-        @Length(min = 1, max = 100)
         String name,
-        @Length(min = 10, max = 1000)
         String description,
         @Min(value = 1, message = "최소 모임 인원수는 1명 이상이어야 합니다")
         Integer memberMaxNumber,

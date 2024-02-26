@@ -1,6 +1,7 @@
 package com.sideteam.groupsaver.global.config.swagger;
 
 import com.sideteam.groupsaver.global.auth.AuthConstants;
+import com.sideteam.groupsaver.global.util.ProjectTimeFormat;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,10 +20,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
+import static com.sideteam.groupsaver.global.util.ProjectTimeFormat.SERVER_ZONE_ID;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.security.config.Elements.JWT;
 
@@ -97,10 +98,10 @@ public class SwaggerConfig {
     }
 
     private String getFormattedTime(Instant time) {
-        final DateTimeFormatter formatter = DateTimeFormatter
+        return DateTimeFormatter
                 .ofPattern("yy-MM-dd E HH:mm:ss zzz")
-                .withZone(ZoneId.systemDefault());
-        return formatter.format(time);
+                .withZone(SERVER_ZONE_ID)
+                .format(time);
     }
 
 }
