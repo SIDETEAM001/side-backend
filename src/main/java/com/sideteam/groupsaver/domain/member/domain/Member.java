@@ -114,8 +114,4 @@ public class Member extends BaseTimeEntity {
         this.activeStatus = MemberActive.SUSPEND;
     }
 
-    public void withdraw() {
-        this.activeStatus = MemberActive.EXIT;
-    }
-
 }
