@@ -34,27 +34,29 @@ public class NotificationService {
     @Async("threadPoolTaskExecutor")
     public void createNewSchedule(long clubId, long scheduleId, String image, Long creatorId) {
         List<Member> clubMembers = clubMemberRepository.findAllMembersExceptCreatorByClubId(clubId, creatorId);
-        notificationRepository.saveAll(clubMembers.stream().map(clubMember ->
-            Notification.of(NotificationRemoteType.SCHEDULE.getMessage(), null, image, scheduleId, NotificationRemoteType.SCHEDULE, clubMember)
-        ).collect(Collectors.toList()));
-        clubMembers.forEach(member -> fcmTokenService.sendPushAlarm(member, NotificationRemoteType.SCHEDULE.getMessage()));
+        createNotifications(clubMembers, NotificationRemoteType.SCHEDULE.getMessage(), null, image, scheduleId, NotificationRemoteType.SCHEDULE);
+        sendPushAlarm(clubMembers, NotificationRemoteType.SCHEDULE.getMessage());
     }
 
     @Async("threadPoolTaskExecutor")
     public void createNewMember(long clubId, long newMemberId, String image) {
         List<Member> clubMembers = clubMemberRepository.findAllMembersExceptNewMemberByClubId(clubId, newMemberId);
-        notificationRepository.saveAll(clubMembers.stream().map(clubMember ->
-                Notification.of(NotificationRemoteType.NEW_MEMBER.getMessage(), null, image, clubId, NotificationRemoteType.NEW_MEMBER, clubMember)
-        ).collect(Collectors.toList()));
-        clubMembers.forEach(member -> fcmTokenService.sendPushAlarm(member, NotificationRemoteType.NEW_MEMBER.getMessage()));
+        createNotifications(clubMembers, NotificationRemoteType.NEW_MEMBER.getMessage(), null, image, clubId, NotificationRemoteType.NEW_MEMBER);
+        sendPushAlarm(clubMembers, NotificationRemoteType.NEW_MEMBER.getMessage());
     }
 
     @Async("threadPoolTaskExecutor")
     public void createNewClub(Club club, Long creatorId) {
         List<Member> members = wantClubCategoryRepository.findAllMembersExceptCreatorByMajor(club.getCategoryMajor(), creatorId);
-        notificationRepository.saveAll(members.stream().map(member ->
-                Notification.of(club.getName(), club.getDescription(), club.getMainImage(), club.getId(), NotificationRemoteType.NEW_CLUB, member)
-        ).collect(Collectors.toList()));
-        members.forEach(member -> fcmTokenService.sendPushAlarm(member, NotificationRemoteType.NEW_CLUB.getMessage()));
+        createNotifications(members, club.getName(), club.getDescription(), club.getMainImage(), club.getId(), NotificationRemoteType.NEW_CLUB);
+        sendPushAlarm(members, NotificationRemoteType.NEW_CLUB.getMessage());
+    }
+
+    private void createNotifications(List<Member> members, String title, String body, String image, long remoteId, NotificationRemoteType remoteType) {
+        notificationRepository.saveAll(members.stream().map(member -> Notification.of(title, body, image, remoteId, remoteType, member)).collect(Collectors.toList()));
+    }
+
+    private void sendPushAlarm(List<Member> members, String message) {
+        members.forEach(member -> fcmTokenService.sendPushAlarm(member, message));
     }
 }

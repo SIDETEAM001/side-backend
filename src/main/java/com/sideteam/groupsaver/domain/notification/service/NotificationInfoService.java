@@ -21,8 +21,8 @@ public class NotificationInfoService {
     @Transactional(readOnly = true)
     public NotificationListResponse getAllNotification() {
         long memberId = GetAuthUserUtils.getAuthUserId();
-        List<Notification> notificationsList = notificationRepository.findAllByMember(memberId);
-        return NotificationListResponse.of(notificationsList);
+        List<Notification> notifications = notificationRepository.findAllByMember(memberId);
+        return NotificationListResponse.of(notifications);
     }
 
     public void checkNotification(long notificationId) {

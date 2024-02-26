@@ -15,11 +15,12 @@ public class NotificationListResponse {
     private List<NotificationResponse> publicNoti;
     private List<NotificationResponse> privateNoti;
 
-    public static NotificationListResponse of(List<Notification> notificationList) {
+    public static NotificationListResponse of(List<Notification> notifications) {
         List<NotificationResponse> publicNoti = new ArrayList<>();
         List<NotificationResponse> privateNoti = new ArrayList<>();
-        notificationList.forEach(notification -> {
-            if (notification.getRemoteType().getType() == NotificationType.PUBLIC_NOTI) {
+
+        notifications.forEach(notification -> {
+            if (notification.getRemoteType().getType() == NotificationType.PUBLIC) {
                 publicNoti.add(NotificationResponse.of(notification.getId(), notification.getTitle(), notification.getBody(), notification.getImage(), notification.getRemoteId(), notification.getRemoteType(), notification.isOpen()));
             } else {
                 privateNoti.add(NotificationResponse.of(notification.getId(), notification.getTitle(), notification.getBody(), notification.getImage(), notification.getRemoteId(), notification.getRemoteType(), notification.isOpen()));
