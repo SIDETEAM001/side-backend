@@ -22,8 +22,7 @@ public class MemberUpdateService {
 
     @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
     public void withdrawMember(Long memberId) {
-        Member member = memberRepository.findByIdOrThrow(memberId);
-        member.withdraw();
+        memberRepository.deleteById(memberId);
     }
 
 }
