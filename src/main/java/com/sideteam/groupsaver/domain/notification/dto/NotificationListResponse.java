@@ -20,10 +20,11 @@ public class NotificationListResponse {
         List<NotificationResponse> privateNoti = new ArrayList<>();
 
         notifications.forEach(notification -> {
-            if (notification.getRemoteType().getType() == NotificationType.PUBLIC) {
-                publicNoti.add(NotificationResponse.of(notification.getId(), notification.getTitle(), notification.getBody(), notification.getImage(), notification.getRemoteId(), notification.getRemoteType(), notification.isOpen()));
+            NotificationResponse response = NotificationResponse.of(notification.getId(), notification.getTitle(), notification.getBody(), notification.getImage(), notification.getRemoteId(), notification.getRemoteType(), notification.isOpen());
+            if (response.getRemoteType().getType() == NotificationType.PUBLIC) {
+                publicNoti.add(response);
             } else {
-                privateNoti.add(NotificationResponse.of(notification.getId(), notification.getTitle(), notification.getBody(), notification.getImage(), notification.getRemoteId(), notification.getRemoteType(), notification.isOpen()));
+                privateNoti.add(response);
             }
         });
         return new NotificationListResponse(publicNoti, privateNoti);
