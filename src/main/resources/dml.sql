@@ -32,3 +32,7 @@ INSERT INTO nickname_noun (noun) VALUES ('사수');
 INSERT INTO nickname_noun (noun) VALUES ('주임');
 INSERT INTO nickname_noun (noun) VALUES ('차장');
 INSERT INTO nickname_noun (noun) VALUES ('인턴');
+
+INSERT INTO ad_message (message) VALUES ('내일 시작하는 건 이제 그만! 지금 바로 자기계발 모임에 참여해보세요!');
+INSERT INTO ad_message (message) VALUES ('시작이 반이다! 고민만 하고 있다면 해결되지않아요. 나만의 취미나 모임생활을 시작해보세요!');
+INSERT INTO ad_message (message) VALUES ('날 위한 모임은 없을까? 맞춤형 모임을 둘러보고 오늘도 성장하는 내가 되길 바라요!');
