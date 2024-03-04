@@ -30,3 +30,11 @@ firebase:
 
 slack:
   report: ${SLACK_REPORT_URL}
+
+
+sms:
+  coolsms:
+    api-key: ${COOLSMS_API_KEY}
+    secret-key: ${COOLSMS_SECRET_KEY}
+    sender-phone: ${COOLSMS_SENDER_PHONE_NUMBER} # '-' 를 제외한 01012345678 형태로 입력
+    sms-send-uri: https://api.coolsms.co.kr/messages/v4/send

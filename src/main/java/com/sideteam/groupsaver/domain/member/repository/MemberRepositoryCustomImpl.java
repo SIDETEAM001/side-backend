@@ -44,7 +44,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
         return queryFactory.select(new QMyProfileResponse(
                         member.id,
-                        member.phoneNumber,
+                        member.phoneNumber.phoneNumber,
                         member.nickname,
                         member.email,
                         member.birth,

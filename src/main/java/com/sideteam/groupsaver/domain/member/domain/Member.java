@@ -7,6 +7,7 @@ import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
 import com.sideteam.groupsaver.domain.member.dto.request.MemberProfileUpdateRequest;
 import com.sideteam.groupsaver.domain.notification.domain.Notification;
 import com.sideteam.groupsaver.domain.report.domain.ReportUser;
+import com.sideteam.groupsaver.domain.certification.domain.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,8 +32,7 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
-    @Column(unique = true, nullable = false)
-    private String phoneNumber;
+    private PhoneNumber phoneNumber;
 
     @Column(nullable = false)
     private String nickname;
@@ -79,7 +79,7 @@ public class Member extends BaseTimeEntity {
     @Builder
     protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, MemberRole role, JobMajor jobCategory, MemberGender gender, LocalDate birth, MemberAgreeTerms agreeTerms) {
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = PhoneNumber.of(phoneNumber);
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;
