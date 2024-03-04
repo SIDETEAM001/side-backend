@@ -5,6 +5,7 @@ import com.sideteam.groupsaver.domain.category.domain.JobMajor;
 import com.sideteam.groupsaver.domain.common.BaseTimeEntity;
 import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
 import com.sideteam.groupsaver.domain.member.dto.request.MemberProfileUpdateRequest;
+import com.sideteam.groupsaver.domain.notification.domain.Notification;
 import com.sideteam.groupsaver.domain.report.domain.ReportUser;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -66,6 +67,10 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(STRING)
     @Column(nullable = false)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private final List<Notification> notifications = new ArrayList<>();
+
+    @Enumerated(value = EnumType.STRING)
     private MemberActive activeStatus;
 
     @Embedded
@@ -114,4 +119,7 @@ public class Member extends BaseTimeEntity {
         this.activeStatus = MemberActive.SUSPEND;
     }
 
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
+    }
 }

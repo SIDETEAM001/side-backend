@@ -5,10 +5,10 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.sideteam.groupsaver.domain.firebase.domain.FcmToken;
-import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenDto;
+import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.dto.DeleteFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.repository.FcmTokenRepository;
-import com.sideteam.groupsaver.domain.member.service.MemberService;
+import com.sideteam.groupsaver.domain.member.domain.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,28 +23,30 @@ import java.util.List;
 public class FcmTokenService {
     private final FcmTokenRepository fcmRepository;
     private final FirebaseMessaging firebaseMessaging;
-    private final MemberService memberService;
 
-    public void createFcmToken(CreateFcmTokenDto dto) {
+    public void createFcmToken(CreateFcmTokenRequest dto) {
         if (!fcmRepository.existsByToken(dto.getToken())) {
             fcmRepository.save(FcmToken.of(dto.getEmail(), dto.getToken()));
         }
     }
 
-    public void sendNotification(String title, String body) {
-        List<String> tokenList = fcmRepository.findAllTokenByEmail(memberService.findMember().getEmail());
-        tokenList.forEach(token -> {
+    public void sendPushAlarm(Member member, String body) {
+        List<FcmToken> tokenList = fcmRepository.findAllByEmail(member.getEmail());
+        tokenList.forEach(FCM -> {
             try {
-                fcmTransmit(token, title, body);
-            } catch (FirebaseMessagingException exception) {
-                log.error(exception.toString());
+                fcmTransmit(FCM.getToken(), body);
+            } catch (FirebaseMessagingException e) {
+                log.error("푸쉬 알람 에러 발생 : ", e);
+                throw new RuntimeException(e);
+            } catch (Exception e1) {
+                log.error("푸쉬 알람 에러 발생 : ", e1);
             }
         });
     }
 
-    public void fcmTransmit(String token, String title, String body) throws FirebaseMessagingException {
+    public void fcmTransmit(String token, String body) throws FirebaseMessagingException {
         Notification notification = Notification.builder()
-                .setTitle(title)
+                .setTitle("사부작")
                 .setBody(body)
                 .build();
 

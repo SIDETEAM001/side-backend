@@ -5,10 +5,10 @@ import com.sideteam.groupsaver.domain.member.domain.MemberActive;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import com.sideteam.groupsaver.global.exception.member.MemberErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -37,4 +37,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     Optional<Member> findByPhoneNumber(String phoneNumber);
 
     Optional<Member> findByIdAndActiveStatus(Long id, MemberActive activeStatus);
+
+    @Query("SELECT m FROM Member m WHERE m.activeStatus = ACTIVE")
+    List<Member> findAllByActiveStatusIsActive();
 }

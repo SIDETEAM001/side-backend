@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubErrorCode.CLUB_MEMBER_DO_NOT_HAVE_PERMISSION;
@@ -27,6 +28,9 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>, C
     @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId")
     Page<Member> findAllMembersByClubId(Long clubId, Pageable pageable);
 
+    @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId AND cm.member.id != :creatorId")
+    List<Member> findAllMembersExceptCreatorByClubId(Long clubId, long creatorId);
+
     default void throwIfMemberNotInClub(Long memberId, Long clubId) {
         if (!existsByClubIdAndMemberId(clubId, memberId)) {
             throw new ClubErrorException(CLUB_MEMBER_DO_NOT_HAVE_PERMISSION, "멤버 ID: " + memberId + ", 모임 ID: " + clubId);
@@ -41,4 +45,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long>, C
         return () -> existsByClubIdAndMemberId(clubId, memberId);
     }
 
+    @Query("SELECT cm.member FROM ClubMember cm WHERE cm.club.id = :clubId AND cm.member.id != :newMemberId")
+    List<Member> findAllMembersExceptNewMemberByClubId(long clubId, long newMemberId);
 }

@@ -1,6 +1,6 @@
 package com.sideteam.groupsaver.domain.firebase.controller;
 
-import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenDto;
+import com.sideteam.groupsaver.domain.firebase.dto.CreateFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.dto.DeleteFcmTokenRequest;
 import com.sideteam.groupsaver.domain.firebase.service.FcmTokenService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class FcmTokenController {
     private final FcmTokenService fcmTokenService;
 
     @PostMapping("/submit")
-    public ResponseEntity<?> submitFcmToken(@RequestBody CreateFcmTokenDto dto) {
+    public ResponseEntity<?> submitFcmToken(@RequestBody CreateFcmTokenRequest dto) {
         fcmTokenService.createFcmToken(dto);
         return ResponseEntity.noContent().build();
     }

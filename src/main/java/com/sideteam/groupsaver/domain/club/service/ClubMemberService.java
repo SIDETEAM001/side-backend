@@ -6,8 +6,10 @@ import com.sideteam.groupsaver.domain.club.dto.response.ClubMemberResponse;
 import com.sideteam.groupsaver.domain.club.repository.ClubMemberRepository;
 import com.sideteam.groupsaver.domain.club.repository.ClubRepository;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
+import com.sideteam.groupsaver.domain.notification.service.NotificationService;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,7 @@ public class ClubMemberService {
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     @PreAuthorize("@authorityChecker.hasAuthority(#memberId, @clubMemberRepository.isInClub(#clubId, #memberId))")
@@ -49,6 +52,7 @@ public class ClubMemberService {
                 memberRepository.getReferenceById(memberId),
                 role);
         clubMemberRepository.save(clubMember);
+        notificationService.createNewMember(clubId, memberId, clubMember.getClub().getMainImage());
     }
 
     @PreAuthorize("@authorityChecker.hasAuthority(#memberId)")
