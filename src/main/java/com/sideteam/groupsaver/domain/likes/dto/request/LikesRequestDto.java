@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class LikesRequestDto {
 
-    private Qna qna;
-    private Member member;
+    private Long qnaId;
 
 }

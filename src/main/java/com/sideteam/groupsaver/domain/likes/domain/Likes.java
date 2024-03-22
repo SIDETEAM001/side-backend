@@ -15,7 +15,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Likes extends BaseTimeEntity {
 
@@ -25,7 +24,6 @@ public class Likes extends BaseTimeEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,10 +38,10 @@ public class Likes extends BaseTimeEntity {
     }
 
     /* DTO -> Entity */
-    public static Likes of(LikesRequestDto likesRequestDto) {
+    public static Likes of(Member member, Qna qna) {
         return Likes.builder()
-                .qna(likesRequestDto.getQna())
-                .member(likesRequestDto.getMember())
+                .member(member)
+                .qna(qna)
                 .build();
     }
 

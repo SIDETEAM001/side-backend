@@ -15,6 +15,4 @@ public interface LikesRepository  extends JpaRepository<Likes, Long> {
     /* 좋아요 여부 확인 */
     boolean existsByMemberIdAndQnaId(Long memberId, Long qnaId);
 
-    /* 좋아요가 존재하면 좋아요 반환, 존재하지 않으면 empty 반환 */
-    Optional<Likes> findByMemberIdAndQnaId(Long memberId, Long qnaId);
 }
