@@ -6,7 +6,6 @@ import com.sideteam.groupsaver.domain.category.domain.ClubCategoryMajor;
 import com.sideteam.groupsaver.domain.join.domain.WantClubCategory;
 import com.sideteam.groupsaver.domain.join.repository.WantClubCategoryRepository;
 import com.sideteam.groupsaver.domain.member.domain.Member;
-import com.sideteam.groupsaver.domain.member.domain.MemberAgreeTerms;
 import com.sideteam.groupsaver.domain.member.domain.MemberRole;
 import com.sideteam.groupsaver.domain.member.domain.OAuthProvider;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;

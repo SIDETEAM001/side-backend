@@ -20,19 +20,10 @@ public final class MemberProvider {
                 .birth(LocalDate.now())
                 .role(MemberRole.USER)
                 .email(createRandomEmail())
-                .agreeTerms(MemberAgreeTerms.builder().ageTerm(true).locationTerm(true).serviceTerm(true).userInfoTerm(true).build())
                 .gender(createGender())
                 .password("123123123ZXC!@#$a")
                 .build();
     }
-
-    public static SignupRequest createSignupRequest(String nickname, String email, String password) {
-        return new SignupRequest(
-                createRandomPhoneNumber(), nickname, email, password,
-                createJobMajor(), createGender(), LocalDate.now(),
-                true, true, true, true, Collections.emptyList());
-    }
-
 
     private static String createRandomNickname() {
         return "test-" + UUID.randomUUID();
