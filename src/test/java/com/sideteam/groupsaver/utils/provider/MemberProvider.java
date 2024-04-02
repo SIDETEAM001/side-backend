@@ -25,6 +25,13 @@ public final class MemberProvider {
                 .build();
     }
 
+    public static SignupRequest createSignupRequest(String nickname, String email, String password) {
+        return new SignupRequest(
+                createRandomPhoneNumber(), nickname, email, password,
+                createJobMajor(), createGender(), LocalDate.now(),
+                Collections.emptyList());
+    }
+
     private static String createRandomNickname() {
         return "test-" + UUID.randomUUID();
     }
