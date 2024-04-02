@@ -40,7 +40,6 @@ public class AuthSignupService {
                 .jobCategory(signupRequest.jobCategory())
                 .gender(signupRequest.gender())
                 .birth(signupRequest.birth())
-                .agreeTerms(createAgreeTerms(signupRequest))
                 .build();
         memberRepository.save(member);
         createWantClubCategories(signupRequest.categories(), member);
@@ -48,15 +47,6 @@ public class AuthSignupService {
         log.info("회원가입 완료: ID: {}, 이메일: {}, 닉네임: {}", member.getId(), member.getEmail(), member.getNickname());
 
         return SignupResult.of(member);
-    }
-
-    private MemberAgreeTerms createAgreeTerms(final SignupRequest signupRequest) {
-        return MemberAgreeTerms.builder()
-                .ageTerm(signupRequest.ageTerm())
-                .locationTerm(signupRequest.locationTerm())
-                .userInfoTerm(signupRequest.userInfoTerm())
-                .serviceTerm(signupRequest.serviceTerm())
-                .build();
     }
 
     private String encodePassword(final SignupRequest signupRequest) {
