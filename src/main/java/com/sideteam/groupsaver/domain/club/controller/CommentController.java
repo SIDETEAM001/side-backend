@@ -33,7 +33,7 @@ public class CommentController {
         return ResponseEntity.ok("OK");
     }
 
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<String> updateComment(@RequestBody CommentRequest request) {
         commentService.update(request);
         return ResponseEntity.ok("OK");
