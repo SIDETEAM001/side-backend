@@ -9,7 +9,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +34,7 @@ public class Qna extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
+    /* 댓글 리스트 */
     @OneToMany(mappedBy = "qna", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QnaReply> qnaReplyList;
 
